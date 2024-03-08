@@ -16,6 +16,7 @@
     "@repo/validations": "workspace:^",
     "@tanstack/react-query": "^5.25.0",
     "class-variance-authority": "^0.7.0",
+    "zod": "^3.22.4",
     "clsx": "^2.1.0",
     "lucide-react": "^0.348.0",
     "next": "^14.1.1",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.1.1",
+    "@repo/types": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^20.11.24",
