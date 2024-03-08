@@ -2,10 +2,12 @@ import { json, urlencoded } from "body-parser";
 import express, { type Express } from "express";
 import morgan from "morgan";
 import cors from "cors";
+import { config } from "dotenv";
 import router from "./routes/router";
 
 export const createServer = (): Express => {
   const app = express();
+  config();
   app
     .disable("x-powered-by")
     .use(morgan("dev"))
