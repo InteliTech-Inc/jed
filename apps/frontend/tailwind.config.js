@@ -16,10 +16,10 @@ module.exports = {
         mono: ["var(--font-sans)", ...fontFamily.sans],
         sans: ["var(--font-geist-sans)"],
       },
-      color: {
-        primary: "#",
-        secondary: "#",
-        accent: "#",
+      colors: {
+        primary: "#1b4332",
+        secondary: "#52b788",
+        accent: "#d8f3dc",
       },
       keyframes: {
         "accordion-down": {

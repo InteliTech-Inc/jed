@@ -25,7 +25,7 @@ export default function WaitList(): JSX.Element {
           <p className=" text-center text-md mt-2">
             Drop us a message here{" "}
             <Link
-              className="text-center text-md text-green-600 underline hover:transistion-all hover:duration-300 ease-in-out"
+              className="text-center text-md text-secondary underline hover:transistion-all hover:duration-300 ease-in-out"
               href="mailto:info.jedvotes@gmail.com"
               target="_blank"
             >

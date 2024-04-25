@@ -60,7 +60,7 @@ export default function WaitListForm(): JSX.Element {
               <FormControl>
                 <Input
                   autoComplete="off"
-                  className="w-[20rem] py-3 px-4 rounded-md border-green-300  focus:border-green-600 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 transition-colors duration-200 ease-in-out"
+                  className="w-[20rem] py-3 px-4 rounded-md border-green-300  focus:border-secondary text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 transition-colors duration-200 ease-in-out"
                   placeholder="Your Email Address"
                   type="text"
                   {...field}
@@ -71,7 +71,7 @@ export default function WaitListForm(): JSX.Element {
           )}
         />
         <Button
-          className="w-full py-3 px-4 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 transition-colors duration-200 ease-in-out disabled:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full py-3 px-4 rounded-md bg-secondary text-white font-semibold hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-colors duration-200 ease-in-out disabled:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={watch.length < 3}
           type="submit"
         >
