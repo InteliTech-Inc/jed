@@ -1,16 +1,22 @@
-import "../globals.css";
+import "./globals.css";
 import { Be_Vietnam_Pro as JedFont } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Toaster } from "sonner";
-import { cn } from "../../@/lib/utils";
+import { cn } from "@/lib/utils";
 import Providers from "./providers";
+import type { Metadata } from "next";
 
 const jedFont = JedFont({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-sans",
 });
+
+export const metadata: Metadata = {
+  title: "JED",
+  description: "The all-in-one ",
+};
 
 export default function RootLayout({
   children,
@@ -33,4 +39,3 @@ export default function RootLayout({
     </html>
   );
 }
-
