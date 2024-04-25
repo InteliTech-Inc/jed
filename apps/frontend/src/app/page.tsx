@@ -1,15 +1,13 @@
-import { Button } from "../../@/components/ui/button";
+import WaitList from "./waitlist/page";
 
 export const metadata = {
-  title: "JEDVOTES | Home",
+  title: "JEDVOTES | WaitLyst",
 };
 
 export default function Home(): JSX.Element {
   return (
-    <div className="">
-      <h2 className=" text-green-500 text-3xl py-4">Welcome to JEDVOTES web</h2>
-      <p className="">Start!!</p>
-      <Button>Test Shadcn</Button>
+    <div>
+      <WaitList />
     </div>
   );
 }
