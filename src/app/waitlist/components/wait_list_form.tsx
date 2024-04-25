@@ -75,7 +75,7 @@ export default function WaitListForm(): JSX.Element {
         >
           Join Waitlist!
         </Button>
-        <div className="hidden md:block absolute -right-24 -top-7 rotate-90  transform scale-x-[-1] ">
+        <div className="hidden md:block absolute -right-24 -top-10 ">
           <Image alt="Arrow" height={70} src={Arrow} width={70} />
         </div>
       </form>

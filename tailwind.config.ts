@@ -1,12 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -18,6 +19,15 @@ const config = {
       },
     },
     extend: {
+      colors: {
+        primary: "#1b4332",
+        secondary: "#52b788",
+        accent: "#d8f3dc",
+      },
+      fontFamily: {
+        mono: ["var(--font-sans)", ...fontFamily.sans],
+        sans: ["var(--font-geist-sans)"],
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -35,6 +45,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;
