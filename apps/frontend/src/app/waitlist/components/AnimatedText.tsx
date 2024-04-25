@@ -35,14 +35,14 @@ export default function AnimatedText(): JSX.Element {
   }, []);
 
   return (
-    <main>
+    <main className="text-secondary">
       <div
         id="text"
         style={{
           clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
         }}
       >
-        <h1 className="hidden md:block text-6xl text-center leading-tight font-bold text-green-600 ">
+        <h1 className="hidden md:block text-6xl text-center leading-tight font-bold ">
           Join the Waitlist for JED today!
         </h1>
       </div>
@@ -52,7 +52,7 @@ export default function AnimatedText(): JSX.Element {
           clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
         }}
       >
-        <h1 className="md:hidden block text-4xl text-center leading-tight font-bold text-green-600">
+        <h1 className="md:hidden block text-4xl text-center leading-tight font-bold ">
           Join the Waitlist for JED today!
         </h1>
       </div>
