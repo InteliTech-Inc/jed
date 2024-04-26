@@ -25,11 +25,12 @@ import {
 import { signupShape } from "@/lib/validations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Logo from "@/app/assets/logo.png";
+import { useState } from "react";
+import Rotating_Lines from "@/components/rotating_lines";
 
 export default function SignupForm() {
   const router = useRouter();
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof signupShape>>({
     resolver: zodResolver(signupShape),
@@ -42,44 +43,50 @@ export default function SignupForm() {
     },
   });
 
+  const inputValues = form.watch();
+
   async function handleSignup(values: z.infer<typeof signupShape>) {
     const { firstName, lastName, email, password } = values;
-    console.log(values);
-    const {
-      data: { user },
-      error,
-    } = await db.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          firstName,
-          lastName,
+
+    try {
+      setIsPending(true);
+      const {
+        data: { user },
+        error,
+      } = await db.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            firstName,
+            lastName,
+          },
         },
-      },
-    });
+      });
 
-    if (error) {
-      toast.error(error.message);
+      if (error) {
+        toast.error(error.message);
+        setIsPending(false);
+        return;
+      }
+
+      if (user?.role === "authenticated") {
+        toast.success("Verification email sent! Please verify your email.");
+        router.push("/");
+
+        // Reset form inputs after successful signup
+        form.reset();
+      }
+      setIsPending(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
     }
-
-    if (user?.role === "authenticated") {
-      toast.success("Verification email sent! Please verify your email.");
-      router.push("/");
-
-      // Reset form inputs after successful signup
-      form.reset();
-    }
-  }
-
-  async function handleSignOut() {
-    await db.auth.signOut();
-    router.push("/login");
   }
 
   return (
     <main className="flex items-center justify-center h-screen">
-      <Button onClick={handleSignOut}>sign out</Button>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSignup)}>
           <Card className="mx-auto font-sans max-w-sm md:min-w-[30rem] flex flex-col justify-center">
@@ -89,8 +96,8 @@ export default function SignupForm() {
                 Enter your information to create an account
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-center gap-x-6">
+            <CardContent className="space-y-3">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-x-6">
                 <FormField
                   control={form.control}
                   name="firstName"
@@ -103,7 +110,7 @@ export default function SignupForm() {
                           type="text"
                           autoComplete="off"
                           placeholder="Enter your first name"
-                          className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                          className=" w-[20rem] md:w-full border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                           {...field}
                         />
                       </FormControl>
@@ -123,7 +130,7 @@ export default function SignupForm() {
                           type="text"
                           autoComplete="off"
                           placeholder="Enter your last name"
-                          className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                          className=" w-[20rem] md:w-full border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                           {...field}
                         />
                       </FormControl>
@@ -196,8 +203,16 @@ export default function SignupForm() {
               />
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-primary"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={
+                  (inputValues.password.length &&
+                    inputValues.confirm_password.length &&
+                    inputValues.email.length &&
+                    inputValues.firstName.length < 1) ||
+                  isPending
+                }
               >
+                {isPending && <Rotating_Lines />}
                 Login
               </Button>
               <div className="text-center">
