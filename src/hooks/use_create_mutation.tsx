@@ -35,7 +35,7 @@ function useCreateRequest<TResponse>({
 
       const { data, error } = await db.from(dbName).insert(payload).select();
 
-      if (error) throw error; //supabase does not throw error when there is an error. We are throwing an error here so we can handle the error it in the onError callback from react-query
+      if (error) throw error; //supabase does not throw error when there is an error. We are throwing an error here so we can handle the error in the onError callback from react-query
 
       if (data) return data;
     },
