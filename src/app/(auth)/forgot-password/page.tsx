@@ -48,6 +48,14 @@ export default function ForgotPassword() {
 
     try {
       setIsPending(true);
+      // Let's check if the email exists in the database
+      const user = db.auth.getUser();
+      if (!user) {
+        toast.error("User does not exist");
+        setIsPending(false);
+        return;
+      }
+
       const { error, data } = await db.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
