@@ -2,18 +2,19 @@
 
 import { db } from "@/lib/supabase";
 import { FormEvent, useState } from "react";
+import { redirect } from "next/navigation";
 
 async function login({
   email,
   password,
 }: Record<"email" | "password", string>) {
   try {
-    const { data, error } = await db.auth.signUp({
+    const { data, error } = await db.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (data) return data
+    if (data) redirect("/waitlist");
 
     if (error) throw new Error(error.message);
   } catch (error) {
