@@ -9,6 +9,7 @@ export default async function middleware(req: NextRequest) {
     "/signup",
     "/forgot-password",
     "/reset-password",
+    "/",
   ];
 
   if (publicUrl.includes(req.nextUrl.pathname)) {
@@ -33,5 +34,6 @@ export default async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/waitlist",
   ],
 };
