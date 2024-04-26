@@ -40,9 +40,10 @@ export default function WaitListForm(): JSX.Element {
   const inputEmail = form.watch("email", "");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    AddEmailToWaitlist({ email: values.email }).then((_) =>
-      toast.success("Your email has been successfully added to the waitlist!.")
-    );
+    AddEmailToWaitlist({ email: values.email }).then((_) => {
+      toast.success("Your email has been successfully added to the waitlist!.");
+      form.reset();
+    });
   }
 
   return (

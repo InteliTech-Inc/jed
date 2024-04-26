@@ -9,6 +9,7 @@ export default async function middleware(req: NextRequest) {
     "/signup",
     "/forgot-password",
     "/reset-password",
+    "/waitlist",
     "/",
   ];
 

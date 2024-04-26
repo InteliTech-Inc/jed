@@ -78,7 +78,6 @@ export default function ForgotPassword() {
                       <Input
                         id="email"
                         type="email"
-                        autoComplete="off"
                         placeholder="Enter your email address"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                         {...field}
