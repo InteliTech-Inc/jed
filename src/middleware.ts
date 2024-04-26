@@ -4,6 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 export default async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
+  const publicUrl = [
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/reset-password",
+    "/",
+  ];
+
+  if (publicUrl.includes(req.nextUrl.pathname)) {
+    return res;
+  }
+
   const supabase = createMiddlewareClient({ req, res });
 
   const {
