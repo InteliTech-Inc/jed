@@ -25,9 +25,12 @@ import {
 import { forgotPasswordShape } from "@/lib/validations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Rotating_Lines from "@/components/rotating_lines";
 
 export default function ForgotPassword() {
   const router = useRouter();
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof forgotPasswordShape>>({
     resolver: zodResolver(forgotPasswordShape),
@@ -36,22 +39,34 @@ export default function ForgotPassword() {
     },
   });
 
+  const inputValues = form.watch();
+
   async function handleForgotPassword(
     values: z.infer<typeof forgotPasswordShape>
   ) {
     const { email } = values;
 
-    const { error, data } = await db.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
+    try {
+      setIsPending(true);
+      const { error, data } = await db.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
 
-    if (error) {
-      return toast.error(error.message);
-    }
+      if (error) {
+        toast.error(error.message);
+        setIsPending(false);
+        return;
+      }
 
-    if (data) {
-      toast.success("Password reset link sent to your email");
-      router.push("/login");
+      if (data) {
+        toast.success("Password reset link sent to your email");
+        router.push("/login");
+      }
+      setIsPending(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
     }
   }
   return (
@@ -91,8 +106,10 @@ export default function ForgotPassword() {
 
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-primary"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={inputValues.email.length < 1 || isPending}
               >
+                {isPending && <Rotating_Lines />}
                 Send Reset Link
               </Button>
               <div className="text-center">

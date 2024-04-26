@@ -25,11 +25,12 @@ import {
 import { authShape } from "@/lib/validations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Logo from "@/app/assets/logo.png";
+import { useState } from "react";
+import Rotating_Lines from "@/components/rotating_lines";
 
 export default function LoginForm() {
   const router = useRouter();
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof authShape>>({
     resolver: zodResolver(authShape),
@@ -39,25 +40,37 @@ export default function LoginForm() {
     },
   });
 
+  const inputValues = form.watch();
+
   async function handleLogin(values: z.infer<typeof authShape>) {
     const { email, password } = values;
-    const {
-      data: { user },
-      error,
-    } = await db.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      setIsPending(true);
+      const {
+        data: { user },
+        error,
+      } = await db.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      toast.error(error.message);
-    }
+      if (error) {
+        toast.error(error.message);
+        setIsPending(false);
+        return;
+      }
 
-    if (user) {
-      router.push("/");
+      if (user) {
+        router.push("/");
 
-      // Clear the form after successful login
-      form.reset();
+        // Clear the form after successful login
+        form.reset();
+      }
+      setIsPending(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
     }
   }
 
@@ -66,13 +79,6 @@ export default function LoginForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleLogin)}>
           <Card className="mx-auto font-sans max-w-sm md:min-w-[30rem] md:h-[30rem] flex flex-col justify-center">
-            {/* <Image
-              src={Logo}
-              alt="jed-logo"
-              width={100}
-              height={100}
-              className="mx-auto"
-            /> */}
             <CardHeader>
               <CardTitle className="text-4xl font-sans">Login</CardTitle>
               <CardDescription>
@@ -130,8 +136,14 @@ export default function LoginForm() {
               />
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-primary"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={
+                  (inputValues.email.length &&
+                    inputValues.password.length < 1) ||
+                  isPending
+                }
               >
+                {isPending && <Rotating_Lines />}
                 Login
               </Button>
               <div className="text-center">

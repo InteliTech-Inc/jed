@@ -14,9 +14,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Arrow from "@/app/assets/arrow.png";
-import { RotatingLines } from "react-loader-spinner";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { toast } from "sonner";
+import Rotating_Lines from "@/components/rotating_lines";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -43,6 +43,8 @@ export default function WaitListForm(): JSX.Element {
     AddEmailToWaitlist({ email: values.email }).then((_) =>
       toast.success("Your email has been successfully added to the waitlist!.")
     );
+
+    form.reset();
   }
 
   return (
@@ -59,18 +61,18 @@ export default function WaitListForm(): JSX.Element {
               <div className="flex flex-col md:flex-row items-center justify-center gap-x-4 gap-y-4">
                 <FormControl>
                   <Input
-                    className="w-[20rem] py-3 px-4 rounded-md border-green-300  focus:border-secondary text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 transition-colors duration-200 ease-in-out"
+                    className="w-[20rem] py-3 px-4 rounded-md border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                     placeholder="Your Email Address"
                     type="text"
                     {...field}
                   />
                 </FormControl>
                 <Button
-                  className=" w-full lg:w-fit py-3 px-4 flex gap-2 rounded-md bg-secondary text-white font-semibold hover:bg-primary focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                  className=" w-full lg:w-fit py-3 px-4 flex gap-2 rounded-md bg-secondary text-white font-semibold hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={inputEmail.length < 1 || isPending}
                   type="submit"
                 >
-                  {isPending && <RotatingLines width="20" strokeColor="#fff" />}
+                  {isPending && <Rotating_Lines />}
                   Join Waitlist!
                 </Button>
               </div>
