@@ -89,7 +89,7 @@ export default function ForgotPasswordForm() {
                 Forgot Password?
               </CardTitle>
               <CardDescription>
-                Enter your email below to login to reset your password
+                Provide your email below to login to reset your password
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 w-full">

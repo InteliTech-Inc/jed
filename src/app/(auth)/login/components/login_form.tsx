@@ -86,7 +86,7 @@ export default function LoginForm() {
             <CardHeader className="w-full">
               <CardTitle className="text-2xl font-sans">Login</CardTitle>
               <CardDescription>
-                Enter your credentials below to login to your account
+                Provide your credentials below to login to your account
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 w-full">

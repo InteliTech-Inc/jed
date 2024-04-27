@@ -99,7 +99,7 @@ export default function SignupForm() {
             <CardHeader className="w-full">
               <CardTitle className="text-2xl font-sans">Sign Up</CardTitle>
               <CardDescription>
-                Enter your information to create an account
+                Provide your valid details to create an account with us
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2 w-full">
