@@ -65,7 +65,7 @@ export default function LoginForm() {
 
       if (user) {
         router.push("/dashboard");
-
+        toast.success("Login successful");
         // Clear the form after successful login
         form.reset();
       }
