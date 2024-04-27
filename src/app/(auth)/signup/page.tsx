@@ -38,6 +38,7 @@ export default function SignupForm() {
       firstName: "",
       lastName: "",
       email: "",
+      phone: "",
       password: "",
       confirm_password: "",
     },
@@ -46,7 +47,7 @@ export default function SignupForm() {
   const inputValues = form.watch();
 
   async function handleSignup(values: z.infer<typeof signupShape>) {
-    const { firstName, lastName, email, password } = values;
+    const { firstName, lastName, email, phone, password } = values;
 
     try {
       setIsPending(true);
@@ -60,6 +61,7 @@ export default function SignupForm() {
           data: {
             firstName,
             lastName,
+            phone,
           },
         },
       });
@@ -110,7 +112,7 @@ export default function SignupForm() {
                           type="text"
                           autoComplete="off"
                           placeholder="Enter your first name"
-                          className=" w-[20rem] md:w-full border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                          className=" w-[21rem] md:w-full border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                           {...field}
                         />
                       </FormControl>
@@ -130,7 +132,7 @@ export default function SignupForm() {
                           type="text"
                           autoComplete="off"
                           placeholder="Enter your last name"
-                          className=" w-[20rem] md:w-full border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                          className=" w-[21rem] md:w-full border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                           {...field}
                         />
                       </FormControl>
@@ -161,17 +163,16 @@ export default function SignupForm() {
               />
               <FormField
                 control={form.control}
-                name="password"
+                name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <Label htmlFor="password">Password</Label>
-
+                    <Label htmlFor="phone">Phone</Label>
                     <FormControl>
                       <Input
-                        id="password"
-                        type="password"
+                        id="phone"
+                        type="text"
                         autoComplete="off"
-                        placeholder="Enter your password"
+                        placeholder="Enter your phone number (+233)"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                         {...field}
                       />
@@ -180,27 +181,50 @@ export default function SignupForm() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="confirm_password"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label htmlFor="confirm_password">Confirm Password</Label>
+              <div className="flex flex-row items-center justify-center gap-x-6">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label htmlFor="password">Password</Label>
 
-                    <FormControl>
-                      <Input
-                        id="confirm_password"
-                        type="password"
-                        autoComplete="off"
-                        placeholder="Confirm your password"
-                        className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage {...field} />
-                  </FormItem>
-                )}
-              />
+                      <FormControl>
+                        <Input
+                          id="password"
+                          type="password"
+                          autoComplete="off"
+                          placeholder="Enter your password"
+                          className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage {...field} />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="confirm_password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label htmlFor="confirm_password">Confirm Password</Label>
+
+                      <FormControl>
+                        <Input
+                          id="confirm_password"
+                          type="password"
+                          autoComplete="off"
+                          placeholder="Confirm your password"
+                          className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage {...field} />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <Button
                 type="submit"
                 className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
