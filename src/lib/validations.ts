@@ -51,6 +51,9 @@ export const signupShape = z
       message: "Last name is required!",
     }),
     email: emailShape,
+    phone: z.string().min(10, {
+      message: "Phone number is required!",
+    }),
     password: passwordShape,
     confirm_password: passwordShape,
   })

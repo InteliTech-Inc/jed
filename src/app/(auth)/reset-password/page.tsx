@@ -25,13 +25,13 @@ import {
 import { resetPasswordShape } from "@/lib/validations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Rotating_Lines from "@/components/rotating_lines";
+import { useState } from "react";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
 
-  // const { searchParams } = new URL(window.location.href);
-  // const code = searchParams.get("code");
-  // console.log(code);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof resetPasswordShape>>({
     resolver: zodResolver(resetPasswordShape),
@@ -41,20 +41,32 @@ export default function ResetPasswordPage() {
     },
   });
 
+  const inputValues = form.watch();
+
   async function ResetPassword(formData: z.infer<typeof resetPasswordShape>) {
     const { password } = formData;
 
-    const { error, data } = await db.auth.updateUser({
-      password,
-    });
+    try {
+      setIsPending(true);
+      const { error, data } = await db.auth.updateUser({
+        password,
+      });
 
-    if (error) {
-      return toast.error(error.message);
-    }
+      if (error) {
+        toast.error(error.message);
+        setIsPending(false);
+        return;
+      }
 
-    if (data) {
-      toast.success("Password reset successful");
-      router.push("/login");
+      if (data) {
+        toast.success("Password reset successful");
+        router.push("/login");
+      }
+      setIsPending(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   }
   return (
@@ -116,8 +128,14 @@ export default function ResetPasswordPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-primary"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={
+                  (inputValues.password.length &&
+                    inputValues.confirm_password.length < 1) ||
+                  isPending
+                }
               >
+                {isPending && <Rotating_Lines />}
                 Reset Password
               </Button>
               <div className="text-center">
