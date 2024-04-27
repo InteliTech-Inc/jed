@@ -27,11 +27,13 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Rotating_Lines from "@/components/rotating_lines";
 import { useState } from "react";
+import Checkbox_Show_Password from "@/components/checkbox_show_password";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
 
   const [isPending, setIsPending] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof resetPasswordShape>>({
     resolver: zodResolver(resetPasswordShape),
@@ -92,7 +94,7 @@ export default function ResetPasswordPage() {
                     <FormControl>
                       <Input
                         id="password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         autoComplete="off"
                         placeholder="Enter your new password"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
@@ -114,7 +116,7 @@ export default function ResetPasswordPage() {
                     <FormControl>
                       <Input
                         id="confirm_password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         autoComplete="off"
                         placeholder="Confirm your new password"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
@@ -125,7 +127,10 @@ export default function ResetPasswordPage() {
                   </FormItem>
                 )}
               />
-
+              <Checkbox_Show_Password
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+              />
               <Button
                 type="submit"
                 className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"

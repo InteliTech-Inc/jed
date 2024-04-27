@@ -27,10 +27,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Rotating_Lines from "@/components/rotating_lines";
+import Checkbox_Show_Password from "@/components/checkbox_show_password";
 
 export default function SignupForm() {
   const router = useRouter();
   const [isPending, setIsPending] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof signupShape>>({
     resolver: zodResolver(signupShape),
@@ -188,11 +190,10 @@ export default function SignupForm() {
                   render={({ field }) => (
                     <FormItem>
                       <Label htmlFor="password">Password</Label>
-
                       <FormControl>
                         <Input
                           id="password"
-                          type="password"
+                          type={showPassword ? "text" : "password"}
                           autoComplete="off"
                           placeholder="Enter your password"
                           className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
@@ -213,7 +214,7 @@ export default function SignupForm() {
                       <FormControl>
                         <Input
                           id="confirm_password"
-                          type="password"
+                          type={showPassword ? "text" : "password"}
                           autoComplete="off"
                           placeholder="Confirm your password"
                           className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
@@ -225,6 +226,10 @@ export default function SignupForm() {
                   )}
                 />
               </div>
+              <Checkbox_Show_Password
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+              />
               <Button
                 type="submit"
                 className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"

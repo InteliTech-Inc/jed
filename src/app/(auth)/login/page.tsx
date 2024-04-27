@@ -27,10 +27,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Rotating_Lines from "@/components/rotating_lines";
+import Checkbox_Show_Password from "@/components/checkbox_show_password";
 
 export default function LoginForm() {
   const router = useRouter();
   const [isPending, setIsPending] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof authShape>>({
     resolver: zodResolver(authShape),
@@ -61,7 +63,7 @@ export default function LoginForm() {
       }
 
       if (user) {
-        router.push("/");
+        router.push("/dashboard");
 
         // Clear the form after successful login
         form.reset();
@@ -123,7 +125,7 @@ export default function LoginForm() {
                     <FormControl>
                       <Input
                         id="password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         autoComplete="off"
                         placeholder="Enter your password"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
@@ -133,6 +135,10 @@ export default function LoginForm() {
                     <FormMessage {...field} />
                   </FormItem>
                 )}
+              />
+              <Checkbox_Show_Password
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
               />
               <Button
                 type="submit"
