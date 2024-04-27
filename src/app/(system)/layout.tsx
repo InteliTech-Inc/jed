@@ -18,6 +18,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
 import Logo from "../../../public/images/logo.png";
+import { Separator } from "@/components/ui/separator";
 
 type Props = {
   children: ReactNode;
@@ -34,9 +35,10 @@ export default function AppLayout({ ...props }: Props) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-[18%] flex-col border-r bg-background lg:flex px-3 py-2">
-        <div className="border-b mb-5">
+        <div>
           <Image src={Logo} alt="Logo" width={80} height={80} />
         </div>
+        <Separator className="mb-5 mt-3" />
         <nav className="flex flex-col items-start gap-4">
           {NAV_LINKS.map((item) => {
             return (
