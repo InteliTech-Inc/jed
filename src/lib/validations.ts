@@ -51,9 +51,14 @@ export const signupShape = z
       message: "Last name is required!",
     }),
     email: emailShape,
-    phone: z.string().min(10, {
-      message: "Phone number is required!",
-    }),
+    phone: z
+      .string()
+      .min(10, {
+        message: "Phone number is required!",
+      })
+      .regex(/^(?:\+\d{1,3})?\d{7,15}$/, {
+        message: "Please enter a valid phone number",
+      }),
     password: passwordShape,
     confirm_password: passwordShape,
   })

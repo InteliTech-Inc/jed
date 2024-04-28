@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #d8f3dc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #52b788;
+  border-radius: 30px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #292828;
+}
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
