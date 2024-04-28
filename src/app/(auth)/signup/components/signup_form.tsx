@@ -69,20 +69,34 @@ export default function SignupForm() {
         },
       });
 
+      // Let's check if we got a user created
+      if (user?.identities && user?.identities.length > 0) {
+        if (user?.role === "authenticated") {
+          toast.success("Verification email sent! Please verify your email.");
+          router.push("/");
+
+          // Reset form inputs after successful signup
+          form.reset();
+        }
+        setIsPending(false);
+      } else {
+        const { error } = await db.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) {
+          toast.error("Email is already in use! Reset your password.");
+          setIsPending(false);
+          return;
+        }
+        toast.success("Successfully signed in! Redirecting...");
+        router.push("/dashboard");
+      }
       if (error) {
         toast.error(error.message);
         setIsPending(false);
         return;
       }
-
-      if (user?.role === "authenticated") {
-        toast.success("Verification email sent! Please verify your email.");
-        router.push("/");
-
-        // Reset form inputs after successful signup
-        form.reset();
-      }
-      setIsPending(false);
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
