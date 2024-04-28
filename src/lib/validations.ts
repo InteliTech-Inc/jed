@@ -35,10 +35,6 @@ export const authShape = z.object({
   password: passwordShape,
 });
 
-export const forgotPasswordShape = z.object({
-  email: emailShape,
-});
-
 // Use Shape to validate Reset Password
 export const resetPasswordShape = shape;
 
