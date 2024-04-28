@@ -56,8 +56,8 @@ export const signupShape = z
       .min(10, {
         message: "Phone number is required!",
       })
-      .regex(/^\+\d{1,3}\d{7,10}$/, {
-        message: "Must include country code e.g. +233559230000",
+      .regex(/^(?:\+\d{1,3})?\d{7,15}$/, {
+        message: "Please enter a valid phone number",
       }),
     password: passwordShape,
     confirm_password: passwordShape,
