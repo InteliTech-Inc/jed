@@ -7,6 +7,31 @@ import Image from "next/image";
 import { MenuIcon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import MobileNavbar from "./mobile_navbar";
+import { Button } from "@/components/ui/button";
+import { UserRoundPlusIcon } from "lucide-react";
+
+export const NavLinks = [
+  {
+    name: "Product",
+    path: "/product",
+  },
+  {
+    name: "Resources",
+    path: "/resources",
+  },
+  {
+    name: "Pricing",
+    path: "/pricing",
+  },
+  {
+    name: "About Us",
+    path: "/#about",
+  },
+  {
+    name: "Blog",
+    path: "/blog",
+  },
+];
 
 export default function Navbar() {
   const [navIsOpen, setNavIsOpen] = useState(false);
@@ -16,7 +41,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="flex p-4 gap-8 sticky top-0 bg-white lg:border-b">
+    <div className="flex p-4 gap-8 sticky top-0 bg-white justify-between items-center border-b">
       <section className=" flex justify-between w-full lg:w-fit ">
         <section>
           <Image src={Logo} width={20} height={20} alt="logo" />
@@ -42,26 +67,26 @@ export default function Navbar() {
           />
         )}
       </AnimatePresence>
-      <section className={`hidden h-fit bg-transparent lg:block`}>
-        <nav className={`bg-white h-fit p-0 w-full `}>
+      <section className={"hidden h-fit bg-transparent lg:block"}>
+        <nav className={"bg-white h-fit p-0 w-full "}>
           <ul className=" flex gap-4 pt-6 flex-row lg:pt-0">
-            <li>
-              <Link href="/" className="hover:text-secondary">
-                Products
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" className="hover:text-secondary">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:text-secondary">
-                Contact
-              </Link>
-            </li>
+            {NavLinks.map(({ name, path }) => (
+              <li key={name}>
+                <Link
+                  href={path}
+                  className=" hover:underline hover:underline-offset-4 ease-in duration-100"
+                >
+                  {name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
+      </section>
+      <section className="hidden lg:block">
+        <Button className=" gap-2">
+          Join waitlist <UserRoundPlusIcon size={18} />{" "}
+        </Button>
       </section>
     </div>
   );

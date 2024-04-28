@@ -5,6 +5,7 @@ import Link from "next/link";
 import { XIcon } from "lucide-react";
 import { useRef } from "react";
 import useClickOutside from "@/hooks/use_click_outside";
+import { NavLinks } from "./navbar";
 
 type MobileNavbarProps = {
   isOpen: boolean;
@@ -30,21 +31,24 @@ export default function MobileNavbar({
     >
       <nav
         ref={menuRef}
-        className={`border top-0 left-0 h-screen bg-white w-5/6 p-4 lg:h-fit relative lg:p-0 lg:w-full `}
+        className={
+          "border top-0 left-0 h-screen bg-white w-5/6 p-4 lg:h-fit relative lg:p-0 lg:w-full "
+        }
       >
         <div className=" absolute right-4 lg:hidden">
           <XIcon size={24} onClick={closeButtonHandler} />
         </div>
         <ul className=" flex-col flex gap-4 pt-6 lg:flex-row lg:pt-0">
-          <li>
-            <Link href="/">Products</Link>
-          </li>
-          <li>
-            <Link href="/about">About</Link>
-          </li>
-          <li>
-            <Link href="/contact">Contact</Link>
-          </li>
+          {NavLinks.map(({ name, path }) => (
+            <li key={name}>
+              <Link
+                href={path}
+                className="hover:underline hover:underline-offset-4 ease-in duration-100"
+              >
+                {name}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
     </motion.section>

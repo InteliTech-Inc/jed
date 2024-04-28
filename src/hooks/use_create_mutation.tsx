@@ -11,7 +11,7 @@ import { QueryError } from "@supabase/supabase-js";
  * @param {string} [method] The mutation method
  * @param {boolean} [showSucessMsg] if you want to show a custom success message, set this to false
  */
-function useCreateRequest<TResponse>({
+function useCreateRequest({
   dbName,
   key,
   method = "post",
