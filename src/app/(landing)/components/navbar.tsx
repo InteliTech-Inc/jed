@@ -13,7 +13,7 @@ import { UserRoundPlusIcon } from "lucide-react";
 
 export const NavLinks = [
   {
-    name: "Product",
+    name: "Products",
     path: "/product",
   },
   {
@@ -87,7 +87,7 @@ export default function Navbar() {
       <section className="hidden lg:block">
       
         <Button className=" gap-2" variant={"outline"}>
-          Join waitlist <UserRoundPlusIcon size={18} />{" "}
+          Join waitlist <UserRoundPlusIcon size={14} />{" "}
         </Button>
       </section>
     </div>

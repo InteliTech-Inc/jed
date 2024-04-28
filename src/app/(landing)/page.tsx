@@ -1,13 +1,12 @@
 import Navbar from "./components/navbar";
 import Hero from "./components/hero";
+import Product from "./components/product";
 export default async function Home() {
   return (
     <div>
       <Navbar />
       <Hero />
-      <section className=" h-[200vh]">
-        <h1>Roll up and smoke my sins away</h1>
-      </section>
+      <Product />
     </div>
   );
 }

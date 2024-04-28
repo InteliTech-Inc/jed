@@ -7,6 +7,9 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
+.main-heading {
+  @apply text-5xl lg:text-[4.5rem] leading-[1.1] font-semibold text-gray-900/90
+}
 
 mark {
   all: unset

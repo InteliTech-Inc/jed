@@ -32,7 +32,7 @@ export default function MobileNavbar({
       <nav
         ref={menuRef}
         className={
-          "border top-0 left-0 h-screen bg-green-50 w-5/6 p-4 lg:h-fit relative lg:p-0 lg:w-full "
+          "border top-0 left-0 h-screen bg-white w-5/6 p-4 lg:h-fit relative lg:p-0 lg:w-full "
         }
       >
         <div className=" absolute right-4 lg:hidden">
