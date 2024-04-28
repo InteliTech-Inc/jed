@@ -7,6 +7,7 @@ import Image from "next/image";
 import { MenuIcon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import MobileNavbar from "./mobile_navbar";
+
 import { Button } from "@/components/ui/button";
 import { UserRoundPlusIcon } from "lucide-react";
 
@@ -41,7 +42,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="flex p-4 gap-8 sticky top-0 bg-white justify-between items-center border-b">
+    <div className="flex p-4 gap-8 sticky top-0 bg-white/70 saturate-150 justify-between backdrop-blur-md items-center border-b z-50 ">
       <section className=" flex justify-between w-full lg:w-fit ">
         <section>
           <Image src={Logo} width={20} height={20} alt="logo" />
@@ -68,7 +69,7 @@ export default function Navbar() {
         )}
       </AnimatePresence>
       <section className={"hidden h-fit bg-transparent lg:block"}>
-        <nav className={"bg-white h-fit p-0 w-full "}>
+        <nav className={" h-fit p-0 w-full lg:bg-transparent"}>
           <ul className=" flex gap-4 pt-6 flex-row lg:pt-0">
             {NavLinks.map(({ name, path }) => (
               <li key={name}>
@@ -84,7 +85,8 @@ export default function Navbar() {
         </nav>
       </section>
       <section className="hidden lg:block">
-        <Button className=" gap-2">
+      
+        <Button className=" gap-2" variant={"outline"}>
           Join waitlist <UserRoundPlusIcon size={18} />{" "}
         </Button>
       </section>

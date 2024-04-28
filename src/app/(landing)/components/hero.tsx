@@ -1,27 +1,49 @@
+import { ArrowRightIcon } from "lucide-react";
+import ProductImage from "@/app/assets/hero-image.webp";
+import Image from "next/image";
+import Link from "next/link";
+import Badge from "./bagde";
+import { Dot } from "lucide-react";
+
 export default function Hero() {
   return (
-    <section className="h-[calc(100vh_-_60px)] w-full grid lg:grid-cols-[60%_auto] gap-4 place-items-center">
-      <section className="flex flex-col gap-4 p-6  border ">
-        <h1 className=" text-7xl leading-[1.2]">
-          Your <mark className=" text-primary/70">all-in-one</mark> events
-          organization platform
-        </h1>
-        <p className="">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
-          neque quis dolorum sequi maiores libero porro ut exercitationem maxime
-          dolorem.
-        </p>
-        <button
-          className="w-fit bg-secondary px-4 py-2 text-white rounded-md"
-          type="button"
-        >
-          Get started
-        </button>
+    <section className="min-h-[calc(100vh_-_60px)] w-full z-10 grid place-content-center lg:p-12">
+      <section className="relative">
+        <div className="absolute w-60 aspect-square bg-green-400/40 blur-[120px]  right-[4%] bottom-[15%] animate-pulse duration-1000" />
+        <div className="absolute w-60 aspect-square bg-green-200/60 blur-[120px]  left-[4%] top-[15%]" />
+        <section className="flex flex-col gap-8 p-2 lg:p-6 text-center w-full lg:w-4/5 mx-auto">
+          <Badge>
+            <p className="flex">
+              {" "}
+              <Dot className=" text-inherit" /> 2 weeks to product launch 🎊{" "}
+              <Dot className=" text-inherit" />
+            </p>
+          </Badge>
+          <h1 className=" text-5xl lg:text-[4.5rem] leading-[1.1] font-semibold text-gray-900/90">
+            Your <mark className=" text-secondary">all-in-one</mark> events
+            organization platform.
+          </h1>
+          <p className=" lg:px-12 mx-auto text-lg lg:text-xl">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
+            neque quis dolorum sequi maiores libero porro ut exercitationem
+            maxime dolorem.
+          </p>
+          <div className="flex w-fit mx-auto gap-4">
+            <Link
+              className="w-fit px-8 py-2 bg-secondary flex items-center rounded-md text-white mx-auto gap-2 hover:gap-3 transition-all duration-300"
+              href={"/login"}
+            >
+              Get started for free <ArrowRightIcon size={16} />
+            </Link>
+          </div>
+        </section>
       </section>
-      <section className="">
-        <img
-          src="https://images.unsplash.com/photo-1616910111011-888888888888?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
-          alt=""
+      <section className=" w-full lg:w-[80%] mx-auto px-3 py-6 lg:py-12 shadow-2xl">
+        <Image
+          src={ProductImage}
+          width={2000}
+          height={2000}
+          alt="Product Dashboard"
         />
       </section>
     </section>

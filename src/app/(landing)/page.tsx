@@ -5,6 +5,9 @@ export default async function Home() {
     <div>
       <Navbar />
       <Hero />
+      <section className=" h-[200vh]">
+        <h1>Roll up and smoke my sins away</h1>
+      </section>
     </div>
   );
 }

@@ -12,7 +12,10 @@ export const metadata: Metadata = {
   description: "The all-in-one ",
 };
 
-const plusJakartaSans = Plus_Jakarta_Sans({ variable: "--font-heading" , subsets: [ "latin"]});
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-heading",
+  subsets: ["latin"],
+});
 
 export default function RootLayout({
   children,

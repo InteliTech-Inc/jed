@@ -27,12 +27,12 @@ export default function MobileNavbar({
       exit={{ opacity: 0 }}
       className={` ${
         isOpen ? "absolute" : "hidden"
-      } w-full h-screen lg:h-fit top-0 left-0 lg:relative bg-black/80 backdrop-blur-sm lg:bg-transparent lg:hidden`}
+      } w-full h-screen lg:h-fit top-0 left-0 lg:relative bg-black/80 backdrop-blur-lg lg:bg-transparent lg:hidden`}
     >
       <nav
         ref={menuRef}
         className={
-          "border top-0 left-0 h-screen bg-white w-5/6 p-4 lg:h-fit relative lg:p-0 lg:w-full "
+          "border top-0 left-0 h-screen bg-green-50 w-5/6 p-4 lg:h-fit relative lg:p-0 lg:w-full "
         }
       >
         <div className=" absolute right-4 lg:hidden">
