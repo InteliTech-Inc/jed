@@ -5,7 +5,6 @@ import {
   InstagramIcon,
   YoutubeIcon,
 } from "lucide-react";
-import Logo from "@/components/logo";
 import Image from "next/image";
 export default function Footer() {
   const date = new Date().getFullYear();
