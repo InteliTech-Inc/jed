@@ -35,6 +35,10 @@ h1, h2, h3, h4, h5, h6 {
   @apply text-4xl lg:text-[4.5rem] leading-[1.1] font-semibold text-gray-900/90
 }
 
+
+.animate-dropdown {
+  @apply absolute transition group-hover:-translate-y-3 py-6 translate-y-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-500 ease-in-out group-hover:transform transform
+}
 mark {
   all: unset
 }

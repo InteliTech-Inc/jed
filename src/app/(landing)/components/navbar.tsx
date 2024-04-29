@@ -1,31 +1,36 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import MobileNavbar from "./mobile_navbar";
 import Logo from "@/components/logo";
+import NavbarProductsDropdown from "./products_dropdown";
+import NavbarResourcesDropdown from "./resources_dropdown";
 
-import { Button } from "@/components/ui/button";
 import { UserRoundPlusIcon } from "lucide-react";
 
 export const NavLinks = [
   {
     name: "Products",
     path: "/product",
+    dropdown: <NavbarProductsDropdown />,
   },
   {
     name: "Resources",
     path: "/resources",
+    dropdown: <NavbarResourcesDropdown />,
   },
   {
     name: "Pricing",
     path: "/pricing",
+    dropdown: false,
   },
   {
     name: "Blog",
     path: "/blog",
+    dropdown: false,
   },
 ];
 
@@ -64,16 +69,25 @@ export default function Navbar() {
       <section className={"hidden h-fit bg-transparent lg:block"}>
         <nav className={" h-fit p-0 w-full lg:bg-transparent"}>
           <ul className=" flex gap-4 pt-6 flex-row lg:pt-0">
-            {NavLinks.map(({ name, path }) => (
-              <li key={name}>
-                <Link
-                  href={path}
-                  className=" hover:underline hover:underline-offset-4 ease-in duration-100"
-                >
-                  {name}
-                </Link>
-              </li>
-            ))}
+            {NavLinks.map((link) => {
+              return (
+                <span key={link.name}>
+                  <li className="relative group">
+                    <Link
+                      href={link.path}
+                      className={` ${
+                        !link.dropdown
+                          ? "hover:underline hover:underline-offset-4"
+                          : ""
+                      } ease-in duration-100 flex items-center gap-2`}
+                    >
+                      {link.name} {link.dropdown && <ChevronDown size={14}/>}
+                    </Link>
+                    {link.dropdown && link.dropdown}
+                  </li>
+                </span>
+              );
+            })}
           </ul>
         </nav>
       </section>
