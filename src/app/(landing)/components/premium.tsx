@@ -1,24 +1,56 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import PricingImage from "@/app/assets/pricing-dashboard.png";
+
+export const TextBoxVariants = {
+  hidden: {
+    opacity: 1,
+  },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.5,
+    },
+  },
+};
+
+export const TextItemsVariants = {
+  hidden: { opacity: 0, y: 50 },
+  show: { opacity: 1, y: 0 },
+};
 
 export default function Premium() {
   return (
     <div className="lg:p-16 place-content-center">
       <section className="p-8 w-full h-full mx-auto lg:rounded-xl bg-primary grid lg:grid-cols-2 gap-4">
-        <div className="text-white p-2 lg:p-6">
-          <h3 className=" text-2xl lg:text-[3rem] lg:leading-[1.3]">
+        <motion.div
+          className="text-white p-2 lg:p-6"
+          variants={TextBoxVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.8 }}
+        >
+          <motion.h3
+            variants={TextItemsVariants}
+            className=" text-2xl lg:text-[3rem] lg:leading-[1.3]"
+          >
             Flexible pricing system specifically tailored for customers.
-          </h3>
-          <p className=" py-4 lg:py-8">
+          </motion.h3>
+          <motion.p variants={TextItemsVariants} className=" py-4 lg:py-8">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae
             minus nihil aliquam.
-          </p>
-          <Button className=" px-12 gap-2 hover:gap-4 transition-all duration-300 ">
+          </motion.p>
+          <motion.button
+            variants={TextItemsVariants}
+            className="bg-secondary flex items-center rounded-md py-2 text-slate-50 hover:bg-secondary/90 px-12 gap-2 hover:gap-4 duration-300 "
+          >
             See Pricing <ArrowRightIcon size={16} />
-          </Button>
-        </div>
+          </motion.button>
+        </motion.div>
         <div className=" rounded-lg overflow-hidden">
           <Image
             src={PricingImage}
