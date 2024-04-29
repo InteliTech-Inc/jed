@@ -144,7 +144,7 @@ export default function LoginForm() {
               />
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 gap-2 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={
                   (inputValues.email.length &&
                     inputValues.password.length < 1) ||

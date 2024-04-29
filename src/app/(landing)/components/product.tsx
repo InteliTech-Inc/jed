@@ -1,35 +1,55 @@
 import { EclipseIcon, ArrowRightIcon } from "lucide-react";
+import Nomination from "@/app/assets/nominations.webp";
+import Voting from "@/app/assets/voting.webp";
+import Ticketing from "@/app/assets/ticketing.webp";
+import Image from "next/image";
+const Products = [
+  {
+    name: "Nominations",
+    img_url: Nomination,
+    description:
+      "Lorem ipsum dolor sit ame did eiusmod tempor incididunt ut labore et and consectetur. Lorem ipsum dolor sit am",
+  },
+  {
+    name: "Ticketing",
+    img_url: Ticketing,
+    description:
+      "Lorem ipsum dolor sit ame did eiusmod tempor incididunt ut labore et and consectetur. Lorem ipsum dolor sit am",
+  },
+  {
+    name: "Voting",
+    img_url: Voting,
+    description:
+      "Lorem ipsum dolor sit ame did eiusmod tempor incididunt ut labore et and consectetur. Lorem ipsum dolor sit am",
+  },
+];
 
 export default function Product() {
   return (
-    <div className=" py-12 h-screen grid place-content-center">
+    <div className=" py-16 grid place-content-center">
       <section className="p-4 w-full text-center">
-        <h1 className=" main-heading py-6">
-          Our <mark className=" text-secondary">Products</mark>
+        <h1 className=" main-heading py-8">
+          What we <mark className=" text-secondary">offer</mark>
         </h1>
         <p className=" text-lg lg:text-2xl  leading-[1.4] w-full lg:w-3/5 mx-auto">
           Seamless online events organization and management{" "}
           <mark className=" text-primary/80">
-            platforms purposely built for you! 
+            platforms purposely built for you!
           </mark>
         </p>
       </section>
-      <section className=" grid lg:grid-cols-3 gap-4 p-4">
-        {["Nominations", "Ticketing", "Voting"].map((item) => {
+      <section className=" grid lg:grid-cols-3 gap-4 px-8 py-12">
+        {Products.map(({ name, img_url, description }) => {
           return (
-            <div className=" border border-neutral-600 rounded-md p-4">
-              <div className="p-4 bg-green-50 rounded-md w-fit aspect-square">
-                <EclipseIcon className="text-secondary" />
-              </div>
+            <div
+              key={name}
+              className=" border rounded-3xl p-4 bg-neutral-50"
+            >
+              <Image src={img_url} alt="Product" />
               <h3 className=" text-2xl font-semibold text-secondary py-2">
-                {item}
+                {name}
               </h3>
-              <p className="py-3">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              </p>
-              <a className="text-primary items-center border-b w-fit border-b-primary gap-1 hover:gap-3 transition-all duration-300 flex text-sm" href="/">
-                Learn more <ArrowRightIcon size={12}/>
-              </a>
+              <p className="py-2">{description}</p>
             </div>
           );
         })}

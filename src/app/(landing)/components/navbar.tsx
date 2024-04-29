@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Logo from "@/app/assets/arrow.png";
-import Image from "next/image";
 import { MenuIcon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import MobileNavbar from "./mobile_navbar";
+import Logo from "@/components/logo";
 
 import { Button } from "@/components/ui/button";
 import { UserRoundPlusIcon } from "lucide-react";
@@ -25,10 +24,6 @@ export const NavLinks = [
     path: "/pricing",
   },
   {
-    name: "About Us",
-    path: "/#about",
-  },
-  {
     name: "Blog",
     path: "/blog",
   },
@@ -42,11 +37,9 @@ export default function Navbar() {
   };
 
   return (
-    <div className="flex p-4 gap-8 sticky top-0 bg-white/70 saturate-150 justify-between backdrop-blur-md items-center border-b z-50 ">
+    <div className="flex p-4 gap-8 sticky top-0 bg-white justify-between items-center border-b z-50 ">
       <section className=" flex justify-between w-full lg:w-fit ">
-        <section>
-          <Image src={Logo} width={20} height={20} alt="logo" />
-        </section>
+        <Logo />
         <AnimatePresence>
           {!navIsOpen && (
             <motion.div
@@ -85,10 +78,12 @@ export default function Navbar() {
         </nav>
       </section>
       <section className="hidden lg:block">
-      
-        <Button className=" gap-2" variant={"outline"}>
-          Join waitlist <UserRoundPlusIcon size={14} />{" "}
-        </Button>
+        <Link
+          className="w-fit px-8 py-2 border flex items-center rounded-md text-secondary mx-auto gap-2 hover:bg-neutral-50 transition-all duration-300"
+          href={"/waitlist"}
+        >
+          Join waitlist <UserRoundPlusIcon size={14} />
+        </Link>
       </section>
     </div>
   );

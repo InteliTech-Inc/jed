@@ -116,7 +116,7 @@ export default function ForgotPasswordForm() {
 
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed gap-2 disabled:opacity-50"
                 disabled={inputValues.email.length < 1 || isPending}
               >
                 {isPending && <Rotating_Lines />}
