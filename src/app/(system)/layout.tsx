@@ -21,6 +21,7 @@ import { ReactNode } from "react";
 import { Separator } from "@/components/ui/separator";
 import Logo from "@/components/logo";
 
+
 type Props = {
   children: ReactNode;
 };
@@ -62,7 +63,7 @@ export default function AppLayout({ ...props }: Props) {
         </nav>
         <nav className="mt-auto flex flex-col items-start gap-4">
           <Link
-            href={`/settings`}
+            href={"/settings"}
             className={cn(
               "flex items-center gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-secondary w-full",
               {
@@ -109,7 +110,7 @@ export default function AppLayout({ ...props }: Props) {
                   })}
                 </nav>
                 <Link
-                  href={`/settings`}
+                  href={"/settings"}
                   className={cn(
                     "flex items-center gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full",
                     {

@@ -27,7 +27,6 @@ export default function WaitListPage(): JSX.Element {
             <Link
               className="text-center text-md text-secondary underline hover:transistion-all hover:duration-300 ease-in-out"
               href="mailto:info.jedvotes@gmail.com"
-              target="_blank"
             >
               Support Team
             </Link>

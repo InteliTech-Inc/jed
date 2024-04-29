@@ -108,7 +108,7 @@ export default function SignupForm() {
     <main className="flex items-center justify-center p-10">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSignup)}>
-          <Card className="mx-auto font-sans w-[23rem] md:min-w-[30rem] flex flex-col justify-center items-center pt-4">
+          <Card className="mx-auto font-sans w-[23rem] md:min-w-[30rem] lg:w-[38rem] flex flex-col justify-center items-center pt-4">
             <Logo />
             <CardHeader className="w-full">
               <CardTitle className="text-2xl font-sans">Sign Up</CardTitle>
@@ -248,7 +248,7 @@ export default function SignupForm() {
               />
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed gap-2 disabled:opacity-50"
                 disabled={
                   (inputValues.password.length &&
                     inputValues.confirm_password.length &&

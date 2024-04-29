@@ -1,22 +1,21 @@
 import "./globals.css";
-import { Be_Vietnam_Pro as JedFont } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Toaster } from "sonner";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Providers from "./providers";
 import type { Metadata } from "next";
-
-const jedFont = JedFont({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-sans",
-});
 
 export const metadata: Metadata = {
   title: "JED",
   description: "The all-in-one ",
 };
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-heading",
+  subsets: ["latin"],
+});
 
 export default function RootLayout({
   children,
@@ -27,8 +26,8 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          ` "min-h-screen bg-background font-sans antialiased",
-         ${jedFont.variable} ${GeistSans.variable} ${GeistMono.variable}`
+          ` "min-h-screen bg-background font-sans antialiased ",
+          ${GeistSans.variable} ${GeistMono.variable} ${plusJakartaSans.variable}`
         )}
       >
         <Providers>
