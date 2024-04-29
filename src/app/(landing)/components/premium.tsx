@@ -1,27 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import PricingImage from "@/app/assets/pricing-dashboard.png";
-
-export const TextBoxVariants = {
-  hidden: {
-    opacity: 1,
-  },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.5,
-    },
-  },
-};
-
-export const TextItemsVariants = {
-  hidden: { opacity: 0, y: 50 },
-  show: { opacity: 1, y: 0 },
-};
+import { TextBoxVariants } from "@/constants/framer_animations";
+import { TextItemsVariants } from "@/constants/framer_animations";
 
 export default function Premium() {
   return (
