@@ -17,6 +17,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
+
+import { Separator } from "@/components/ui/separator";
 import Logo from "@/components/logo";
 
 
@@ -38,6 +40,7 @@ export default function AppLayout({ ...props }: Props) {
         <div className="border-b mb-5">
           <Logo />
         </div>
+        <Separator className="mb-5 mt-3" />
         <nav className="flex flex-col items-start gap-4">
           {NAV_LINKS.map((item) => {
             return (

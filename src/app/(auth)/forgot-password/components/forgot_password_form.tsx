@@ -22,7 +22,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { forgotPasswordShape } from "@/lib/validations";
+import { authShape } from "@/lib/validations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -32,6 +32,8 @@ import Logo from "@/components/logo";
 export default function ForgotPasswordForm() {
   const router = useRouter();
   const [isPending, setIsPending] = useState<boolean>(false);
+
+  const forgotPasswordShape = authShape.pick({ email: true });
 
   const form = useForm<z.infer<typeof forgotPasswordShape>>({
     resolver: zodResolver(forgotPasswordShape),
