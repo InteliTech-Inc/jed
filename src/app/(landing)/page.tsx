@@ -7,7 +7,7 @@ import Globe from "./components/globe";
 import Footer from "./components/footer";
 export default async function Home() {
   return (
-    <div className="w-full  mx-auto max-w-screen-xl ">
+    <div className="w-full  mx-auto max-w-screen-2xl ">
       <Navbar />
       <Hero />
       <Product />

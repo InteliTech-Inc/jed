@@ -45,7 +45,7 @@ export default function Product() {
           </mark>
         </motion.p>
       </section>
-      <section className=" grid lg:grid-cols-3 gap-4 px-8 py-12">
+      <section className=" grid md:grid-cols-2 lg:grid-cols-3 gap-4 px-8 py-12">
         {Products.map(({ name, img_url, description }) => {
           return (
             <div key={name} className=" border rounded-3xl p-4 bg-neutral-50">
