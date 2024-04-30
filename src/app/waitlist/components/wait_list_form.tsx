@@ -17,12 +17,7 @@ import Arrow from "@/app/assets/arrow.png";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { toast } from "sonner";
 import Rotating_Lines from "@/components/rotating_lines";
-
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-});
+import { formSchema } from "@/lib/validations";
 
 export default function WaitListForm(): JSX.Element {
   const { mutateAsync: AddEmailToWaitlist, isPending } = useCreateMutation({
@@ -67,7 +62,7 @@ export default function WaitListForm(): JSX.Element {
                   />
                 </FormControl>
                 <Button
-                  className=" w-full lg:w-fit py-3 px-4 flex gap-2 rounded-md bg-secondary text-white font-semibold hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                  className=" w-full lg:w-fit py-3 px-4 flex gap-2 rounded-md font-semibold hover:bg-secondary/80 hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out"
                   disabled={inputEmail.length < 1 || isPending}
                   type="submit"
                 >
