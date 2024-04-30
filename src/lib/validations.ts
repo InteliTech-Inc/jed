@@ -68,3 +68,9 @@ export const signupShape = z
     }
     return true;
   });
+
+export const formSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+});
