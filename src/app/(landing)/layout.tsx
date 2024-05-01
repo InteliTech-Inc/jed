@@ -1,6 +1,15 @@
 import { ReactNode } from "react";
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    default: "JED",
+    template: "JED - %s",
+  },
+};
+
 export default function LandingPageLayout({
   children,
 }: {

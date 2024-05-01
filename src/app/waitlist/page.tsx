@@ -2,6 +2,11 @@ import Link from "next/link";
 import React from "react";
 import WaitListForm from "./components/wait_list_form";
 import AnimatedText from "./components/animated_text";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "WaitLyst",
+};
 
 export default function WaitListPage(): JSX.Element {
   return (

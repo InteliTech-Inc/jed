@@ -2,6 +2,11 @@ import Image from "next/image";
 import NominationsImage from "@/app/assets/nominations.webp";
 import VotingImage from "@/app/assets/voting.webp";
 import TicketingImage from "@/app/assets/ticketing.webp";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Products",
+};
 
 export default function ProductsPage() {
   return (

@@ -5,7 +5,7 @@ import React from "react";
 import BlogList from "./components/blog_lists";
 
 export const metadata: Metadata = {
-  title: "JED Blog",
+  title: "Blog",
 };
 
 export default async function BlogPage() {

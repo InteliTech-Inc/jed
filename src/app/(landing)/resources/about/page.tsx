@@ -1,5 +1,10 @@
 import Image from "next/image";
 import AboutImage from "@/app/assets/pricing-dashboard.png";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+};
 
 export default function AboutUsPage() {
   return (

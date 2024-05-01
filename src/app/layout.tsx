@@ -8,8 +8,30 @@ import Providers from "./providers";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "JED",
-  description: "The all-in-one ",
+  metadataBase: new URL("http://localhost:3000"),
+  title: {
+    default: "JED",
+    template: "JED - %s",
+  },
+  description:
+    "A modern JED with a focus on performance, accessibility, and developer experience",
+  twitter: {
+    card: "summary_large_image",
+  },
+  alternates: {
+    canonical: "/",
+    languages: {
+      "en-US": "/en-US",
+    },
+  },
+  openGraph: {
+    images: [
+      {
+        url: "../app/opengraph-image.png",
+      },
+    ],
+  },
+  // icons: [{ rel: "icon", url: Favicon.src }],
 };
 
 const plusJakartaSans = Plus_Jakarta_Sans({
