@@ -248,12 +248,12 @@ export default function SignupForm() {
               />
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed gap-2 disabled:opacity-50"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-secondary"
                 disabled={
-                  (inputValues.password.length &&
-                    inputValues.confirm_password.length &&
-                    inputValues.email.length &&
-                    inputValues.firstName.length < 1) ||
+                  (inputValues.password.length === 0 &&
+                    inputValues.confirm_password.length === 0 &&
+                    inputValues.email.length === 0 &&
+                    inputValues.firstName.length === 0) ||
                   isPending
                 }
               >
