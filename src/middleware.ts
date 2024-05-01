@@ -11,14 +11,14 @@ export default async function middleware(req: NextRequest) {
     "/reset-password",
     "/waitlist",
     "/",
-    "/blog",
   ];
 
   if (
     publicUrl.includes(req.nextUrl.pathname) ||
     req.nextUrl.pathname.match(/products(.*)/) ||
     req.nextUrl.pathname.match(/resources\/?(.*)/) ||
-    req.nextUrl.pathname.match(/blog\/?(.*)/)
+    req.nextUrl.pathname.match(/blog\/?(.*)/) ||
+    req.nextUrl.pathname.match(/pricing\/?(.*)/)
   ) {
     return res;
   }
