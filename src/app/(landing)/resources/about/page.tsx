@@ -43,7 +43,7 @@ export default function AboutUsPage() {
           </p>
         </section>
         <section className=" border rounded-3xl p-4 bg-neutral-50 h-25">
-          <h3 className=" text-3xl py-4 font-semibold text-secondary">Our Mission</h3>
+          <h3 className=" text-3xl py-4 font-semibold text-secondaryp">Our Mission</h3>
           <p className="leading-[1.6]">
             The JED event is dedicated to inspiring and connecting students in
             JED science, and to catalysing event by empowering them with
