@@ -1,12 +1,13 @@
 import { FlowerIcon, TagIcon, VoteIcon } from "lucide-react";
+import Link from "next/link";
 export default function NavbarProductsDropdown() {
   return (
     <div className="animate-dropdown">
       <div className="w-96 border rounded-lg bg-white z-10 p-2 shadow-lg">
         <ul>
           <li className="">
-            <a
-              href="/first"
+            <Link
+              href="/products/#nominations"
               className="dropdown-item flex gap-4 hover:bg-gray-100 p-2 rounded-md"
             >
               <span className="p-2 bg-blue-100 h-fit border-2 border-blue-400 rounded-md">
@@ -19,11 +20,11 @@ export default function NavbarProductsDropdown() {
                   Minima fugit iure esse.
                 </p>
               </span>
-            </a>
+            </Link>
           </li>
           <li className="">
-            <a
-              href="/first"
+            <Link
+              href="/products#ticketing"
               className="dropdown-item flex gap-4 hover:bg-gray-100 p-2 rounded-md"
             >
               <span className="p-2 bg-red-100 h-fit border-2 border-red-300 rounded-md">
@@ -36,11 +37,11 @@ export default function NavbarProductsDropdown() {
                   Minima fugit iure esse.
                 </p>
               </span>
-            </a>
+            </Link>
           </li>
           <li className="">
-            <a
-              href="/first"
+            <Link
+              href="/products#voting"
               className="dropdown-item flex gap-4 hover:bg-gray-100 p-2 rounded-md"
             >
               <span className="p-2 bg-neutral-100 h-fit border rounded-md">
@@ -53,7 +54,7 @@ export default function NavbarProductsDropdown() {
                   Minima fugit iure esse.
                 </p>
               </span>
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

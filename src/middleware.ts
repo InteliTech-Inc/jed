@@ -13,7 +13,11 @@ export default async function middleware(req: NextRequest) {
     "/",
   ];
 
-  if (publicUrl.includes(req.nextUrl.pathname)) {
+  if (
+    publicUrl.includes(req.nextUrl.pathname) ||
+    req.nextUrl.pathname.match(/products(.*)/) ||
+    req.nextUrl.pathname.match(/resources\/?(.*)/)
+  ) {
     return res;
   }
 
@@ -26,8 +30,6 @@ export default async function middleware(req: NextRequest) {
   if (!session) {
     return NextResponse.rewrite(new URL("/login", req.url));
   }
-
-  console.log(session);
 
   return res;
 }
