@@ -1,9 +1,8 @@
+import { client } from "@/client";
+import { postQuery } from "@/lib/query";
+import { Metadata } from "next";
 import React from "react";
 import BlogList from "./components/blog_lists";
-import { postQuery } from "@/lib/query";
-import { client } from "@/client";
-import { Metadata } from "next";
-import Footer from "../components/footer";
 
 export const metadata: Metadata = {
   title: "JED Blog",
@@ -15,7 +14,6 @@ export default async function BlogPage() {
   return (
     <>
       <BlogList posts={posts} />
-      <Footer />
     </>
   );
 }

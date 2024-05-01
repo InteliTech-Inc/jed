@@ -62,10 +62,10 @@ export default function Footer() {
           </p>
           <ul className="flex gap-4 text-[.8rem]">
             <li className="hover:text-secondary">
-              <a href="/resources/terms">Terms of Use</a>
+              <Link href="/resources/terms">Terms of Use</Link>
             </li>
             <li className="hover:text-secondary">
-              <a href="/resources/privacy-policy">Privacy Policy</a>
+              <Link href="/resources/privacy-policy">Privacy Policy</Link>
             </li>
           </ul>
         </section>
@@ -78,7 +78,7 @@ export default function Footer() {
             >
               <InstagramIcon
                 size={16}
-                className="hover:text-secondary transition-all duration-100 cursor-pointer"
+                className="hover:text-secondary transition-all duration-300 cursor-pointer hover:-translate-y-1"
               />
             </a>
             <Link
@@ -88,7 +88,7 @@ export default function Footer() {
             >
               <LinkedinIcon
                 size={16}
-                className="hover:text-secondary transition-all duration-100 cursor-pointer"
+                className="hover:text-secondary transition-all duration-300 cursor-pointer hover:-translate-y-1"
               />
             </Link>
             <a
@@ -98,7 +98,7 @@ export default function Footer() {
             >
               <TwitterIcon
                 size={16}
-                className="hover:text-secondary transition-all duration-100 cursor-pointer"
+                className="hover:text-secondary transition-all duration-300 cursor-pointer hover:-translate-y-1"
               />
             </a>
             <a
@@ -108,7 +108,7 @@ export default function Footer() {
             >
               <YoutubeIcon
                 size={16}
-                className="hover:text-secondary transition-all duration-100 cursor-pointer"
+                className="hover:text-secondary transition-all duration-300 cursor-pointer hover:-translate-y-1"
               />
             </a>
           </div>

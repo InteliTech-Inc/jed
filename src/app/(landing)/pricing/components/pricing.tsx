@@ -3,7 +3,6 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-type Props = {};
 
 const PRICING_DATA = [
   {
@@ -77,11 +76,11 @@ const PRICING_DATA = [
   },
 ];
 
-export default function Pricing({}: Props) {
+export default function Pricing() {
   return (
     <section>
       <div className="container mx-auto px-6 py-20">
-        <h2 className="text-4xl font-bold text-center  mb-8">Pricing</h2>
+        <h2 className="main-heading text-center mb-8">Pricing</h2>
         <div className="flex flex-col md:flex-row justify-center items-center md:space-x-8 space-y-4 md:space-y-0">
           {PRICING_DATA.map((pricing) => (
             <div

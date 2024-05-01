@@ -34,7 +34,9 @@ export default function AboutUsPage() {
       </div>
       <div className="grid lg:w-[90%] mx-auto lg:grid-cols-2 p-6 gap-4 ">
         <section className=" border rounded-3xl p-4 bg-neutral-50 h-25 ">
-          <h3 className=" text-3xl py-4 font-semibold text-secondary">Our Vision</h3>
+          <h3 className=" text-3xl py-4 font-semibold text-secondary">
+            Our Vision
+          </h3>
           <p className="leading-[1.6]">
             At MIH, we envision a world where the most pressing JED problems are
             solved by the next generation of JED scientists. We seek to train
@@ -43,7 +45,9 @@ export default function AboutUsPage() {
           </p>
         </section>
         <section className=" border rounded-3xl p-4 bg-neutral-50 h-25">
-          <h3 className=" text-3xl py-4 font-semibold text-secondaryp">Our Mission</h3>
+          <h3 className=" text-3xl py-4 font-semibold text-secondary">
+            Our Mission
+          </h3>
           <p className="leading-[1.6]">
             The JED event is dedicated to inspiring and connecting students in
             JED science, and to catalysing event by empowering them with

@@ -10,8 +10,8 @@ export const RichText = {
           <Image
             src={urlFor(value).url()}
             alt={"Image"}
-            width={700}
-            height={50}
+            width={2000}
+            height={2000}
             className="object-cover w-full h-full rounded-lg"
           />
         </div>

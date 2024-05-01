@@ -63,7 +63,7 @@ export default function BlogList({ posts }: Props) {
         {currentPostsToShow.map((post) => (
           <ClientSideRoutes key={post._id} route={`/blog/${post.slug.current}`}>
             <div className="flex flex-col overflow-hidden group cursor-pointer rounded-lg">
-              <div className="relative w-fill h-80 drop-shadow-xl group-hover:scale-105 transition-transform duration-500 ease-out ">
+              <div className="relative w-fill h-80 group-hover:scale-105 transition-transform duration-500 ease-out ">
                 <Image
                   className="object-cover md:object-center rounded-lg"
                   src={post.mainImage ? urlFor(post.mainImage)?.url() : ""}
