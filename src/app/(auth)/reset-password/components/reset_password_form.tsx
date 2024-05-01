@@ -135,9 +135,9 @@ export default function ResetPasswordForm() {
               />
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-secondary"
                 disabled={
-                  (inputValues.password.length &&
+                  (inputValues.password.length === 0 &&
                     inputValues.confirm_password.length < 1) ||
                   isPending
                 }
