@@ -33,8 +33,6 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.rewrite(new URL("/login", req.url));
   }
 
-  console.log(session);
-
   return res;
 }
 

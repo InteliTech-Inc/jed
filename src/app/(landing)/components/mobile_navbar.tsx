@@ -40,7 +40,8 @@ export default function MobileNavbar({
         </div>
         <ul className=" flex-col flex gap-4 pt-6 lg:flex-row lg:pt-0">
           {NavLinks.map(({ name, path }) => (
-            <li key={name}>
+            // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+            <li key={name} onClick={closeButtonHandler}>
               <Link
                 href={path}
                 className="hover:underline hover:underline-offset-4 ease-in duration-100"

@@ -14,7 +14,7 @@ import { UserRoundPlusIcon } from "lucide-react";
 export const NavLinks = [
   {
     name: "Products",
-    path: "/product",
+    path: "/products",
     dropdown: <NavbarProductsDropdown />,
   },
   {

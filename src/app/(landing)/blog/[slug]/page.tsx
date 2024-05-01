@@ -76,39 +76,41 @@ export default async function SinglePost({ params: { slug } }: Props) {
     <section className="flex flex-col items-center justify-center w-[85dvw] md:w-[75dvw] mx-auto">
       <div className="my-8">
         <BackButton />
-        <h1 className="text-4xl md:text-5xl font-extrabold text-center">
+        <h1 className="text-4xl leading-[1.4] py-4 md:text-5xl font-extrabold lg:text-center">
           {posts.title}
         </h1>
-        <div className="flex flex-col md:flex-row items-center justify-center md:gap-x-4 my-5">
+        <div className="flex flex-row items-center lg:justify-center gap-2 md:gap-x-4 my-5">
           <Image
             src={urlFor(posts.author.image).url()}
             alt={posts.author.name}
-            width={40}
-            height={40}
+            width={200}
+            height={200}
             className="rounded-full w-12 h-12 object-cover object-top "
           />
-          <p className="flex items-center justify-center">
-            <span className="font-bold">
-              {posts.author.name ? `Written By ${posts.author.name}` : "User"}
+          <section className="flex flex-col lg:flex-row items-start justify-center lg:items-center">
+            <p className="flex items-center justify-center">
+              <span className="font-bold">
+                {posts.author.name ? `By ${posts.author.name}` : "User"}
+              </span>
+            </p>
+            <span className="hidden md:block text-lg text-gray-500 px-2">
+              &#x2022;
             </span>
-          </p>
-          <span className="hidden md:block text-lg text-gray-500">
-            &#x2022;
-          </span>
-          <span className=" text-gray-500">
-            {new Date(posts._createdAt).toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </span>
+            <span className=" text-gray-500">
+              {new Date(posts._createdAt).toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </span>
+          </section>
         </div>
         <div className="w-full md:h-[35rem]  my-14">
           <Image
             src={urlFor(posts.mainImage).url()}
             alt={posts.title}
-            width={700}
-            height={300}
+            width={2000}
+            height={2000}
             className="object-cover w-full h-full rounded-lg shadow-md"
           />
         </div>
@@ -118,8 +120,8 @@ export default async function SinglePost({ params: { slug } }: Props) {
           <Image
             src={urlFor(posts.author.image).url()}
             alt={posts.author.name}
-            width={100}
-            height={100}
+            width={2000}
+            height={2000}
             className="rounded-full h-24 w-24 md:h-28 md:w-28 object-cover object-top hover:scale-105 transition-transform duration-300 ease-in-out"
           />
           <div>

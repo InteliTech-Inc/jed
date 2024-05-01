@@ -1,12 +1,13 @@
 import { FlowerIcon, TagIcon } from "lucide-react";
+import Link from "next/link";
 export default function NavbarResourcesDropdown() {
   return (
     <div className=" animate-dropdown">
       <div className=" w-96 border rounded-lg bg-white z-10 p-2 shadow-lg">
         <ul>
           <li className="">
-            <a
-              href="/first"
+            <Link
+              href="/resources/guides"
               className="dropdown-item flex gap-4 hover:bg-gray-100 p-2 rounded-md"
             >
               <span className="p-2 bg-neutral-100 h-fit border rounded-md">
@@ -19,11 +20,11 @@ export default function NavbarResourcesDropdown() {
                   Minima fugit iure esse.
                 </p>
               </span>
-            </a>
+            </Link>
           </li>
           <li className="">
-            <a
-              href="/first"
+            <Link
+              href="/resources/about"
               className="dropdown-item flex gap-4 hover:bg-gray-100 p-2 rounded-md"
             >
               <span className="p-2 bg-neutral-100 h-fit border rounded-md">
@@ -36,7 +37,7 @@ export default function NavbarResourcesDropdown() {
                   Minima fugit iure esse.
                 </p>
               </span>
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

@@ -12,7 +12,7 @@ function EventsPage() {
           </h3>
         </div>
         <div>
-          <Link href={`/events/create`}>
+          <Link href={"/events/create"}>
             <Button>Create Event</Button>
           </Link>
         </div>

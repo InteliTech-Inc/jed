@@ -83,4 +83,8 @@ mark {
   }
 }
 
+.active-link {
+  @apply bg-green-50 border-l border-l-secondary transition-colors  duration-500 ;
+}
+
 

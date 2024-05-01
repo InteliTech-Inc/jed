@@ -18,6 +18,7 @@ import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { toast } from "sonner";
 import Rotating_Lines from "@/components/rotating_lines";
 import { formSchema } from "@/lib/validations";
+import Confetti from "react-confetti";
 
 export default function WaitListForm(): JSX.Element {
   const { mutateAsync: AddEmailToWaitlist, isPending } = useCreateMutation({
@@ -31,6 +32,7 @@ export default function WaitListForm(): JSX.Element {
       email: "",
     },
   });
+  const [explode, setExpload] = useState(false);
 
   const inputEmail = form.watch("email", "");
 
@@ -38,11 +40,21 @@ export default function WaitListForm(): JSX.Element {
     AddEmailToWaitlist({ email: values.email }).then((_) => {
       toast.success("Your email has been successfully added to the waitlist!.");
       form.reset();
+      setExpload(true);
     });
   }
 
   return (
     <Form {...form}>
+      {explode && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          gravity={0.5}
+          recycle={false}
+          onConfettiComplete={() => setExpload(false)}
+        />
+      )}
       <form
         className="flex flex-col md:flex-row items-center justify-center gap-x-4 gap-y-4 z-10 relative"
         onSubmit={form.handleSubmit(onSubmit)}
