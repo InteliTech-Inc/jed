@@ -62,10 +62,10 @@ export default function Footer() {
           </p>
           <ul className="flex gap-4 text-[.8rem]">
             <li className="hover:text-secondary">
-              <a href="/">Terms of Use</a>
+              <a href="/resources/terms">Terms of Use</a>
             </li>
             <li className="hover:text-secondary">
-              <a href="/">Privacy Policy</a>
+              <a href="/resources/privacy-policy">Privacy Policy</a>
             </li>
           </ul>
         </section>
