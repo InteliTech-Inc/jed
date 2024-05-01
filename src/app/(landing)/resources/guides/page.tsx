@@ -28,7 +28,7 @@ function Help() {
       // biome-ignore lint/complexity/noForEach: <it works>
       elements.forEach((element) => {
         const rect = element?.getBoundingClientRect();
-        const isLess = rect.top <= 80;
+        const isLess = rect?.top <= 80;
         isLess ? setActiveHash(`#${element.id}`) : "";
       });
     }, 200);
