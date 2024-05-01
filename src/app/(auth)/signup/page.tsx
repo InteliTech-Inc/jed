@@ -1,8 +1,12 @@
 import React from "react";
 import SignupForm from "./components/signup_form";
+import { Metadata } from "next";
 
-type Props = {};
+export const metadata: Metadata = {
+  title: "Sign Up",
+  description: "Create an account to access have a dashboard",
+};
 
-export default function SignUpPage({}: Props) {
+export default function SignUpPage() {
   return <SignupForm />;
 }

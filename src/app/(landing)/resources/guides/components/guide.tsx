@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import throttle from "lodash.throttle";
 import debounce from "lodash.debounce";
-import { Metadata } from "next";
 
 const PageHashedLinks = {
   Introduction: "Introduction to JED App",
@@ -18,11 +17,11 @@ function slugify(str: string) {
 }
 
 export default function Guide() {
-  const url = new URL(window !== undefined ? window.location.href : "");
-  const [activeHash, setActiveHash] = useState(url.hash);
+  const [activeHash, setActiveHash] = useState("");
 
   useEffect(() => {
-    const handleHashChange = () => setActiveHash(window.location.hash);
+    const url = new URL(window !== undefined ? window.location.href : "");
+    const handleHashChange = () => setActiveHash(url.hash);
     const handleScroll = throttle(() => {
       const elements = Object.values(PageHashedLinks).map(
         (item) => document.querySelector(`#${slugify(item)}`) as HTMLElement

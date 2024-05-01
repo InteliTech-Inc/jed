@@ -8,7 +8,7 @@ import Providers from "./providers";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL("http://localhost:3000/"),
   title: {
     default: "JED",
     template: "JED - %s",
@@ -24,14 +24,13 @@ export const metadata: Metadata = {
       "en-US": "/en-US",
     },
   },
-  openGraph: {
-    images: [
-      {
-        url: "../app/opengraph-image.png",
-      },
-    ],
-  },
-  // icons: [{ rel: "icon", url: Favicon.src }],
+  // openGraph: {
+  //   images: [
+  //     {
+  //       url: "../app/opengraph-image.png",
+  //     },
+  //   ],
+  // },
 };
 
 const plusJakartaSans = Plus_Jakarta_Sans({
