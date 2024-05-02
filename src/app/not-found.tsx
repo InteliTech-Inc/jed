@@ -1,10 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
-import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+};
 
 export default function NotFound() {
-  const goback = (): void => {
+  const goBack = (): void => {
     return window.history.back();
   };
 
@@ -22,7 +26,7 @@ export default function NotFound() {
         </div>
         <div className="mt-5">
           <Button
-            onClick={goback}
+            onClick={goBack}
             className="group w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md transition-all ease duration-100"
           >
             <ArrowLeftIcon height={16} width={16} className="mr-2" />
