@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import PricingImage from "@/app/assets/pricing-dashboard.png";
 import { TextBoxVariants } from "@/constants/framer_animations";
 import { TextItemsVariants } from "@/constants/framer_animations";
+import Link from "next/link";
 
 export default function Premium() {
   return (
@@ -28,12 +29,14 @@ export default function Premium() {
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae
             minus nihil aliquam.
           </motion.p>
-          <motion.button
-            variants={TextItemsVariants}
-            className="bg-secondary flex items-center rounded-md py-2 text-slate-50 hover:bg-secondary/90 px-12 gap-2 hover:gap-4 duration-300 "
-          >
-            See Pricing <ArrowRightIcon size={16} />
-          </motion.button>
+          <Link href="/pricing">
+            <motion.button
+              variants={TextItemsVariants}
+              className="bg-secondary flex items-center rounded-md py-2 text-slate-50 hover:bg-secondary/90 px-12 gap-2 hover:gap-4 duration-300 "
+            >
+              See Pricing <ArrowRightIcon size={16} />
+            </motion.button>
+          </Link>
         </motion.div>
         <div className=" rounded-lg overflow-hidden">
           <Image
