@@ -1,4 +1,5 @@
 "use client";
+import Rotating_Lines from "@/components/rotating_lines";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,11 +11,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useCreateMutation } from "@/hooks/use_create_mutation";
+import { db } from "@/lib/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ImageDown } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -27,8 +33,15 @@ const formSchema = z.object({
 });
 
 function CreateEventForm() {
+  const router = useRouter();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
+
+  const { mutateAsync: CreateEvent, isPending } = useCreateMutation({
+    dbName: "events",
+    key: "events",
+    showSucessMsg: false,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,8 +51,32 @@ function CreateEventForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const supabase = createClientComponentClient();
+    const user = await db.auth.getUser();
+
+    const { data, error } = await supabase.storage
+      .from("events")
+      .upload(selectedFile?.name!, selectedFile!, {
+        contentType: "image/png",
+      });
+
+    if (error) {
+      console.log(error);
+      toast.error(`${error.message}`);
+      return;
+    }
+
+    CreateEvent({
+      name: values.event_name,
+      description: values.event_description,
+      img_url: data?.path,
+      user_id: user.data.user?.id,
+    }).then((_) => {
+      toast.success("Your event has been successfully created!");
+      form.reset();
+      router.push("/events");
+    });
   }
 
   function UploadImageToForm(e: ChangeEvent<HTMLInputElement>) {
@@ -128,8 +165,13 @@ function CreateEventForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="tracking-wide uppercase w-full my-4">
-            Create Event
+          <Button
+            type="submit"
+            className="tracking-wide uppercase w-full my-4"
+            disabled={isPending}
+          >
+            {isPending && <Rotating_Lines />}
+            Submit
           </Button>
         </form>
       </Form>
