@@ -13,14 +13,11 @@ import { NAV_LINKS } from "@/constants/nav_links";
 import { db } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import { PanelLeft, Settings, User } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
 
-import { Separator } from "@/components/ui/separator";
 import Logo from "@/components/logo";
-
 
 type Props = {
   children: ReactNode;
@@ -37,10 +34,9 @@ export default function AppLayout({ ...props }: Props) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-[18%] flex-col border-r bg-background lg:flex px-3 py-2">
-        <div className="border-b mb-5">
+        <div className="border-b pb-3 mb-5">
           <Logo />
         </div>
-        <Separator className="mb-5 mt-3" />
         <nav className="flex flex-col items-start gap-4">
           {NAV_LINKS.map((item) => {
             return (
@@ -78,7 +74,7 @@ export default function AppLayout({ ...props }: Props) {
         </nav>
       </aside>
       <div className="flex flex-col lg:gap-4 lg:py-4 lg:pl-[18%]">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 lg:static lg:h-auto lg:border-0 lg:bg-transparent lg:px-6">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-white px-4 lg:static lg:h-auto lg:border-0 lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="lg:hidden">
