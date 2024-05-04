@@ -9,7 +9,6 @@ async function EventsPage() {
   const db = dbServer(cookies);
 
   const { data: events } = await db.from("events").select("*");
-  console.log("Events", events);
 
   return (
     <div>
@@ -40,7 +39,7 @@ async function EventsPage() {
                 >
                   <h5 className="font-semibold">{event.name}</h5>
                   <Image
-                    src={`https://cbboxofzpwjfpihaoyhn.supabase.co/storage/v1/object/public/events/${event.img_url}`}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
                     alt={`${event.name}`}
                     width={2000}
                     height={2000}

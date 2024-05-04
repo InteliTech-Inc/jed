@@ -1,11 +1,11 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { NextApiRequestCookies } from "next/dist/server/api-utils";
-import { cookies } from "next/headers";
-const supabase = createClientComponentClient();
+const supabase = createClientComponentClient<Database>();
+import { Database } from "@/types/supabase";
+import { NextRequest } from "next/server";
 
-export function dbServer(cookies: any) {
-  return createServerComponentClient({ cookies });
+export function dbServer<T>(cookies: any) {
+  return createServerComponentClient<Database>({ cookies });
 }
 
 export { supabase as db };
