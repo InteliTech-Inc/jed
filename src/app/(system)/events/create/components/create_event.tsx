@@ -71,7 +71,7 @@ function CreateEventForm() {
 
     const { data, error } = await supabase.storage
       .from("events")
-      .upload(`/jed-${randomString}${slicedName}`, file, {
+      .upload(`thumbnails/jed-${randomString}${slicedName}`, file, {
         contentType: "image/*",
       });
 
