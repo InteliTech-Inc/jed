@@ -9,7 +9,7 @@ async function EventsPage() {
   const db = dbServer(cookies);
 
   const { data: events } = await db.from("events").select("*");
-  console.log("Events", JSON.stringify(events, null, 2));
+  console.log("Events", events);
 
   return (
     <div>

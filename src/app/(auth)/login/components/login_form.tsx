@@ -78,7 +78,7 @@ export default function LoginForm() {
   }
 
   return (
-    <main className="flex items-center justify-center h-screen">
+    <main className="flex items-center justify-center h-screen bg-pattern bg-center bg-cover">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleLogin)}>
           <Card className="mx-auto font-sans max-w-sm md:min-w-[30rem] md:h-[30rem] flex flex-col items-center justify-center pt-4">
@@ -144,7 +144,7 @@ export default function LoginForm() {
               />
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-secondary"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 gap-2 ease-in-out disabled:bg-secondary"
                 disabled={
                   (inputValues.email.length === 0 &&
                     inputValues.password.length === 0) ||
