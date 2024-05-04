@@ -53,12 +53,22 @@ function CreateEventForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const supabase = createClientComponentClient();
-    const user = await db.auth.getUser();
+    const {
+      data: { user },
+    } = await db.auth.getUser();
+
+    // Using a random string to avoid conflicts with other files
+    const randomString = Math.random().toString(36).substring(2, 15);
+
+    // Getting the file extension
+    const slicedName = selectedFile?.name.slice(
+      selectedFile?.name.lastIndexOf(".")
+    );
 
     const { data, error } = await supabase.storage
       .from("events")
-      .upload(selectedFile?.name!, selectedFile!, {
-        contentType: "image/png",
+      .upload(`/jed-${randomString}${slicedName}`, selectedFile!, {
+        contentType: "image/*",
       });
 
     if (error) {
@@ -71,7 +81,7 @@ function CreateEventForm() {
       name: values.event_name,
       description: values.event_description,
       img_url: data?.path,
-      user_id: user.data.user?.id,
+      user_id: user?.id,
     }).then((_) => {
       toast.success("Your event has been successfully created!");
       form.reset();
