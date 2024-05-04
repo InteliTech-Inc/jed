@@ -1,37 +1,15 @@
-"use client";
 import { Button } from "@/components/ui/button";
-import { db } from "@/lib/supabase";
+import { dbServer } from "@/lib/supabase";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { cookies } from "next/headers";
 
-interface Event {
-  id: string;
-  name: string;
-  img_url: string;
-}
+async function EventsPage() {
+  const db = dbServer(cookies);
 
-function EventsPage() {
-  const [events, setEvents] = useState<null | Event[]>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    async function fetchEvents() {
-      try {
-        setIsLoading(true);
-        const { data: events, error } = await db.from("events").select("*");
-        if (events) {
-          setEvents(events);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          console.log(error.stack);
-        }
-      }
-    }
-    fetchEvents();
-  }, []);
+  const { data: events } = await db.from("events").select("*");
+  console.log("Events", JSON.stringify(events, null, 2));
 
   return (
     <div>
@@ -53,25 +31,21 @@ function EventsPage() {
           <div>No Events to show</div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {isLoading ? (
-              <h1>Fetching Data...</h1>
-            ) : (
-              events?.map((event) => {
-                return (
-                  <div className="border p-3 h-fit rounded-xl" key={event.id}>
-                    <h5 className="font-semibold">{event.name}</h5>
-                    <Image
-                      src={`https://cbboxofzpwjfpihaoyhn.supabase.co/storage/v1/object/public/events/${event.img_url}`}
-                      alt={`${event.name}`}
-                      width={2000}
-                      height={2000}
-                      className="rounded-md w-full h-full my-4"
-                      priority
-                    />
-                  </div>
-                );
-              })
-            )}
+            {events?.map((event) => {
+              return (
+                <div className="border p-3 h-fit rounded-xl" key={event.id}>
+                  <h5 className="font-semibold">{event.name}</h5>
+                  <Image
+                    src={`https://cbboxofzpwjfpihaoyhn.supabase.co/storage/v1/object/public/events/${event.img_url}`}
+                    alt={`${event.name}`}
+                    width={2000}
+                    height={2000}
+                    className="rounded-md w-full h-full my-4"
+                    priority
+                  />
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
