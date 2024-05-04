@@ -33,7 +33,11 @@ async function EventsPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
             {events?.map((event) => {
               return (
-                <div className="border p-3 h-fit rounded-xl" key={event.id}>
+                <Link
+                  href={`/events/${event.id}`}
+                  key={event.id}
+                  className="border p-3 h-fit rounded-xl"
+                >
                   <h5 className="font-semibold">{event.name}</h5>
                   <Image
                     src={`https://cbboxofzpwjfpihaoyhn.supabase.co/storage/v1/object/public/events/${event.img_url}`}
@@ -43,7 +47,7 @@ async function EventsPage() {
                     className="rounded-md w-full h-full my-4"
                     priority
                   />
-                </div>
+                </Link>
               );
             })}
           </div>
