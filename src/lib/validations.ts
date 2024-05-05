@@ -80,9 +80,14 @@ export const nominationShape = z.object({
     message: "Nominee's full name is required",
   }),
   email: emailShape,
-  telephone: z.string({
-    message: "Nominee's phone number is required",
-  }),
+  telephone: z
+    .string()
+    .min(10, {
+      message: "Phone number is required!",
+    })
+    .regex(/^(?:\+\d{1,3})?\d{7,15}$/, {
+      message: "Please enter a valid phone number",
+    }),
   reasons: z.string({
     message: "Reasons for nomination is required",
   }),
