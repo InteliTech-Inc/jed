@@ -29,10 +29,22 @@ import Rotating_Lines from "@/components/rotating_lines";
 import { nominationShape } from "@/lib/validations";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 
+type Event = {
+  id: string;
+  name: string;
+  img_url: string;
+};
+
+type Category = {
+  id: string;
+  category_name: string;
+  event_id: string;
+};
+
 export default function NominationForm() {
-  const [event, setEvent] = useState<any>();
+  const [event, setEvent] = useState<Event>("" as unknown as Event);
   const [isPending, setIsPending] = useState<boolean>(false);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const url = usePathname();
   const segments = url.split("/");
@@ -206,7 +218,7 @@ export default function NominationForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {categories.map((category: any) => (
+                      {categories.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.category_name}
                         </SelectItem>
