@@ -74,3 +74,16 @@ export const formSchema = z.object({
     message: "Please enter a valid email address.",
   }),
 });
+
+export const nominationShape = z.object({
+  full_name: z.string({
+    message: "Nominee's full name is required",
+  }),
+  email: emailShape,
+  telephone: z.string({
+    message: "Nominee's phone number is required",
+  }),
+  reasons: z.string({
+    message: "Reasons for nomination is required",
+  }),
+});
