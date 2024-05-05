@@ -86,4 +86,7 @@ export const nominationShape = z.object({
   reasons: z.string({
     message: "Reasons for nomination is required",
   }),
+  category: z.string({
+    message: "Category is required",
+  }),
 });

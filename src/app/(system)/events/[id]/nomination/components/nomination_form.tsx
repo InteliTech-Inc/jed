@@ -33,7 +33,6 @@ export default function NominationForm() {
   const [event, setEvent] = useState<any>();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [categories, setCategories] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const url = usePathname();
   const segments = url.split("/");
@@ -63,6 +62,7 @@ export default function NominationForm() {
       email: "",
       telephone: "",
       reasons: "",
+      category: "",
     },
   });
 
@@ -81,17 +81,15 @@ export default function NominationForm() {
         full_name: values.full_name,
         email: values.email,
         phone: values.telephone,
-        category_id: selectedCategory,
+        category_id: values.category,
         reasons: values.reasons,
         event_id: eventId,
       };
-
       CreateNomination(payload)
         .then((_) => {
           toast.success("Nomination submitted successfully..");
           form.reset();
           router.push(`/events/${eventId}`);
-          setSelectedCategory("");
           setIsPending(false);
         })
         .catch((error) => {
@@ -118,7 +116,7 @@ export default function NominationForm() {
             priority
           />
         </div>
-        <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex flex-col items-center justify-center">
+        <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg text-center flex flex-col items-center justify-center">
           <h1 className="text-4xl text-white font-bold uppercase tracking-wider">
             {event?.name}
           </h1>
@@ -194,29 +192,28 @@ export default function NominationForm() {
             />
             <FormField
               control={form.control}
-              name="telephone"
+              name="category"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <Label htmlFor="telephone">Select a Category</Label>
-                  <FormControl>
-                    <Select
-                      onValueChange={setSelectedCategory}
-                      value={selectedCategory}
-                      required
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a Category" />
+                  <Label>Category</Label>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((category: any) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.category_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage {...field} />
+                    </FormControl>
+                    <SelectContent>
+                      {categories.map((category: any) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.category_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -247,6 +244,7 @@ export default function NominationForm() {
               inputValues.telephone.length === 0 ||
               inputValues.email.length === 0 ||
               inputValues.reasons.length === 0 ||
+              inputValues.category.length === 0 ||
               isPending
             }
           >
