@@ -8,7 +8,16 @@ import { cookies } from "next/headers";
 async function EventsPage() {
   const db = dbServer(cookies);
 
-  const { data: events } = await db.from("events").select("*");
+  const {
+    data: { user },
+  } = await db.auth.getUser();
+  console.log(user?.id);
+
+  const { data: events } = await db
+    .from("events")
+    .select("*")
+    .eq("user_id", user?.id);
+  console.log("Events", JSON.stringify(events, null, 2));
 
   return (
     <div className="p-6">
