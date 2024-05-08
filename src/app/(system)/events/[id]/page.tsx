@@ -7,7 +7,7 @@ type Props = {
   params: { id: string };
 };
 
-export default async async function SingleEvent({ params: { id } }: Props) {
+export default async function SingleEvent({ params: { id } }: Props) {
   const db = dbServer(cookies);
   const { data, error } = await db
     .from("events")
@@ -19,12 +19,6 @@ export default async async function SingleEvent({ params: { id } }: Props) {
     return <div>No event found</div>;
   }
 
-  const db = dbServer(cookies);
-  const { data } = await db
-    .from("events")
-    .select(`*, nominations(*, categories(category_name))`)
-    .eq("id", id)
-    .single();
 
   return (
     <section>
