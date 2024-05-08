@@ -11,12 +11,12 @@ async function EventsPage() {
   const {
     data: { user },
   } = await db.auth.getUser();
-  console.log(user?.id);
 
   const { data: events } = await db
     .from("events")
     .select("*")
-    .eq("user_id", user?.id);
+    .eq("user_id", user?.id!);
+
   console.log("Events", JSON.stringify(events, null, 2));
 
   return (
@@ -50,7 +50,7 @@ async function EventsPage() {
                   <section className=" h-80">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
-                      alt={`${event.name}`}
+                      alt={`${event.name}'s image`}
                       width={2000}
                       height={2000}
                       className="rounded-md  w-full h-full object-cover object-center"
