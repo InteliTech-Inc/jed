@@ -80,7 +80,7 @@ export default function Pricing() {
     <section>
       <div className="container mx-auto px-6 py-20">
         <div className="mb-8 space-y-3">
-          <h2 className="text-4xl md:text-6xl text-center font-medium text-center">
+          <h2 className="text-4xl md:text-6xl text-center font-medium">
             Plans for everybody
           </h2>
           <p className="text-center text-xl text-gray-600">

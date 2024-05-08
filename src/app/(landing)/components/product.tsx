@@ -12,19 +12,19 @@ const Products = [
     name: "Nominations",
     img_url: Nomination,
     description:
-      "Lorem ipsum dolor sit ame did eiusmod tempor incididunt ut labore et and consectetur. Lorem ipsum dolor sit am",
+      "Manage nominations with our user-friendly platform, simplifying submissions and voting processes for a smooth experience.",
   },
   {
     name: "Ticketing",
     img_url: Ticketing,
     description:
-      "Lorem ipsum dolor sit ame did eiusmod tempor incididunt ut labore et and consectetur. Lorem ipsum dolor sit am",
+      "Our platform makes it easy for organizers and attendees to manage ticket purchases and registrations hassle-free.",
   },
   {
     name: "Voting",
     img_url: Voting,
     description:
-      "Lorem ipsum dolor sit ame did eiusmod tempor incididunt ut labore et and consectetur. Lorem ipsum dolor sit am",
+      "Simplify your voting processes with our platform, ensuring a smooth experience for all participants as they cast their votes effortlessly.",
   },
 ];
 
@@ -48,7 +48,10 @@ export default function Product() {
       <section className=" grid md:grid-cols-2 lg:grid-cols-3 gap-4 px-8 py-12">
         {Products.map(({ name, img_url, description }) => {
           return (
-            <div key={name} className=" border rounded-3xl p-4 bg-neutral-50">
+            <div
+              key={name}
+              className=" border rounded-3xl p-4 overflow-hidden bg-neutral-50"
+            >
               <Image src={img_url} alt="Product" className="card-image" />
               <h3 className=" text-2xl font-semibold text-secondary py-2">
                 {name}
