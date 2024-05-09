@@ -33,18 +33,23 @@ type Event = {
   id: string;
   name: string;
   img_url: string;
+  categories: Category[];
+  created_at: string;
+  updated_at: string;
+  description: string;
+  user_id: string;
+  is_completed: boolean;
 };
 
 type Category = {
   id: string;
-  category_name: string;
-  event_id: string;
+  category_name: string | null;
+  event_id: string | null;
 };
 
 export default function NominationForm() {
-  const [event, setEvent] = useState<Event>("" as unknown as Event);
+  const [event, setEvent] = useState<Event>({} as Event);
   const [isPending, setIsPending] = useState<boolean>(false);
-  const [categories, setCategories] = useState<Category[]>([]);
 
   const url = usePathname();
   const segments = url.split("/");
@@ -61,8 +66,7 @@ export default function NominationForm() {
         if (error) {
           toast.error("Error fetching data...");
         } else {
-          setEvent(data);
-          setCategories(data.categories);
+          setEvent(data as Event);
         }
       });
   }, [eventId]);
@@ -117,10 +121,10 @@ export default function NominationForm() {
 
   return (
     <section className="">
-      <div className="relative flex flex-col justify-center h-40 -mt-2 overflow-auto mb-6">
+      <div className="relative flex flex-col justify-center h-40 mt-[14rem] overflow-auto mb-6">
         <div className="absolute inset-0 rounded-md">
           <Image
-            src={`https://cbboxofzpwjfpihaoyhn.supabase.co/storage/v1/object/public/events/${event?.img_url}`}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event?.img_url}`}
             alt="Banner image"
             className="rounded-md w-full h-full blur-sm object-cover object-top "
             width={2000}
@@ -218,7 +222,7 @@ export default function NominationForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {categories.map((category) => (
+                      {event.categories?.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.category_name}
                         </SelectItem>

@@ -59,30 +59,36 @@ function CreateEventForm() {
 
     // Using a random string to avoid conflicts with other files
     const randomString = Math.random().toString(36).substring(2, 15);
+    5;
 
     // Getting the file extension
     const slicedName = selectedFile?.name.slice(
       selectedFile?.name.lastIndexOf(".")
     );
 
+    // biome-ignore lint/style/noNonNullAssertion: <the users always upload a picture>
+    const file = selectedFile!;
+
     const { data, error } = await supabase.storage
       .from("events")
-      .upload(`/jed-${randomString}${slicedName}`, selectedFile!, {
+      .upload(`thumbnails/jed-${randomString}${slicedName}`, file, {
         contentType: "image/*",
       });
 
     if (error) {
       console.log(error);
-      toast.error(`${error.message}`);
+      toast.error("Something went wrong");
       return;
     }
 
-    CreateEvent({
+    const payload = {
       name: values.event_name,
       description: values.event_description,
       img_url: data?.path,
       user_id: user?.id,
-    }).then((_) => {
+    };
+
+    CreateEvent(payload).then((_) => {
       toast.success("Your event has been successfully created!");
       form.reset();
       router.push("/events");
@@ -90,7 +96,7 @@ function CreateEventForm() {
   }
 
   function UploadImageToForm(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files && e.target.files[0];
+    const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
 
@@ -139,7 +145,7 @@ function CreateEventForm() {
                   className="h-[350px] object-cover rounded-t-md"
                 />
               ) : (
-                <div></div>
+                <div />
               )}
             </section>
             <Label

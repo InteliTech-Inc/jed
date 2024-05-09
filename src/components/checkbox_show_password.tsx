@@ -22,7 +22,7 @@ export default function Checkbox_Show_Password({
       />
       <span
         className={`mr-2 w-5 h-5 flex items-center border border-gray-300 rounded ${
-          showPassword ? "bg-green-500" : "bg-white"
+          showPassword ? "bg-secondary" : "bg-white"
         }`}
       >
         {showPassword && <Check className="font-bold text-white" />}

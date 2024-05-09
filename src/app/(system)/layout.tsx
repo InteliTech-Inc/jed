@@ -1,150 +1,54 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { NAV_LINKS } from "@/constants/nav_links";
-import { db } from "@/lib/supabase";
-import { cn } from "@/lib/utils";
-import { PanelLeft, Settings, User } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { ReactNode } from "react";
-
+import { Menu } from "lucide-react";
 import Logo from "@/components/logo";
+import { Button } from "@/components/ui/button";
+import Topbar from "./components/topbar";
+import { NAV_LINKS } from "@/constants/nav_links";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import UserDropdown from "./components/user_dropdown";
 
-type Props = {
-  children: ReactNode;
-};
-
-export default function AppLayout({ ...props }: Props) {
-  const pathname = usePathname();
-  const router = useRouter();
-
-  const signOut = async () => {
-    await db.auth.signOut();
-    router.push("/");
-  };
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-[18%] flex-col border-r bg-background lg:flex px-3 py-2">
-        <div className="border-b pb-3 mb-5">
+    <div className="flex min-h-screen w-full flex-col max-w-screen-2xl mx-auto ">
+      <header className="sticky top-0 flex h-16 items-center bg-white/60 backdrop-blur-md saturate-150 z-50 gap-4 border-b px-4 md:px-6">
+        <Link className="hidden lg:block" href={"/"}>
           <Logo />
+        </Link>
+        <Topbar />
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="shrink-0 md:hidden"
+            >
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left">
+            <nav className="grid gap-6 text-lg font-medium">
+              {NAV_LINKS.map((link) => {
+                return (
+                  <Link
+                    href={link.href}
+                    key={link.id}
+                    className=" text-muted-foreground transition-all hover:text-secondary w-full"
+                  >
+                    {link.title}
+                  </Link>
+                );
+              })}
+            </nav>
+          </SheetContent>
+        </Sheet>
+        <div className="w-fit ml-auto">
+          <UserDropdown />
         </div>
-        <nav className="flex flex-col items-start gap-4">
-          {NAV_LINKS.map((item) => {
-            return (
-              <Link
-                href={item.href}
-                key={item.id}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-secondary w-full",
-                  {
-                    "bg-secondary text-white rounded-r-xl hover:text-white":
-                      pathname === item.href,
-                  }
-                )}
-              >
-                {item.icon}
-                {item.title}
-              </Link>
-            );
-          })}
-        </nav>
-        <nav className="mt-auto flex flex-col items-start gap-4">
-          <Link
-            href={"/settings"}
-            className={cn(
-              "flex items-center gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-secondary w-full",
-              {
-                "bg-secondary text-white rounded-r-xl hover:text-white":
-                  pathname === "/settings",
-              }
-            )}
-          >
-            <Settings className="h-5 w-5" />
-            <span>Settings</span>
-          </Link>
-        </nav>
-      </aside>
-      <div className="flex flex-col lg:gap-4 lg:py-4 lg:pl-[18%]">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-white px-4 lg:static lg:h-auto lg:border-0 lg:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="icon" variant="outline" className="lg:hidden">
-                <PanelLeft className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="lg:max-w-xs">
-              <nav className="grid gap-6 text-lg font-medium">
-                <Logo />
-                <nav className="flex flex-col items-start gap-4">
-                  {NAV_LINKS.map((item) => {
-                    return (
-                      <Link
-                        href={item.href}
-                        key={item.id}
-                        className={cn(
-                          "flex items-center gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-secondary w-full",
-                          {
-                            "bg-secondary text-white rounded-r-xl hover:text-white":
-                              pathname === item.href,
-                          }
-                        )}
-                      >
-                        {item.icon}
-                        {item.title}
-                      </Link>
-                    );
-                  })}
-                </nav>
-                <Link
-                  href={"/settings"}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full",
-                    {
-                      "bg-primary text-white rounded-r-xl hover:text-white":
-                        pathname === "/settings",
-                    }
-                  )}
-                >
-                  <Settings className="h-5 w-5" />
-                  <span>Settings</span>
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
-          <div className="w-full flex justify-end">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="overflow-hidden rounded-full border"
-                >
-                  <User />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOut}>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </header>
-        <main className="p-5">{props.children}</main>
-      </div>
+      </header>
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 md:gap-8 ">
+        {children}
+      </main>
     </div>
   );
 }

@@ -11,16 +11,16 @@ async function EventsPage() {
   const {
     data: { user },
   } = await db.auth.getUser();
-  console.log(user?.id);
 
   const { data: events } = await db
     .from("events")
     .select("*")
-    .eq("user_id", user?.id);
+    .eq("user_id", user?.id!);
+
   console.log("Events", JSON.stringify(events, null, 2));
 
   return (
-    <div>
+    <div className="p-6">
       <div className="flex justify-between items-center gap-5">
         <div>
           <h3 className="text-2xl font-semibold leading-none tracking-tight">
@@ -29,7 +29,7 @@ async function EventsPage() {
         </div>
         <div>
           <Link href={"/events/create"}>
-            <Button>Create Event</Button>
+            <Button>Create new Event</Button>
           </Link>
         </div>
       </div>
@@ -46,15 +46,17 @@ async function EventsPage() {
                   key={event.id}
                   className="border p-3 h-fit rounded-xl"
                 >
-                  <h5 className="font-semibold">{event.name}</h5>
-                  <Image
-                    src={`https://cbboxofzpwjfpihaoyhn.supabase.co/storage/v1/object/public/events/${event.img_url}`}
-                    alt={`${event.name}`}
-                    width={2000}
-                    height={2000}
-                    className="rounded-md w-full h-full my-4"
-                    priority
-                  />
+                  <h5 className="font-semibold py-2">{event.name}</h5>
+                  <section className=" h-80">
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
+                      alt={`${event.name}'s image`}
+                      width={2000}
+                      height={2000}
+                      className="rounded-md  w-full h-full object-cover object-center"
+                      priority
+                    />
+                  </section>
                 </Link>
               );
             })}

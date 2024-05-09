@@ -1,21 +1,21 @@
 export const FAQ_QUESTIONS = [
   {
     id: "item 1",
-    question: "Can I host any event on this platform?",
+    question: "How do I create an event on your platform?",
     answer:
-      "Yes, you can host any event here wai, based on their expertise or familiarity with your work.",
+      "To create an event, log in to your account and navigate to the 'Create Event' section. Follow the prompts to fill in event details such as title, date, location, ticket types, and more.",
   },
   {
     id: "item 2",
-    question: "How are nominations done?",
+    question: "Can I customize the ticketing options for my event?",
     answer:
-      "Lorem ipsum dolor sit amet and con laoreet et justo sit am vel met null a ante et justo sit amet et justo sit amet et justo sit amet",
+      "Yes, our platform allows you to customize ticket types, prices, quantities, and even offer discounts or promotional codes to your attendees.",
   },
   {
     id: "item 3",
-    question: "Is Evans Elabo an L7 dev or L9?",
+    question: "How can attendees purchase tickets for an event?",
     answer:
-      "Lorem ipsum dolor sit amet and con laoreet et justo sit am vel met null a ante et justo sit amet et justo sit amet et justo sit amet",
+      " Attendees can easily purchase tickets through our platform by visiting the event page, selecting their desired ticket type, and completing the checkout process securely.",
   },
   {
     id: "item 4",
