@@ -19,7 +19,6 @@ export default async function SingleEvent({ params: { id } }: Props) {
     return <div>No event found</div>;
   }
 
-
   return (
     <section>
       <div className="flex items-center justify-between gap-x-4">
@@ -27,16 +26,6 @@ export default async function SingleEvent({ params: { id } }: Props) {
         <AddCategoryModal event_id={data} />
       </div>
       <div>
-        {/* {data.categories.length === 0 ? (
-          <div>No Category</div>
-        ) : (
-          data.categories.map((category: any) => (
-            <div key={category.id}>
-              <h1>{category.category_name}</h1>
-              <h2>{category.event_id}</h2>
-            </div>
-          ))
-        )} */}
         <h1 className="font-bold text-4xl my-4">Nominations Down Here</h1>
         {data.nominations.length === 0 ? (
           <div>No Nomination</div>
