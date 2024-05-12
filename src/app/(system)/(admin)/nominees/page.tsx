@@ -19,9 +19,9 @@ export default async function AdminNominee() {
   const { data: nominees } = await db.from("nominees").select("*");
 
   return (
-    <section className="p-8 ">
+    <section className="py-8 px-6 ">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">NOMINEES</h1>
+        <h1 className="text-3xl font-bold">Your Nominees</h1>
         <AddNominees data={categories} />
       </div>
       <GetNominees nominees={nominees} />

@@ -6,6 +6,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
@@ -133,8 +134,8 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
         toast.success("Nominee updated successfully");
         form.reset();
         setSelectedFile(null);
+        setIsPending(false);
       }
-      setIsPending(false);
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -151,7 +152,7 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
         (payload) => {
           if (payload) {
             router.refresh();
-            console.log("Changes received");
+            toast.success("Changes received");
             setTimeout(() => {
               router.replace("/nominees");
             }, 1000);
@@ -165,38 +166,37 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
     };
   }, [supabase, router]);
   return (
-    <section className=" w-screen p-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Edit Nominee</h1>
-        <h2 className="text-xl font-semibold text-secondary">{data.id}</h2>
+    <div className="my-8 w-full lg:w-4/5 mx-auto h-full">
+      {/* <BackButton /> */}
+      <div>
+        <h3 className="text-3xl text-center mt-2 mb-8 font-bold text-neutral-700">
+          Update Nominee's Details
+        </h3>
       </div>
-      <div className="flex items-center justify-between gap-4 mt-4">
-        <div className="relative h-[40rem] w-full rounded overflow-hidden hover:shadow transition-all duration-150 hover:border border-secondary bg-white group">
-          <Image
-            src={
-              preview
-                ? preview
-                : `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${data.img_url}`
-            }
-            layout="fill"
-            sizes="100%"
-            objectFit="cover"
-            className="z-0"
-            alt={inputValues.full_name}
-          />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent opacity-50 h-1/2 z-10"></div>
-          <div className="absolute bottom-0 left-0 p-4 text-white z-20">
-            <h2 className="text-xl font-bold">{inputValues.full_name}</h2>
-            <p>{inputValues.category}</p>
-            <p>Nominee's code: {inputValues.code}</p>
-          </div>
-        </div>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleUpdate)}
-            className="mx-auto font-sans md:w-full flex flex-col justify-center items-center overflow-auto"
-          >
-            <div className="flex flex-col w-full items-center justify-center my-3 space-y-10">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleUpdate)} className="">
+          <div className=" flex flex-col-reverse md:flex-row  gap-8">
+            <section className=" w-full space-y-6">
+              <FormField
+                control={form.control}
+                name="full_name"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <Label htmlFor="full_name">Nominees's Full Name</Label>
+                    <FormControl>
+                      <Input
+                        id="full_name"
+                        type="text"
+                        autoComplete="off"
+                        placeholder="Enter nominee's full name"
+                        className="border border-accent focus:border-secondary focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage {...field} />
+                  </FormItem>
+                )}
+              />
               <div className="relative w-full">
                 <FormField
                   control={form.control}
@@ -225,7 +225,7 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
                   <Button
                     variant={"outline"}
                     type="button"
-                    //   onClick={generateCode}
+                    onClick={() => toast.error("Code generated already")}
                     className="absolute top-[50%] right-0 transform translate-y-[-50%]"
                   >
                     Generate Code
@@ -234,31 +234,10 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
               </div>
               <FormField
                 control={form.control}
-                name="full_name"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Label htmlFor="full_name">Nominees's Full Name</Label>
-                    <FormControl>
-                      <Input
-                        id="full_name"
-                        type="text"
-                        autoComplete="off"
-                        placeholder="Enter nominee's full name"
-                        className="border border-accent focus:border-secondary focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage {...field} />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="category"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <Label>Category</Label>
+                    <Label> Nominee's Category</Label>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -288,45 +267,65 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
                   </FormItem>
                 )}
               />
-              <section className="border rounded-md shadow-sm w-full my-4">
+
+              <div className=" flex flex-col md:flex-row gap-2"></div>
+
+              <Button
+                type="submit"
+                className="tracking-wide uppercase w-full my-4"
+                disabled={isPending}
+              >
+                {isPending && <Rotating_Lines />}
+                Submit
+              </Button>
+            </section>
+            <div className=" w-full md:mt-8">
+              <section className="border bg-white  w-full md:w-[90%] lg:w-[70%] mx-auto aspect-square rounded-md shadow-sm">
+                <div className="relative h-full w-full rounded overflow-hidden hover:shadow transition-all duration-150 hover:border border-secondary bg-white group">
+                  <Image
+                    src={
+                      preview
+                        ? preview
+                        : `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${data.img_url}`
+                    }
+                    layout="fill"
+                    sizes="100%"
+                    objectFit="cover"
+                    className="z-0"
+                    alt={inputValues.full_name}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent opacity-50 h-1/2 z-10"></div>
+                  <div className="absolute bottom-0 left-0 p-4 text-white z-20">
+                    <h2 className="text-xl font-bold">
+                      {inputValues.full_name}
+                    </h2>
+                    <p>{inputValues.category}</p>
+                    <p>Nominee's code: {inputValues.code}</p>
+                  </div>
+                </div>
+              </section>
+              <div className="">
                 <Label
                   htmlFor="imageUpload"
                   className="w-auto gap-2 flex flex-row items-center justify-center text-sm rounded-[4px] hover:cursor-pointer hover:underline p-3"
                 >
-                  {selectedFile ? (
-                    <span>Uploaded File: {selectedFile.name}</span>
-                  ) : (
-                    <div className="flex items-center gap-5">
-                      <ImageDown />
-                      <span>Upload Nominee's Image</span>
-                    </div>
-                  )}
+                  <div className="">
+                    <ImageDown className=" text-gray-700" />
+                  </div>
+                  <span>Choose Event Image</span>
                 </Label>
                 <input
                   type="file"
                   id="imageUpload"
                   accept="image/*"
                   onChange={(e) => UploadImageToForm(e)}
-                  className="hidden relative h-[0.1px] -z-50"
+                  className="hidden relative -z-50"
                 />
-              </section>
+              </div>
             </div>
-            <Button
-              type="submit"
-              className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-secondary"
-              disabled={
-                inputValues.full_name.length === 0 ||
-                inputValues.code.length === 0 ||
-                inputValues.category.length === 0 ||
-                isPending
-              }
-            >
-              {isPending && <Rotating_Lines />}
-              Create Nominee
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </section>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }
