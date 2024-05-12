@@ -66,7 +66,7 @@ export default function GetNominees({ nominees }: any) {
             <Button
               onClick={() => router.push(`/nominees/edit/${nominee.id}`)}
               variant={"outline"}
-              className="absolute top-0 right-0 m-4 font-bold py-2 px-4 rounded opacity-0 group-hover:opacity-100 z-30"
+              className="absolute top-0 right-0 m-4 font-bold py-2 px-4 rounded-full opacity-0 group-hover:opacity-100 z-30"
             >
               Edit
             </Button>
