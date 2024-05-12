@@ -166,7 +166,7 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
     };
   }, [supabase, router]);
   return (
-    <div className="my-8 w-full lg:w-4/5 mx-auto h-full">
+    <div className="my-8 w-full lg:w-4/5 mx-auto h-full px-4">
       {/* <BackButton /> */}
       <div>
         <h3 className="text-3xl text-center mt-2 mb-8 font-bold text-neutral-700">
@@ -175,7 +175,7 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleUpdate)} className="">
-          <div className=" flex flex-col-reverse md:flex-row  gap-8">
+          <div className=" flex flex-col-reverse md:flex-row gap-8">
             <section className=" w-full space-y-6">
               <FormField
                 control={form.control}
@@ -312,7 +312,7 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
                   <div className="">
                     <ImageDown className=" text-gray-700" />
                   </div>
-                  <span>Choose Event Image</span>
+                  <span>Choose Nominee Image</span>
                 </Label>
                 <input
                   type="file"
