@@ -3,31 +3,56 @@ import Link from "next/link";
 const TERMS_CONTENT = [
   {
     id: 0,
-    title: "Personal Information",
-    text: `  We may collect personal information, such as your
-name, contact details (address, email address, phone number), and payment
-information when you use our JED services.`,
-  },
-  {
-    id: 1,
-    title: "JED Details",
-    text: ` We collect information about your JED, including fabric
-types, special care instructions, stains, and damages, to ensure proper handling
-and processing.`,
+    title: "About JED",
+    text: `At JED, we provide an innovative online platform that empowers individuals and organizations to conduct voting, ticketing, and nomination events with utmost confidentiality and security.`,
   },
   {
     id: 2,
-    title: "Usage Information",
-    text: `We may collect information about how you use our website
-or mobile application, including IP addresses, browser type, device information,
-and page views, to improve our services and enhance user experience.`,
+    title: "License",
+    text: `Upon accepting these Terms and Conditions, you are granted a limited, non-exclusive, and non-transferable license to access and utilize JED's online platform as per the terms specified in a separate Services Agreement mutually agreed upon by both parties`,
   },
   {
     id: 3,
-    title: "Cookies and Tracking Technologies",
-    text: ` We use cookies and similar tracking
-technologies to collect information about your interactions with our website or
-application and deliver personalized content.`,
+    title: "Payments, Cancellation, and Refund Policy",
+    text: `Payment processing services are facilitated by Hubtel, governed by their terms and conditions. Refunds are subject to review and applicable laws. Fraudulent transactions are promptly identified and canceled to protect both JED and its clients.
+`,
+  },
+  {
+    id: 4,
+    title: "Right to Refund",
+    text: `Customers have the right to request a refund if services are not delivered as per the agreed terms. Refund requests must be submitted via info.jedvotes@gmail.com. Approved refunds will be processed promptly.
+
+`,
+  },
+  {
+    id: 5,
+    title: "Prohibited Acts",
+    text: `Users must not engage in tampering, interference, infringement, spamming, malware installation, harming minors, impersonation, violating laws, or disabling security features.`,
+  },
+  {
+    id: 6,
+    title: "Your Content",
+    text: `By submitting Content to JED, you grant us the right to use it in connection with our services. Prohibited content includes illegal, infringing, offensive, or harmful material.`,
+  },
+  {
+    id: 7,
+    title: "Changes and Updates",
+    text: `JED reserves the right to update, modify, or discontinue services with prior notice. Temporary suspensions for maintenance purposes may occur.`,
+  },
+  {
+    id: 8,
+    title: "Copyright and Intellectual Property Rights",
+    text: `All rights to JED's services and content are reserved. Users may access the website for informational purposes only.`,
+  },
+  {
+    id: 9,
+    title: "Cancellation and Termination",
+    text: `Accounts may be terminated for legal compliance, technical issues, fraudulent activities, or at JED's discretion.`,
+  },
+  {
+    id: 10,
+    title: "Terms for Certain Customers and Countries",
+    text: `JED operates under Ghanaian laws. Users accessing our services from other locations do so at their own risk and must comply with local laws.`,
   },
 ];
 
@@ -39,12 +64,12 @@ function TermsAndConditionsPage() {
           Terms & Conditions
         </h1>
         <p className=" ">
-          JED Votes ("we," "us," or "our") is committed to protecting the
-          privacy of our customers ("you" or "your"). This Terms and Conditions
-          shall explain how we collect, use, disclose, and protect your personal
-          information in connection with our JED services. By using our
-          services, you consent to the practices described in this Privacy
-          Policy.
+          JED ("we," "us," or "our") is committed to protecting the privacy of
+          our customers ("you" or "your"). Please carefully review the following
+          Terms and Conditions, which govern your use of JED's services. By
+          accessing or using our services, you agree to be bound by these Terms
+          and Conditions. If you do not agree with any part of these Terms and
+          Conditions, please refrain from using our services.
         </p>
       </section>
       {TERMS_CONTENT.map((content, index) => {
@@ -57,130 +82,6 @@ function TermsAndConditionsPage() {
           </section>
         );
       })}
-      <section>
-        <h1 className=" text-primary text-xl lg:text-3xl heading py-2 border-b">
-          5. How we use collected information.
-        </h1>
-        <ul>
-          <h4 className="py-4 ">
-            <Link className=" text-primary" href="/">
-              JED
-            </Link>{" "}
-            may collect and use Users' personal information for the following
-            purposes:
-          </h4>
-          <li className=" my-2">
-            &bull; We use the collected information to provide and improve our
-            JED services, process payments, schedule pickups and deliveries, and
-            communicate with you regarding your orders.
-          </li>
-          <li className=" my-2">
-            &bull; Your JED details are used to ensure proper cleaning, drying,
-            and folding according to your preferences and any specific care
-            instructions.
-          </li>
-          <li className=" my-2">
-            &bull; We may use your contact information to send you
-            service-related notifications, updates, promotional offers, or
-            customer surveys, unless you opt out of such communications.
-          </li>
-          <li className=" my-2">
-            &bull; We may analyze usage information to monitor and improve our
-            website or application, identify technical issues, and personalize
-            user experiences. e. We will not sell, rent, or lease your personal
-            information to third parties without your consent, except as
-            required by law.
-          </li>
-        </ul>
-      </section>
-      <section>
-        <h1 className=" text-primary text-2xl lg:text-3xl heading py-2 border-b">
-          6. Data Retention
-        </h1>
-        <ul>
-          <li className=" my-2">
-            &bull; We retain your personal information for as long as necessary
-            to fulfill the purposes outlined in this Privacy Policy, unless a
-            longer retention period is required or permitted by law.
-          </li>
-          <li className=" my-2">
-            &bull; JED details, such as fabric preferences or care instructions,
-            may be stored for future reference or to enhance the quality of our
-            services.
-          </li>
-        </ul>
-      </section>
-      <section>
-        <h1 className=" text-primary text-2xl lg:text-3xl heading py-2 border-b">
-          7. Data Security
-        </h1>
-        <ul>
-          <li className=" my-2">
-            &bull; We implement reasonable security measures to protect your
-            personal information from unauthorized access, disclosure,
-            alteration, or destruction.
-          </li>
-          <li className=" my-2">
-            &bull; However, no data transmission or storage method is 100%
-            secure. While we strive to protect your information, we cannot
-            guarantee its absolute security.
-          </li>
-        </ul>
-      </section>
-      <section>
-        <h1 className=" text-primary text-2xl lg:text-3xl heading py-2 border-b">
-          8. Third Party Services
-        </h1>
-        <ul>
-          <li className=" my-2">
-            &bull; We may engage third-party service providers to assist us in
-            providing JED services, process payments, or analyze website usage.
-            These providers may have access to your personal information but are
-            obligated to maintain its confidentiality and use it only for the
-            purposes we specify.
-          </li>
-          <li className=" my-2">
-            &bull;Our website or application may contain links to third-party
-            websites or services. We are not responsible for the privacy
-            practices or content of such websites.
-          </li>
-        </ul>
-      </section>
-      <section>
-        <h1 className=" text-primary text-2xl lg:text-3xl heading py-2 border-b">
-          9. Children's Privacy
-        </h1>
-        <ul>
-          <li className=" my-2">
-            &bull; Our services are not intended for individuals under the age
-            of 16. We do not knowingly collect personal information from
-            children. If you become aware that a child has provided us with
-            personal information without parental consent, please contact us,
-            and we will take steps to remove the information from our systems
-          </li>
-        </ul>
-      </section>
-      <section>
-        <h1 className=" text-primary text-2xl lg:text-3xl heading py-2 border-b">
-          10. Changes To This Privacy Policy
-        </h1>
-        <ul>
-          <li className=" my-2">
-            &bull; We may update this Privacy Policy from time to time. We will
-            notify you of any material changes by posting the updated Privacy
-            Policy on our website or application and updating the "Effective
-            Date" at the top.
-          </li>
-          <li className=" my-2">
-            &bull; Please review this Privacy Policy periodically for any
-            changes. Your continued use of our services after the posting of
-            changes constitutes your acceptance of the updated policy
-          </li>
-          <li className=" my-2">
-            The Privacy Policy was last updated on Monday, July 10 , 2023.
-          </li>
-        </ul>
-      </section>
     </div>
   );
 }

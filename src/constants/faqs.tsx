@@ -19,18 +19,20 @@ export const FAQ_QUESTIONS = [
   },
   {
     id: "item 4",
-    question: "Does Topboy have access to the national cake?",
-    answer: "I'm sure he does, cos that guy dey hold forkn 🫡",
+    question: "Is there a way to track ticket sales and attendee information?",
+    answer:
+      "Absolutely, our platform provides comprehensive reporting tools that allow you to track ticket sales, monitor attendance, and gather valuable insights about your event's performance.",
   },
   {
     id: "item 5",
-    question: "Is JRO a scammer?",
+    question: "What payment options are available for ticket purchases?",
     answer:
-      "Lorem ipsum dolor sit amet and con laoreet et justo sit am vel met null a ante et justo sit amet et justo sit amet et justo sit amet",
+      "We support various payment methods including credit/debit cards, Mobile Money and other secure payment gateways to ensure a smooth transaction process for your users.",
   },
   {
     id: "item 6",
-    question: " Is there a fee for using this platform?",
-    answer: "Yes, the platform has per-event charges. ",
+    question: "How are nominations managed on your platform?",
+    answer:
+      "Nominations can be easily managed through our platform by creating nomination forms, setting up voting criteria, and tracking nominee submissions and votes in real-time.",
   },
 ];

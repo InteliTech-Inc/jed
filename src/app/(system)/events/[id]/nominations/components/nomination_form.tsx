@@ -59,7 +59,7 @@ export default function NominationForm() {
 
   useEffect(() => {
     db.from("events")
-      .select(`*, categories(category_name, id, event_id)`)
+      .select("*, categories(category_name, id, event_id)")
       .eq("id", eventId)
       .single()
       .then(({ data, error }) => {
@@ -121,18 +121,18 @@ export default function NominationForm() {
 
   return (
     <section className="">
-      <div className="relative flex flex-col justify-center h-40 mt-[14rem] overflow-auto mb-6">
-        <div className="absolute inset-0 rounded-md">
+      <div className="relative flex flex-col justify-center h-40 overflow-auto mb-6">
+        <div className="absolute inset-0">
           <Image
             src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event?.img_url}`}
             alt="Banner image"
-            className="rounded-md w-full h-full blur-sm object-cover object-top "
+            className=" w-full h-full blur-sm object-cover object-top "
             width={2000}
             height={2000}
             priority
           />
         </div>
-        <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg text-center flex flex-col items-center justify-center">
+        <div className="absolute inset-0 bg-black bg-opacity-50 text-center flex flex-col items-center justify-center">
           <h1 className="text-4xl text-white font-bold uppercase tracking-wider">
             {event?.name}
           </h1>
@@ -142,7 +142,7 @@ export default function NominationForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleNomination)}
-          className="mx-auto font-sans md:w-[45rem] flex flex-col justify-center items-center"
+          className="mx-auto font-sans md:w-[45rem] pb-4 flex flex-col justify-center items-center"
         >
           <div className="flex flex-col w-full items-center justify-center gap-x-6 my-4 space-y-3">
             <FormField
@@ -155,7 +155,6 @@ export default function NominationForm() {
                     <Input
                       id="full_name"
                       type="text"
-                      autoComplete="off"
                       placeholder="Enter nominee's full name"
                       className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                       {...field}
@@ -176,7 +175,6 @@ export default function NominationForm() {
                     <Input
                       id="email"
                       type="email"
-                      autoComplete="off"
                       placeholder="Enter a valid email address"
                       className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                       {...field}
@@ -196,8 +194,7 @@ export default function NominationForm() {
                     <Input
                       id="telephone"
                       type="text"
-                      autoComplete="off"
-                      placeholder="Enter nominee's phone number (+233)"
+                      placeholder="Enter nominee's phone number"
                       className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                       {...field}
                     />

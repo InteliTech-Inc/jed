@@ -78,7 +78,7 @@ export default function LoginForm() {
   }
 
   return (
-    <main className="flex items-center justify-center h-screen bg-pattern bg-center bg-cover">
+    <main className="flex items-center justify-center h-screen ">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleLogin)}>
           <Card className="mx-auto font-sans max-w-sm md:min-w-[30rem] md:h-[30rem] flex flex-col items-center justify-center pt-4">
@@ -127,7 +127,6 @@ export default function LoginForm() {
                       <Input
                         id="password"
                         type={showPassword ? "text" : "password"}
-                        autoComplete="off"
                         placeholder="Enter your password"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                         {...field}

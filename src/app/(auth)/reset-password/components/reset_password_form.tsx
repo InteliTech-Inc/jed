@@ -97,7 +97,6 @@ export default function ResetPasswordForm() {
                       <Input
                         id="password"
                         type={showPassword ? "text" : "password"}
-                        autoComplete="off"
                         placeholder="Enter your new password"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                         {...field}
@@ -119,7 +118,6 @@ export default function ResetPasswordForm() {
                       <Input
                         id="confirm_password"
                         type={showPassword ? "text" : "password"}
-                        autoComplete="off"
                         placeholder="Confirm your new password"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                         {...field}

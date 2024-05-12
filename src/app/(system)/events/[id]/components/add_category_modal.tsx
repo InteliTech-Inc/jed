@@ -98,7 +98,6 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
                   <Input
                     id={`name${index}`}
                     type="text"
-                    autoComplete="off"
                     placeholder="Enter category name"
                     className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                     required

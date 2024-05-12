@@ -18,13 +18,13 @@ export const NavLinks = [
     dropdown: <NavbarProductsDropdown />,
   },
   {
-    name: "Resources",
-    path: "/resources",
-    dropdown: <NavbarResourcesDropdown />,
+    name: "Competitions",
+    path: "/competitions",
+    dropdwon: false,
   },
   {
-    name: "Pricing",
-    path: "/pricing",
+    name: "About",
+    path: "/about",
     dropdown: false,
   },
   {
@@ -44,7 +44,9 @@ export default function Navbar() {
   return (
     <div className="flex p-4 gap-8 sticky top-0 bg-white justify-between items-center border-b z-50 ">
       <section className=" flex justify-between w-full lg:w-fit ">
-        <Logo />
+        <Link href={"/"}>
+          <Logo />
+        </Link>
         <AnimatePresence>
           {!navIsOpen && (
             <motion.div
@@ -81,7 +83,7 @@ export default function Navbar() {
                           : ""
                       } ease-in duration-100 flex items-center gap-2`}
                     >
-                      {link.name} {link.dropdown && <ChevronDown size={14}/>}
+                      {link.name} {link.dropdown && <ChevronDown size={14} />}
                     </Link>
                     {link.dropdown && link.dropdown}
                   </li>

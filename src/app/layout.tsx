@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: "JED - %s",
   },
   description:
-    "A modern JED with a focus on performance, accessibility, and developer experience",
+    "Discover all the essential tools for creating memorable events, including ticketing, nomination filing, and voting for nominees, designed to be user-friendly for both organizers and attendees.",
   twitter: {
     card: "summary_large_image",
   },
@@ -52,7 +52,12 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <Toaster className="font-sans" position="top-center" richColors />
+          <Toaster
+            closeButton
+            className="font-sans"
+            position="top-center"
+            richColors
+          />
           {children}
         </Providers>
       </body>

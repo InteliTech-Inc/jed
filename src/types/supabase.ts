@@ -68,6 +68,54 @@ export type Database = {
         }
         Relationships: []
       }
+      nominations: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          email: string | null
+          event_id: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          reasons: string | null
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          email?: string | null
+          event_id?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          reasons?: string | null
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          email?: string | null
+          event_id?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          reasons?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nominations_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nominations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       schedules: {
         Row: {
           created_at: string
