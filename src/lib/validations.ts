@@ -95,3 +95,15 @@ export const nominationShape = z.object({
     message: "Category is required",
   }),
 });
+
+export const nomineeFormShape = z.object({
+  full_name: z.string({
+    message: "Nominee's full name is required",
+  }),
+  code: z.string({
+    message: "Nominee's code is required",
+  }),
+  category: z.string({
+    message: "Category is required",
+  }),
+});
