@@ -38,7 +38,7 @@ export default function GetNominees({ nominees }: any) {
     };
   }, [supabase, router]);
   return (
-    <div className="flex items-center justify-center ">
+    <div className="flex items-start justify-start ">
       <div className="grid grid-cols-1 md:flex items-start justify-start px-2  flex-wrap gap-4 mt-4">
         {nominees.length === 0 && (
           <h1 className="text-2xl font-bold">
