@@ -65,10 +65,18 @@ export default function AddNominees({ data }: { data: any }) {
 
   // Generate a random code logic here
   const generateCode = () => {
-    // Generate a random 4-digit character and a number
-    const randomCode = Math.floor(1000 + Math.random() * 9000);
+    // Generate two random characters between a and z
+    let char1 = String.fromCharCode(97 + Math.floor(Math.random() * 26));
+    let char2 = String.fromCharCode(97 + Math.floor(Math.random() * 26));
 
-    form.setValue("code", randomCode.toString());
+    // Generate two random integers between 0 and 9
+    let int1 = Math.floor(Math.random() * 10);
+    let int2 = Math.floor(Math.random() * 10);
+
+    // Combine the random characters and integers
+    let randomCode = char1 + char2 + int1 + int2;
+
+    form.setValue("code", randomCode.toString().toUpperCase());
   };
 
   const { mutateAsync: CreateNominees } = useCreateMutation({
