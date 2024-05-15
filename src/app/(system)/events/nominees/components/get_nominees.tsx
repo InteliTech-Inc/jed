@@ -57,7 +57,7 @@ export default function GetNominees({ nominees }: any) {
               height={2000}
               alt={nominee.full_name}
             />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent opacity-50 h-1/2 z-10"></div>
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent opacity-90 h-1/2 z-10"></div>
             <div className="absolute bottom-0 left-0 p-4 text-white z-20">
               <h2 className="text-xl font-bold">{nominee.full_name}</h2>
               <p>{nominee.category}</p>
