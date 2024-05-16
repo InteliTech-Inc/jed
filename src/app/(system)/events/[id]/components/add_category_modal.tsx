@@ -133,7 +133,7 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
           </form>
         </DialogContent>
       </Dialog>
-      <Link href={`/events/${id}/nomination`}>
+      <Link href={`/events/${id}/nominations`}>
         <Button>Create Nomination</Button>
       </Link>
     </div>

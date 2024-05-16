@@ -35,10 +35,10 @@ import {
 } from "@/components/ui/popover";
 
 const formSchema = z.object({
-  event_name: z.string().min(1, {
+  name: z.string().min(1, {
     message: "This is a required field.",
   }),
-  event_description: z.string().min(1, {
+  description: z.string().min(1, {
     message: "This is a required field.",
   }),
   voting: z.object({
@@ -53,8 +53,13 @@ const formSchema = z.object({
     .optional(),
 });
 
-function CreateEventForm() {
+type CreateEventProps = {
+  defaultValues?: z.infer<typeof formSchema>
+};
+
+function CreateEventForm({ defaultValues }: CreateEventProps) {
   const router = useRouter();
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [addNomination, setAddNomination] = useState(false);
   const [preview, setPreview] = useState<string>("");
@@ -68,8 +73,7 @@ function CreateEventForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      event_name: "",
-      event_description: "",
+      ...defaultValues,
     },
   });
 
@@ -97,9 +101,11 @@ function CreateEventForm() {
     //   return;
     // }
 
+    
+
     const payload = {
-      name: values.event_name,
-      description: values.event_description,
+      name: values.name,
+      description: values.description,
       // img_url: data?.path,
       user_id: user?.id,
       isCompleted: false,
@@ -147,7 +153,7 @@ function CreateEventForm() {
             <section className=" w-full">
               <FormField
                 control={form.control}
-                name="event_name"
+                name="name"
                 render={({ field }) => (
                   <FormItem className=" mb-4">
                     <FormLabel>Event Name</FormLabel>
@@ -163,7 +169,7 @@ function CreateEventForm() {
               />
               <FormField
                 control={form.control}
-                name="event_description"
+                name="description"
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Description</FormLabel>
