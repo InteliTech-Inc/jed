@@ -28,18 +28,8 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { ImageDown } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Category_sup as Category, Nominee } from "@/types/types";
 
-type Nominee = {
-  data: {
-    id: string;
-    full_name: string;
-    category: string;
-    code: string;
-    img_url: string;
-    event_id: string;
-  };
-  categories: any;
-};
 export default function UpdateNomineeForm({ data, categories }: Nominee) {
   const supabase = createClientComponentClient();
 
@@ -167,9 +157,11 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
   }, [supabase, router]);
   return (
     <div className="my-8 w-full lg:w-4/5 mx-auto h-full px-4">
-      {/* <BackButton /> */}
+      <Button variant={"outline"} onClick={() => router.back()}>
+        Go Back
+      </Button>
       <div>
-        <h3 className="text-3xl text-center mt-2 mb-8 font-bold text-neutral-700">
+        <h3 className="text-3xl text-center mt-2 mb-8  font-bold text-neutral-700">
           Update Nominee's Details
         </h3>
       </div>
@@ -253,7 +245,7 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {categories[0].categories.map((category: any) => (
+                        {categories[0].categories.map((category: Category) => (
                           <SelectItem
                             key={category.id}
                             value={category.category_name}

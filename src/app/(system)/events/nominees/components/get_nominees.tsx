@@ -1,9 +1,8 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import NomineeCard from "./nominee_card";
 
 type Nominee = {
   id: string;
@@ -13,7 +12,7 @@ type Nominee = {
   img_url: string;
 };
 
-export default function GetNominees({ nominees }: any) {
+export default function GetNominees({ nominees, votes }: any) {
   const supabase = createClientComponentClient();
   const router = useRouter();
 
@@ -37,6 +36,65 @@ export default function GetNominees({ nominees }: any) {
       supabase.removeChannel(channel);
     };
   }, [supabase, router]);
+
+  // Realtime for votes
+  useEffect(() => {
+    const channel = supabase
+      .channel("realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "voting",
+        },
+        () => {
+          router.refresh();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, router]);
+
+  // Let get the nominees id and then add voting logic
+  async function handleNomineeVoting(nomineeId: string) {
+    // Check if the nominee has been voted for
+    const { data: votes, error } = await supabase
+      .from("voting")
+      .select("*")
+      .eq("nominee_id", nomineeId);
+
+    console.log("Feteching votes", votes);
+
+    if (error) {
+      console.error("Error fetching votes:", error);
+      return;
+    }
+
+    if (votes && votes.length > 0) {
+      // If the nominee has been voted for, increment the vote count
+      const { error: updateError } = await supabase
+        .from("voting")
+        .update({ count: votes[0].count + 1 })
+        .eq("nominee_id", nomineeId);
+
+      if (updateError) {
+        console.error("Error updating vote count:", updateError);
+      }
+    } else {
+      const { error: insertError } = await supabase
+        .from("voting")
+        .insert({ nominee_id: nomineeId, count: 1 });
+
+      if (insertError) {
+        console.error("Error inserting new vote:", insertError);
+      }
+    }
+  }
+
   return (
     <div className="flex items-start justify-start ">
       <div className="grid grid-cols-1 md:flex items-start justify-start px-2  flex-wrap gap-4 mt-4">
@@ -46,31 +104,12 @@ export default function GetNominees({ nominees }: any) {
           </h1>
         )}
         {nominees.map((nominee: Nominee) => (
-          <div
+          <NomineeCard
             key={nominee.id}
-            className="relative h-[25rem] w-full md:w-[18rem] rounded overflow-hidden hover:shadow transition-all duration-150 hover:border border-secondary bg-white group"
-          >
-            <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${nominee.img_url}`}
-              className="z-0 h-full object-cover w-full"
-              width={2000}
-              height={2000}
-              alt={nominee.full_name}
-            />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent opacity-90 h-1/2 z-10"></div>
-            <div className="absolute bottom-0 left-0 p-4 text-white z-20">
-              <h2 className="text-xl font-bold">{nominee.full_name}</h2>
-              <p>{nominee.category}</p>
-              <p>Nominee's code: {nominee.code}</p>
-            </div>
-            <Button
-              onClick={() => router.push(`/nominees/edit/${nominee.id}`)}
-              variant={"outline"}
-              className="absolute top-0 right-0 m-4 font-bold py-2 px-4 rounded-full opacity-0 group-hover:opacity-100 z-30"
-            >
-              Edit
-            </Button>
-          </div>
+            nominee={nominee}
+            handleNomineeVoting={handleNomineeVoting}
+            votes={votes}
+          />
         ))}
       </div>
     </div>

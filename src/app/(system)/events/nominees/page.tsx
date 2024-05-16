@@ -18,13 +18,21 @@ export default async function AdminNominee() {
   // Get Nominees
   const { data: nominees } = await db.from("nominees").select("*");
 
+  // Get Votes and its nominees
+  const { data: votes } = await db.from("voting").select(`*, nominees(*)`);
+  // Get only the count and nominee_id props
+  const votesCount = votes?.map((vote: any) => ({
+    count: vote.count,
+    nominee_id: vote.nominee_id,
+  }));
+
   return (
     <section className="py-8 px-3 md:px-6 ">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl md:text-3xl font-bold">Your Nominees</h1>
         <AddNominees data={categories} />
       </div>
-      <GetNominees nominees={nominees} />
+      <GetNominees nominees={nominees} votes={votesCount} />
     </section>
   );
 }
