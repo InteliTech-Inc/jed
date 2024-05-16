@@ -82,18 +82,26 @@ function CreateEventForm({ defaultValues }: CreateEventProps) {
     const {
       data: { user },
     } = await db.auth.getUser();
+
     const randomString = Math.random().toString(36).substring(2, 15);
     5;
+
     const slicedName = selectedFile?.name.slice(
       selectedFile?.name.lastIndexOf(".")
     );
+
     const file = selectedFile!;
 
-    // const { data, error } = await supabase.storage
-    //   .from("events")
-    //   .upload(`thumbnails/jed-${randomString}${slicedName}`, file, {
-    //     contentType: "image/*",
-    //   });
+    if (file === null) {
+      toast.error("Please upload an image");
+      return;
+    }
+
+    const { data, error } = await supabase.storage
+      .from("events")
+      .upload(`thumbnails/jed-${randomString}${slicedName}`, file, {
+        contentType: "image/*",
+      });
 
     // if (error) {
     //   console.log(error);
@@ -108,16 +116,67 @@ function CreateEventForm({ defaultValues }: CreateEventProps) {
       description: values.description,
       // img_url: data?.path,
       user_id: user?.id,
-      isCompleted: false,
+      is_completed: false,
     };
 
-    console.log(values);
+    const nomination_period = {
+      start_date: values.nominations?.start_date,
+      end_date: values.nominations?.end_date,
+    };
 
-    // CreateEvent(payload).then((_) => {
-    //   toast.success("Your event has been successfully created!");
-    //   form.reset();
-    //   router.push("/events");
-    // });
+    const voting_period = {
+      start_date: values.voting?.start_date,
+      end_date: values.voting?.end_date,
+    };
+
+    console.table(payload);
+    console.table(nomination_period);
+    console.table(voting_period);
+
+    await CreateEvent(payload)
+      .then(async (data) => {
+        if (data) {
+          console.log("AFter event creation", data);
+          // Let's create the nomination period
+          const nominationPayload = {
+            event_id: data[0].id,
+            start_date: nomination_period.start_date,
+            end_date: nomination_period.end_date,
+          };
+          const { data: nomin_period, error } = await supabase
+            .from("nomination_period")
+            .insert(nominationPayload)
+            .select("*");
+
+          if (error) {
+            toast.error("Something went wrong");
+            return;
+          }
+
+          // Let's create the voting period
+          const votingPayload = {
+            event_id: data[0].id,
+            start_date: voting_period.start_date,
+            end_date: voting_period.end_date,
+          };
+
+          const { data: vot_period, error: vot_error } = await supabase
+            .from("voting_period")
+            .insert(votingPayload)
+            .select("*");
+
+          if (vot_error) {
+            toast.error("Something went wrong");
+            return;
+          }
+        }
+        router.push(`/events/${data && data[0]?.id}`);
+        form.reset();
+        setSelectedFile;
+
+        toast.success("Event created successfully");
+      })
+      .catch((error) => toast.error(error.message));
   }
 
   function UploadImageToForm(e: ChangeEvent<HTMLInputElement>) {
