@@ -11,13 +11,13 @@ export type EventsFields = {
   location: string;
 };
 
-type Base = {
+interface Base {
   _createdAt: string;
   _updatedAt: string;
   _id: string;
   _rev: string;
   _type: string;
-};
+}
 
 interface Post extends Base {
   author: Author;
@@ -82,4 +82,34 @@ interface Title {
   current: string;
 }
 
-export type { Post };
+interface Data {
+  id: string;
+  full_name: string;
+  category: string;
+  code: string;
+  img_url: string;
+  event_id: string;
+}
+
+type Category_sup = {
+  id: string;
+  category_name: string;
+};
+
+interface Categories {
+  categories: Category_sup[];
+}
+
+type Nominee = {
+  data: Data;
+  categories: Categories[];
+};
+
+// Define the category type
+type EditNominee = {
+  params: {
+    id: string;
+  };
+};
+
+export type { Post, Nominee, Category_sup, EditNominee };
