@@ -67,8 +67,6 @@ export default function GetNominees({ nominees, votes }: any) {
       .select("*")
       .eq("nominee_id", nomineeId);
 
-    console.log("Feteching votes", votes);
-
     if (error) {
       console.error("Error fetching votes:", error);
       return;

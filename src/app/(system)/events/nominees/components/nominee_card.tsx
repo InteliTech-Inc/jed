@@ -51,8 +51,7 @@ export default function NomineeCard({
           <p>Nominee's code: {nominee.code}</p>
           <p>
             Votes:{" "}
-            {votes.find((vote: any) => vote.nominee_id === nominee.id)?.count ||
-              0}
+            {votes.find((vote) => vote.nominee_id === nominee.id)?.count || 0}
           </p>
         </div>
         <Button
@@ -67,7 +66,7 @@ export default function NomineeCard({
         onClick={() => handleNomineeVoting(nominee.id)}
         className="w-full rounded-b-md rounded-t-none my-2"
       >
-        UpVotes
+        Vote
       </Button>
     </div>
   );
