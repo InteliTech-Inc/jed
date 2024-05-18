@@ -28,6 +28,7 @@ import { useForm } from "react-hook-form";
 import Rotating_Lines from "@/components/rotating_lines";
 import { nominationShape } from "@/lib/validations";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
+import { checkConnection } from "@/lib/utils";
 
 type Event = {
   id: string;
@@ -91,6 +92,8 @@ export default function NominationForm() {
   });
 
   async function handleNomination(values: z.infer<typeof nominationShape>) {
+    checkConnection();
+
     try {
       setIsPending(true);
       const payload = {
@@ -116,6 +119,8 @@ export default function NominationForm() {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
 

@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -34,8 +34,9 @@ import Rotating_Lines from "@/components/rotating_lines";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { nomineeFormShape } from "@/lib/validations";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import Image from "next/image";
 import { ImageDown } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { checkConnection } from "@/lib/utils";
 
 // Define the category type
 type Category = {
@@ -45,8 +46,13 @@ type Category = {
 };
 
 export default function AddNominees({ data, user_id }: any) {
-  const id = data[0]?.id;
   const supabase = createClientComponentClient();
+
+  const url = usePathname();
+  const segments = url.split("/");
+  const id = segments[segments.length - 2];
+
+  const router = useRouter();
 
   const [isPending, setIsPending] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -105,6 +111,8 @@ export default function AddNominees({ data, user_id }: any) {
   }
 
   async function handleNomination(values: z.infer<typeof nomineeFormShape>) {
+    checkConnection();
+
     // Using a random string to avoid conflicts with other files
     const randomString = Math.random().toString(36).substring(2, 15);
     5;
@@ -122,19 +130,21 @@ export default function AddNominees({ data, user_id }: any) {
       return;
     }
 
-    const { data, error } = await supabase.storage
-      .from("events")
-      .upload(`nominees/jed-${randomString}${slicedName}`, file, {
-        contentType: "image/*",
-      });
-
-    if (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-      return;
-    }
     try {
       setIsPending(true);
+
+      const { data, error } = await supabase.storage
+        .from("events")
+        .upload(`nominees/jed-${randomString}${slicedName}`, file, {
+          contentType: "image/*",
+        });
+
+      if (error) {
+        console.log(error);
+        toast.error("Something went wrong");
+        return;
+      }
+
       const payload = {
         full_name: values.full_name,
         code: values.code,
@@ -158,8 +168,33 @@ export default function AddNominees({ data, user_id }: any) {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
+
+  // Subscribing to the realtime changes
+  useEffect(() => {
+    const channel = supabase
+      .channel("realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "nominees",
+        },
+        () => {
+          router.refresh();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, router]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -250,14 +285,22 @@ export default function AddNominees({ data, user_id }: any) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {data[0].categories.map((category: Category) => (
-                          <SelectItem
-                            key={category.id}
-                            value={category.category_name}
-                          >
-                            {category.category_name}
-                          </SelectItem>
-                        ))}
+                        {data.map((categories: any) => {
+                          return categories.categories.map(
+                            (category: Category) => {
+                              if (category.event_id === id) {
+                                return (
+                                  <SelectItem
+                                    key={category.id}
+                                    value={category.category_name}
+                                  >
+                                    {category.category_name}
+                                  </SelectItem>
+                                );
+                              }
+                            }
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                     <FormMessage />

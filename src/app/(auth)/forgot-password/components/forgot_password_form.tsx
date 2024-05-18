@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Rotating_Lines from "@/components/rotating_lines";
 import Logo from "@/components/logo";
+import { checkConnection } from "@/lib/utils";
 
 export default function ForgotPasswordForm() {
   const router = useRouter();
@@ -47,6 +48,8 @@ export default function ForgotPasswordForm() {
   async function handleForgotPassword(
     values: z.infer<typeof forgotPasswordShape>
   ) {
+    checkConnection();
+
     const { email } = values;
 
     try {
@@ -78,6 +81,8 @@ export default function ForgotPasswordForm() {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
   return (

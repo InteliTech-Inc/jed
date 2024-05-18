@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form";
 import BackButton from "@/components/back";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { checkConnection, cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
@@ -54,7 +54,7 @@ const formSchema = z.object({
 });
 
 type CreateEventProps = {
-  defaultValues?: z.infer<typeof formSchema>
+  defaultValues?: z.infer<typeof formSchema>;
 };
 
 function CreateEventForm({ defaultValues }: CreateEventProps) {
@@ -78,6 +78,10 @@ function CreateEventForm({ defaultValues }: CreateEventProps) {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const isOnline = checkConnection();
+
+    if (!isOnline) return;
+
     const supabase = createClientComponentClient();
     const {
       data: { user },
@@ -108,8 +112,6 @@ function CreateEventForm({ defaultValues }: CreateEventProps) {
     //   toast.error("Something went wrong");
     //   return;
     // }
-
-    
 
     const payload = {
       name: values.name,

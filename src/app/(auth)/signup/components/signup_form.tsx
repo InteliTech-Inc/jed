@@ -29,6 +29,7 @@ import { useState } from "react";
 import Rotating_Lines from "@/components/rotating_lines";
 import Checkbox_Show_Password from "@/components/checkbox_show_password";
 import Logo from "@/components/logo";
+import { checkConnection } from "@/lib/utils";
 
 export default function SignupForm() {
   const router = useRouter();
@@ -50,6 +51,8 @@ export default function SignupForm() {
   const inputValues = form.watch();
 
   async function handleSignup(values: z.infer<typeof signupShape>) {
+    checkConnection();
+
     const { firstName, lastName, email, phone, password } = values;
 
     try {
@@ -101,6 +104,8 @@ export default function SignupForm() {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
 
