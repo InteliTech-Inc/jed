@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import BackButton from "@/components/back";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { checkConnection, cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateMutation } from "@/hooks/use_create_mutation";

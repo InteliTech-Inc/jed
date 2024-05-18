@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +14,9 @@ import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { PlusIcon} from "lucide-react";
 import { toast } from "sonner";
 import { Trash2, Plus } from "lucide-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
+import { checkConnection } from "@/lib/utils";
 
 type Props = {
   event_id: {
@@ -32,6 +35,9 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
 
   // Submit category form
   async function handleCategory(e: React.FormEvent<HTMLFormElement>) {
+    const isOnline = checkConnection();
+    if (!isOnline) return;
+
     e.preventDefault();
     for (const category of categories) {
       const payload = {
@@ -76,6 +82,31 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
     newCategories[index] = value;
     setCategories(newCategories);
   }
+
+  const supabase = createClientComponentClient();
+  const router = useRouter();
+
+  // RealTime for categories
+  useEffect(() => {
+    const category_channel = supabase
+      .channel("realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "categories",
+        },
+        () => {
+          router.refresh();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(category_channel);
+    };
+  }, [supabase, router]);
 
   return (
     <div className="space-x-4">

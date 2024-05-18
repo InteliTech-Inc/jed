@@ -29,6 +29,7 @@ import Rotating_Lines from "@/components/rotating_lines";
 import { useState } from "react";
 import Checkbox_Show_Password from "@/components/checkbox_show_password";
 import Logo from "@/components/logo";
+import { checkConnection } from "@/lib/utils";
 
 export default function ResetPasswordForm() {
   const router = useRouter();
@@ -47,6 +48,7 @@ export default function ResetPasswordForm() {
   const inputValues = form.watch();
 
   async function ResetPassword(formData: z.infer<typeof resetPasswordShape>) {
+    checkConnection();
     const { password } = formData;
 
     try {
@@ -70,6 +72,8 @@ export default function ResetPasswordForm() {
       if (error instanceof Error) {
         toast.error(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
   return (

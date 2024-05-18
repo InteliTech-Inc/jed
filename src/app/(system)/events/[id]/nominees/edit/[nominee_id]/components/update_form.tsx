@@ -28,6 +28,7 @@ import Image from "next/image";
 import { ImageDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Category_sup as Category, Nominee } from "@/types/types";
+import { checkConnection } from "@/lib/utils";
 
 export default function UpdateNomineeForm({ data, categories }: Nominee) {
   const supabase = createClientComponentClient();
@@ -75,6 +76,8 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
   }
 
   async function handleUpdate(values: z.infer<typeof nomineeFormShape>) {
+    checkConnection();
+
     // Using a random string to avoid conflicts with other files
     const randomString = Math.random().toString(36).substring(2, 15);
     5;
@@ -87,19 +90,20 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
     // biome-ignore lint/style/noNonNullAssertion: <the users always upload a picture>
     const file = selectedFile!;
 
-    const { data: ImageData, error } = await supabase.storage
-      .from("events")
-      .upload(`nominees/jed-${randomString}${slicedName}`, file, {
-        contentType: "image/*",
-      });
-
-    if (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-      return;
-    }
     try {
       setIsPending(true);
+
+      const { data: ImageData, error: ImageError } = await supabase.storage
+        .from("events")
+        .upload(`nominees/jed-${randomString}${slicedName}`, file, {
+          contentType: "image/*",
+        });
+
+      if (ImageError) {
+        console.log(ImageError);
+        toast.error("Something went wrong");
+        return;
+      }
       const payload = {
         full_name: values.full_name,
         code: values.code,
@@ -129,6 +133,8 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
 
