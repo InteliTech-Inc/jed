@@ -102,12 +102,13 @@ export default function GetNominees({ nominees, votes }: any) {
           </h1>
         )}
         {nominees.map((nominee: Nominee) => (
-          <NomineeCard
-            key={nominee.id}
-            nominee={nominee}
-            handleNomineeVoting={handleNomineeVoting}
-            votes={votes}
-          />
+          <div key={nominee.id}>
+            <NomineeCard
+              nominee={nominee}
+              handleNomineeVoting={handleNomineeVoting}
+              votes={votes}
+            />
+          </div>
         ))}
       </div>
     </div>

@@ -50,7 +50,10 @@ export default async function SingleEvent({ params: { id } }: Props) {
               <ul className=" grid grid-cols-2 gap-4">
                 {data.categories.map((category) => {
                   return (
-                    <li className=" w-full p-6 border  bg-gray-50 rounded-lg ">
+                    <li
+                      className=" w-full p-6 border  bg-gray-50 rounded-lg "
+                      key={category.id}
+                    >
                       {category.category_name}
                     </li>
                   );

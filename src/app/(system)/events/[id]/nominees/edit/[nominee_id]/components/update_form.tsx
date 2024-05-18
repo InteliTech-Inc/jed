@@ -6,7 +6,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
@@ -144,7 +143,7 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
             router.refresh();
             toast.success("Changes received");
             setTimeout(() => {
-              router.replace("/nominees");
+              router.back();
             }, 1000);
           }
         }
