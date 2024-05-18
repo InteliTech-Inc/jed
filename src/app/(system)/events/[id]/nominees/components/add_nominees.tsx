@@ -36,6 +36,7 @@ import { nomineeFormShape } from "@/lib/validations";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ImageDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { checkConnection } from "@/lib/utils";
 
 // Define the category type
 type Category = {
@@ -110,6 +111,10 @@ export default function AddNominees({ data, user_id }: any) {
   }
 
   async function handleNomination(values: z.infer<typeof nomineeFormShape>) {
+    const isOnline = checkConnection();
+
+    if (!isOnline) return;
+
     // Using a random string to avoid conflicts with other files
     const randomString = Math.random().toString(36).substring(2, 15);
     5;

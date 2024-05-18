@@ -8,6 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 
 export const checkConnection = () => {
   if (!navigator.onLine) {
-    return toast.error("Please check your internet connection");
+    toast.error("Please check your internet connection");
+    return false;
   }
+  return true;
 };

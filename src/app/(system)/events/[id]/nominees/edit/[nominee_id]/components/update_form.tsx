@@ -28,6 +28,7 @@ import Image from "next/image";
 import { ImageDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Category_sup as Category, Nominee } from "@/types/types";
+import { checkConnection } from "@/lib/utils";
 
 export default function UpdateNomineeForm({ data, categories }: Nominee) {
   const supabase = createClientComponentClient();
@@ -75,6 +76,10 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
   }
 
   async function handleUpdate(values: z.infer<typeof nomineeFormShape>) {
+    const isOnline = checkConnection();
+
+    if (!isOnline) return;
+
     // Using a random string to avoid conflicts with other files
     const randomString = Math.random().toString(36).substring(2, 15);
     5;

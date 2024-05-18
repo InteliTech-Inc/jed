@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { Trash2, Plus } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
+import { checkConnection } from "@/lib/utils";
 
 type Props = {
   event_id: {
@@ -34,6 +35,9 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
 
   // Submit category form
   async function handleCategory(e: React.FormEvent<HTMLFormElement>) {
+    const isOnline = checkConnection();
+    if (!isOnline) return;
+
     e.preventDefault();
     for (const category of categories) {
       const payload = {

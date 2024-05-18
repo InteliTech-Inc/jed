@@ -29,6 +29,7 @@ import { useState } from "react";
 import Rotating_Lines from "@/components/rotating_lines";
 import Checkbox_Show_Password from "@/components/checkbox_show_password";
 import Logo from "@/components/logo";
+import { checkConnection } from "@/lib/utils";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -46,6 +47,8 @@ export default function LoginForm() {
   const inputValues = form.watch();
 
   async function handleLogin(values: z.infer<typeof authShape>) {
+    const isOnline = checkConnection();
+    if (!isOnline) return;
     const { email, password } = values;
     try {
       setIsPending(true);
