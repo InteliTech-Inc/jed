@@ -4,6 +4,11 @@ import { cookies } from "next/headers";
 import { dbServer } from "@/lib/supabase";
 import GetNominees from "./components/get_nominees";
 
+interface VoteCount {
+  count: number;
+  nominee_id: string;
+}
+
 export default async function AdminNominee() {
   const db = dbServer(cookies);
   const {
@@ -23,8 +28,9 @@ export default async function AdminNominee() {
 
   // Get Votes and its nominees
   const { data: votes } = await db.from("voting").select(`*, nominees(*)`);
+
   // Get only the count and nominee_id props
-  const votesCount = votes?.map((vote: any) => ({
+  const votesCount = votes?.map((vote: VoteCount) => ({
     count: vote.count,
     nominee_id: vote.nominee_id,
   }));
