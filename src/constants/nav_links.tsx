@@ -13,5 +13,10 @@ export const NAV_LINKS = [
     href: "/events",
     icon: <Vote />,
   },
+  {
+    id: 2,
+    title: "Ticketing",
+    href: "/ticketing",
+    icon: <Vote />,
+  },
 ];
-

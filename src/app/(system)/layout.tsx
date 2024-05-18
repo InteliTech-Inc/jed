@@ -27,7 +27,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
-            <nav className="grid gap-6 text-lg font-medium">
+            <nav className="grid gap-6 font-medium">
               {NAV_LINKS.map((link) => {
                 return (
                   <Link
