@@ -22,7 +22,7 @@ export default async function EditEventPage({
   }
 
   return (
-    <div>
+    <div className="">
       <Suspense fallback={<Spinner />}>
         <CreateEventForm defaultValues={data} />
       </Suspense>
