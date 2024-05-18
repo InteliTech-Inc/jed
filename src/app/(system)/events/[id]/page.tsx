@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import CategoryCard from "./components/category_card";
 
 type Props = {
   params: { id: string };
@@ -13,7 +14,7 @@ export default async function SingleEvent({ params: { id } }: Props) {
   const db = dbServer(cookies);
   const { data, error } = await db
     .from("events")
-    .select("*, categories(category_name), nominations(*, categories(*))")
+    .select("*, categories(id, category_name), nominations(*, categories(*))")
     .eq("id", id)
     .single();
 
@@ -45,21 +46,7 @@ export default async function SingleEvent({ params: { id } }: Props) {
           </h1>
           <div className="">
             <p>{data.description}</p>
-            <section className=" py-4">
-              <h3 className="text-2xl my-2 font-semibold">Categories</h3>
-              <ul className=" grid grid-cols-2 gap-4">
-                {data.categories.map((category) => {
-                  return (
-                    <li
-                      className=" w-full p-6 border  bg-gray-50 rounded-lg "
-                      key={category.id}
-                    >
-                      {category.category_name}
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
+            <CategoryCard categories={data.categories} />
           </div>
         </div>
       </section>
