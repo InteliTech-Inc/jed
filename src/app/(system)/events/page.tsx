@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { cookies } from "next/headers";
-import CreateEventForm from "./create/components/create_event";
 
 async function EventsPage() {
   const db = dbServer(cookies);

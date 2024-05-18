@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Home, LineChart, Package, Users, Sidebar } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 const SidebarLinks = [
   {
@@ -24,24 +24,22 @@ const SidebarLinks = [
     icon: <Package size={20} />,
   },
   {
-    name: "Ticketing",
-    icon: <Package size={20} />,
-  },
-  {
     name: "Withdrawal",
     icon: <Package size={20} />,
   },
 ];
 export default function EventsSidebar() {
   const path = usePathname();
+  const { id } = useParams();
   const segments = path.split("/");
   const lastSegment = segments[segments.length - 1];
-  const activeLink = lastSegment.includes("-") ? "details" : lastSegment; // compromised
+
+  const activeLink = lastSegment === id ? "details" : lastSegment;
 
   return (
     <div className="h-fit sticky top-16 p-2 border-b md:border-b-0 md:h-[calc(100vh_-_5rem)] border-r bg-white">
       <div className="hidden md:block md:flex-1">
-        <nav className="hidden md:grid items-start gap-2 text-neutral-800 px-2 font-medium lg:px-4">
+        <nav className="hidden md:grid items-start gap-2 text-neutral-800 px-2 lg:px-4">
           {SidebarLinks.map((item) => {
             const ac =
               activeLink === item.name.toLowerCase()
@@ -49,17 +47,14 @@ export default function EventsSidebar() {
                 : "hover:bg-gray-50 ";
             return (
               <Link
-                href={`${path}/${item.name.toLowerCase()}`}
+                href={`/events/${id}/${
+                  item.name === "Details" ? "" : item.name.toLowerCase()
+                }`}
                 key={item.name}
-                className={`${ac} mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground`}
+                className={`${ac} mx-[-0.65rem] flex items-center gap-4 text-sm rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground`}
               >
                 {item.icon}
                 {item.name}{" "}
-                {item.name === "Ticketing" && (
-                  <small className="px-2 p-1 bg-green-200 rounded-full">
-                    Coming soon
-                  </small>
-                )}
               </Link>
             );
           })}
