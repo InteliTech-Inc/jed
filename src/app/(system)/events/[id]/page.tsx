@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
+import { EditIcon } from "lucide-react";
 type Props = {
   params: { id: string };
 };
@@ -23,9 +23,18 @@ export default async function SingleEvent({ params: { id } }: Props) {
 
   return (
     <section className="p-4">
-      <div className="flex items-center justify-between gap-x-4">
+      <section className=" mb-4">
+        <p className=" text-4xl text-neutral-700 mb-2 font-semibold">
+          Event details
+        </p>
+        <p className=" text-neutral-600">
+          View and edit the details of your event
+        </p>
+      </section>
+      <div className="flex items-center justify-end gap-x-4">
         <AddCategoryModal event_id={data} />
-        <Button>
+        <Button className=" gap-2">
+          <EditIcon size={14} />
           <Link href={`/events/${id}/edit`}>Edit Event</Link>
         </Button>
       </div>
@@ -46,8 +55,8 @@ export default async function SingleEvent({ params: { id } }: Props) {
           <div className="">
             <p>{data.description}</p>
             <section className=" py-4">
-              <h3 className="text-2xl my-2 font-semibold">Categories</h3>
-              <ul className=" grid grid-cols-2 gap-4">
+              <h3 className="text-2xl my-2 font-semibold">Categories ({data.categories.length})</h3>
+              <ul className=" grid md:grid-cols-2 gap-4">
                 {data.categories.map((category) => {
                   return (
                     <li className=" w-full p-6 border  bg-gray-50 rounded-lg ">
