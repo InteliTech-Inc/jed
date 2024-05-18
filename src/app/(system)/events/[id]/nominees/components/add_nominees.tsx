@@ -43,8 +43,8 @@ type Category = {
   event_id: string;
 };
 
-export default function AddNominees({ data }: { data: any }) {
-  const id = data[0].id;
+export default function AddNominees({ data, user_id }: any) {
+  const id = data[0]?.id;
   const supabase = createClientComponentClient();
 
   const [isPending, setIsPending] = useState<boolean>(false);
@@ -140,6 +140,7 @@ export default function AddNominees({ data }: { data: any }) {
         category: values.category,
         event_id: id,
         img_url: data?.path,
+        user_id,
       };
       await CreateNominees(payload)
         .then(() => {
