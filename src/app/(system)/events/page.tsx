@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { cookies } from "next/headers";
+import CreateEventForm from "./create/components/create_event";
 
 async function EventsPage() {
   const db = dbServer(cookies);
@@ -17,14 +18,12 @@ async function EventsPage() {
     .select("*")
     .eq("user_id", user?.id!);
 
-  console.log("Events", JSON.stringify(events, null, 2));
-
   return (
     <div className="p-6">
       <div className="flex justify-between items-center gap-5">
         <div>
           <h3 className="text-2xl font-semibold leading-none tracking-tight">
-            Events
+            Your Events
           </h3>
         </div>
         <div>
@@ -46,8 +45,7 @@ async function EventsPage() {
                   key={event.id}
                   className="border p-3 h-fit rounded-xl"
                 >
-                  <h5 className="font-semibold py-2">{event.name}</h5>
-                  <section className=" h-80">
+                  <section className=" h-64">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
                       alt={`${event.name}'s image`}
@@ -56,6 +54,14 @@ async function EventsPage() {
                       className="rounded-md  w-full h-full object-cover object-center"
                       priority
                     />
+                  </section>
+                  <h5 className="font-semibold py-2">{event.name}</h5>
+                  <section className="py-4 w-full">
+                    <span className=" ">
+                      <p className="border w-fit text-sm bg-green-100 border-secondary rounded-full px-4 py-1">
+                        {event.is_completed ? "Completed" : "In Progress"}
+                      </p>
+                    </span>
                   </section>
                 </Link>
               );

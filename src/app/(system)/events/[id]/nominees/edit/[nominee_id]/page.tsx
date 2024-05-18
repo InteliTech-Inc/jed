@@ -1,12 +1,21 @@
 import { dbServer } from "@/lib/supabase";
 import UpdateNomineeForm from "./components/update_form";
 import { cookies } from "next/headers";
-import { EditNominee as Props } from "@/types/types";
 
-export default async function EditNominee({ params: { id } }: Props) {
+type EditNomineeProps = {
+  params: { nominee_id: string };
+};
+
+export default async function EditNominee({
+  params: { nominee_id },
+}: EditNomineeProps) {
   const db = dbServer(cookies);
   // Fetch the nominee data
-  const { data } = await db.from("nominees").select("*").eq("id", id).single();
+  const { data } = await db
+    .from("nominees")
+    .select("*")
+    .eq("id", nominee_id)
+    .single();
 
   //   GEt user first
   const {

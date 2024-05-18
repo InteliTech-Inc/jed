@@ -1,5 +1,5 @@
 export const headingAnimation = {
-  hidden: { y: 150 },
+  hidden: { y: 100 },
   show: {
     y: 0,
     transition: {

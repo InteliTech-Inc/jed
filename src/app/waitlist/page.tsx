@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function WaitListPage(): JSX.Element {
   return (
-    <main className="flex items-center justify-center min-h-screen bg-white px-5 ">
+    <main className="flex items-center justify-center bg-pattern bg-center min-h-screen bg-white px-5 ">
       <div className="w-[40rem] flex flex-col justify-center items-center gap-y-4 z-10">
         <p className=" font-normal text-center text-md tracking-wide mb-4">
           🚀 Experience the Future of Voting & Ticketing with Us!

@@ -27,9 +27,9 @@ export default function AnimatedText(): JSX.Element {
           clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
         }}
       >
-        <h1 className="text-[2.2rem] md:text-6xl text-center leading-tight font-bold ">
+        <p className="text-[2.2rem] md:text-6xl text-center leading-tight font-bold ">
           Join the Waitlist for JED today!
-        </h1>
+        </p>
       </div>
     </main>
   );

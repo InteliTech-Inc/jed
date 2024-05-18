@@ -128,7 +128,6 @@ export default function SignupForm() {
                         <Input
                           id="firstName"
                           type="text"
-                          autoComplete="off"
                           placeholder="Enter your first name"
                           className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                           {...field}
@@ -148,7 +147,6 @@ export default function SignupForm() {
                         <Input
                           id="lastName"
                           type="text"
-                          autoComplete="off"
                           placeholder="Enter your last name"
                           className="  border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                           {...field}
@@ -169,7 +167,6 @@ export default function SignupForm() {
                       <Input
                         id="email"
                         type="email"
-                        autoComplete="off"
                         placeholder="Enter a valid email address"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                         {...field}
@@ -189,8 +186,7 @@ export default function SignupForm() {
                       <Input
                         id="phone"
                         type="text"
-                        autoComplete="off"
-                        placeholder="Enter your phone number (+233)"
+                        placeholder="Enter your phone number"
                         className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                         {...field}
                       />
@@ -210,7 +206,6 @@ export default function SignupForm() {
                         <Input
                           id="password"
                           type={showPassword ? "text" : "password"}
-                          autoComplete="off"
                           placeholder="Enter your password"
                           className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                           {...field}
@@ -231,7 +226,6 @@ export default function SignupForm() {
                         <Input
                           id="confirm_password"
                           type={showPassword ? "text" : "password"}
-                          autoComplete="off"
                           placeholder="Confirm your password"
                           className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                           {...field}

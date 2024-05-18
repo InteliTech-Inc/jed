@@ -98,7 +98,6 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
                   <Input
                     id={`name${index}`}
                     type="text"
-                    autoComplete="off"
                     placeholder="Enter category name"
                     className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                     required
@@ -134,7 +133,7 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
           </form>
         </DialogContent>
       </Dialog>
-      <Link href={`/events/${id}/nomination`}>
+      <Link href={`/events/${id}/nominations`}>
         <Button>Create Nomination</Button>
       </Link>
     </div>

@@ -1,8 +1,7 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import Link from "next/link";
 
 interface Nominee {
   id: string;
@@ -55,11 +54,10 @@ export default function NomineeCard({
           </p>
         </div>
         <Button
-          onClick={() => router.push(`/events/nominees/edit/${nominee.id}`)}
           variant={"outline"}
           className="absolute top-0 right-0 m-4 font-bold py-2 px-4 rounded-full opacity-0 group-hover:opacity-100 z-30"
         >
-          Edit
+          <Link href={`nominees/edit/${nominee.id}`}>Edit</Link>
         </Button>
       </div>
       <Button

@@ -18,7 +18,7 @@ export default function Footer() {
               Home
             </Link>
             <Link href={"/about"} className="hover:text-secondary">
-              Pricing
+              About
             </Link>
             <Link href={"/blog"} className="hover:text-secondary">
               Blog

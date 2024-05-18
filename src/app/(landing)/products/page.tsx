@@ -14,11 +14,10 @@ export default function ProductsPage() {
       <section className="p-6">
         <h1 className="py-4 main-heading">Products</h1>
         <p className=" text-lg lg:w-3/5 lg:text-2xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora
-          impedit,{" "}
+          Simplify voting, nominations, and ticketing to simplify your events
+          management. Ensure every event is{" "}
           <mark className=" text-primary/60">
-            odit praesentium perspiciatis vel voluptatum omnis amet odio quia
-            corporis!
+            memorable by improving your planning with our simple-to-use tools.
           </mark>
         </p>
       </section>
@@ -31,25 +30,13 @@ export default function ProductsPage() {
             Nominations
           </h1>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur consectetur deserunt quaerat illum tempora magni ut
-            molestiae magnam. Doloremque, ipsum. Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Est corrupti quidem nemo! Labore
-            sequi quae optio dolorem officia odit distinctio!
-          </p>
-          <br />
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur consectetur deserunt quaerat illum tempora magni ut
-            molestiae magnam. Doloremque, ipsum. Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Est corrupti quidem nemo! Labore
-            sequi quae optio dolorem officia odit distinctio!
-          </p>
-          <br />
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur consectetur deserunt quaerat illum tempora magni ut
-            molestia
+            Improve the prestige of your event by using our simplified Nominee
+            Voting system. Handle the nomination process for the event with
+            dedication, making sure that everything is transparent and fair.
+            Encourage participation in a dynamic and open voting process by
+            providing participants with customisable vote criteria and real-time
+            result tracking. Encourage a sense of excitement and anticipation as
+            voters select deserving candidates.
           </p>
         </section>
         <section>
