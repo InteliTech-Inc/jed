@@ -87,19 +87,20 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
     // biome-ignore lint/style/noNonNullAssertion: <the users always upload a picture>
     const file = selectedFile!;
 
-    const { data: ImageData, error } = await supabase.storage
-      .from("events")
-      .upload(`nominees/jed-${randomString}${slicedName}`, file, {
-        contentType: "image/*",
-      });
-
-    if (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-      return;
-    }
     try {
       setIsPending(true);
+
+      const { data: ImageData, error: ImageError } = await supabase.storage
+        .from("events")
+        .upload(`nominees/jed-${randomString}${slicedName}`, file, {
+          contentType: "image/*",
+        });
+
+      if (ImageError) {
+        console.log(ImageError);
+        toast.error("Something went wrong");
+        return;
+      }
       const payload = {
         full_name: values.full_name,
         code: values.code,
