@@ -51,8 +51,8 @@ export default function SignupForm() {
   const inputValues = form.watch();
 
   async function handleSignup(values: z.infer<typeof signupShape>) {
-    const isOnline = checkConnection();
-    if (!isOnline) return;
+    checkConnection();
+
     const { firstName, lastName, email, phone, password } = values;
 
     try {
@@ -104,6 +104,8 @@ export default function SignupForm() {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
 

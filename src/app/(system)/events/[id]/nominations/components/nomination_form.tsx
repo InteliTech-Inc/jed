@@ -92,8 +92,7 @@ export default function NominationForm() {
   });
 
   async function handleNomination(values: z.infer<typeof nominationShape>) {
-    const isOnline = checkConnection();
-    if (!isOnline) return;
+    checkConnection();
 
     try {
       setIsPending(true);
@@ -120,6 +119,8 @@ export default function NominationForm() {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
 

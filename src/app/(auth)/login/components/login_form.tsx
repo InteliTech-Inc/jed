@@ -47,8 +47,7 @@ export default function LoginForm() {
   const inputValues = form.watch();
 
   async function handleLogin(values: z.infer<typeof authShape>) {
-    const isOnline = checkConnection();
-    if (!isOnline) return;
+    checkConnection();
     const { email, password } = values;
     try {
       setIsPending(true);
@@ -77,6 +76,8 @@ export default function LoginForm() {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
 

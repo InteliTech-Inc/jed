@@ -111,9 +111,7 @@ export default function AddNominees({ data, user_id }: any) {
   }
 
   async function handleNomination(values: z.infer<typeof nomineeFormShape>) {
-    const isOnline = checkConnection();
-
-    if (!isOnline) return;
+    checkConnection();
 
     // Using a random string to avoid conflicts with other files
     const randomString = Math.random().toString(36).substring(2, 15);
@@ -170,6 +168,8 @@ export default function AddNominees({ data, user_id }: any) {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
 

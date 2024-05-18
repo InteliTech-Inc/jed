@@ -48,9 +48,7 @@ export default function ForgotPasswordForm() {
   async function handleForgotPassword(
     values: z.infer<typeof forgotPasswordShape>
   ) {
-    const isOnline = checkConnection();
-
-    if (!isOnline) return;
+    checkConnection();
 
     const { email } = values;
 
@@ -83,6 +81,8 @@ export default function ForgotPasswordForm() {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
   return (

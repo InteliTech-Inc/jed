@@ -48,8 +48,7 @@ export default function ResetPasswordForm() {
   const inputValues = form.watch();
 
   async function ResetPassword(formData: z.infer<typeof resetPasswordShape>) {
-    const isOnline = checkConnection();
-    if (!isOnline) return;
+    checkConnection();
     const { password } = formData;
 
     try {
@@ -73,6 +72,8 @@ export default function ResetPasswordForm() {
       if (error instanceof Error) {
         toast.error(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
   return (
