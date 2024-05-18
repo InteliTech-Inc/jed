@@ -1,6 +1,6 @@
 "use client";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import NomineeCard from "./nominee_card";
 
@@ -10,54 +10,17 @@ type Nominee = {
   category: string;
   code: string;
   img_url: string;
+  event_id: string;
 };
 
 export default function GetNominees({ nominees, votes }: any) {
   const supabase = createClientComponentClient();
+
+  const url = usePathname();
+  const segments = url.split("/");
+  const id = segments[segments.length - 2];
+
   const router = useRouter();
-
-  useEffect(() => {
-    const channel = supabase
-      .channel("realtime")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "nominees",
-        },
-        () => {
-          router.refresh();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase, router]);
-
-  // Realtime for votes
-  useEffect(() => {
-    const channel = supabase
-      .channel("realtime")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "voting",
-        },
-        () => {
-          router.refresh();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase, router]);
 
   // Let get the nominees id and then add voting logic
   async function handleNomineeVoting(nomineeId: string) {
@@ -93,24 +56,45 @@ export default function GetNominees({ nominees, votes }: any) {
     }
   }
 
+  // Realtime for votes
+  useEffect(() => {
+    const channel = supabase
+      .channel("realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "voting",
+        },
+        () => {
+          router.refresh();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, router]);
+
   return (
-    <div className="flex items-start justify-start ">
-      <div className="grid grid-cols-1 md:flex items-start justify-start px-2  flex-wrap gap-4 mt-4">
-        {nominees.length === 0 && (
-          <h1 className="text-2xl font-bold">
-            There are no nominees available at the moment.
-          </h1>
-        )}
-        {nominees.map((nominee: Nominee) => (
-          <div key={nominee.id}>
-            <NomineeCard
-              nominee={nominee}
-              handleNomineeVoting={handleNomineeVoting}
-              votes={votes}
-            />
-          </div>
-        ))}
+    <section className="flex flex-col md:flex-row md:items-start md:justify-start">
+      <div className="grid grid-cols-1 md:flex md:items-start md:justify-start px-2 flex-wrap  mt-4">
+        {nominees.map((nominee: Nominee) => {
+          return nominee.event_id === id ? (
+            <div key={nominee.id} className="md:mr-4 md:mb-4">
+              <NomineeCard
+                nominee={nominee}
+                handleNomineeVoting={handleNomineeVoting}
+                votes={votes}
+              />
+            </div>
+          ) : (
+            <div />
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 }
