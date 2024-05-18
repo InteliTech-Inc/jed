@@ -16,7 +16,10 @@ export default async function AdminNominee() {
     .eq("user_id", user?.id);
 
   // Get Nominees
-  const { data: nominees } = await db.from("nominees").select("*");
+  const { data: nominees } = await db
+    .from("nominees")
+    .select("*")
+    .eq("user_id", user?.id);
 
   // Get Votes and its nominees
   const { data: votes } = await db.from("voting").select(`*, nominees(*)`);
@@ -30,7 +33,7 @@ export default async function AdminNominee() {
     <section className="py-8 px-3 md:px-6 ">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl md:text-3xl font-bold">Your Nominees</h1>
-        <AddNominees data={categories} />
+        <AddNominees data={categories} user_id={user?.id} />
       </div>
       <GetNominees nominees={nominees} votes={votesCount} />
     </section>
