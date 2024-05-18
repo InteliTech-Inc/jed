@@ -1,8 +1,5 @@
-import { dbServer } from "@/lib/supabase";
-import { cookies } from "next/headers";
 import { Suspense } from "react";
-import CreateEventForm from "../../create/components/create_event";
-import Spinner from "@/components/rotating_lines";
+import EditEvent from "./components/edit_event";
 
 type EditEventProps = {
   params: { id: string };
@@ -10,22 +7,16 @@ type EditEventProps = {
 export default async function EditEventPage({
   params: { id },
 }: EditEventProps) {
-  const db = dbServer(cookies);
-  const { data, error } = await db
-    .from("events")
-    .select("*, categories(category_name), nominations(*, categories(*))")
-    .eq("id", id)
-    .single();
-
-  if (!data) {
-    return <div>No event found</div>;
-  }
-
   return (
-    <div className="">
-      <Suspense fallback={<Spinner />}>
-        <CreateEventForm defaultValues={data} />
+    <section className="p-4">
+      <section className=" mb-4 max-w-screen-sm">
+        <p className=" text-4xl text-neutral-700 mb-2 font-semibold">
+          Edit Event
+        </p>
+      </section>
+      <Suspense>
+        <EditEvent id={id} />
       </Suspense>
-    </div>
+    </section>
   );
 }

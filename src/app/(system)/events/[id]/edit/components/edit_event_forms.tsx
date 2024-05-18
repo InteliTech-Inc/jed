@@ -1,5 +1,5 @@
 "use client";
-import Spinner from "@/components/rotating_lines";
+import Rotating_Lines from "@/components/rotating_lines";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -8,7 +8,6 @@ import {
   FormItem,
   FormLabel,
   FormDescription,
-  FormMessage,
 } from "@/components/ui/form";
 import BackButton from "@/components/back";
 import { Input } from "@/components/ui/input";
@@ -39,8 +38,8 @@ const formSchema = z.object({
   name: z.string().min(1, {
     message: "This is a required field.",
   }),
-  description: z.string().min(100, {
-    message: "This should not be less than 100 characters",
+  description: z.string().min(1, {
+    message: "This is a required field.",
   }),
   voting: z.object({
     start_date: z.date(),
@@ -54,18 +53,22 @@ const formSchema = z.object({
     .optional(),
 });
 
-const defaultValues = {
-  name: "",
-  description: "",
+type EditEventProps = {
+  defaultValues?: z.infer<typeof formSchema>;
 };
 
-function CreateEventForm() {
+function EditEventForm({ defaultValues }: EditEventProps) {
   const router = useRouter();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [addNomination, setAddNomination] = useState(false);
   const [preview, setPreview] = useState<string>("");
-  const [loading, setLoading] = useState(false);
+
+  const { mutateAsync: CreateEvent, isPending } = useCreateMutation({
+    dbName: "events",
+    key: "events",
+    showSucessMsg: false,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,105 +78,103 @@ function CreateEventForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
+    const supabase = createClientComponentClient();
     const {
       data: { user },
     } = await db.auth.getUser();
 
     const randomString = Math.random().toString(36).substring(2, 15);
+    5;
 
     const slicedName = selectedFile?.name.slice(
       selectedFile?.name.lastIndexOf(".")
     );
 
-    const file = selectedFile;
+    const file = selectedFile!;
 
     if (file === null) {
       toast.error("Please upload an image");
       return;
     }
 
-    try {
-      const { data, error } = await db.storage
-        .from("events")
-        .upload(`thumbnails/jed-${randomString}${slicedName}`, file, {
-          contentType: "image/*",
-        });
+    const { data, error } = await supabase.storage
+      .from("events")
+      .upload(`thumbnails/jed-${randomString}${slicedName}`, file, {
+        contentType: "image/*",
+      });
 
-      if (error) return toast.error("there was an error uploading your image");
+    // if (error) {
+    //   console.log(error);
+    //   toast.error("Something went wrong");
+    //   return;
+    // }
 
-      const payload = {
-        name: values.name,
-        description: values.description,
-        user_id: user?.id!,
-        img_url: data.path,
-        is_completed: false,
-      };
+    const payload = {
+      name: values.name,
+      description: values.description,
+      // img_url: data?.path,
+      user_id: user?.id,
+      is_completed: false,
+    };
 
-      let nomination_period;
+    const nomination_period = {
+      start_date: values.nominations?.start_date,
+      end_date: values.nominations?.end_date,
+    };
 
-      if (values.nominations) {
-        nomination_period = {
-          start_date: values.nominations?.start_date,
-          end_date: values.nominations?.end_date,
-        };
-      }
+    const voting_period = {
+      start_date: values.voting?.start_date,
+      end_date: values.voting?.end_date,
+    };
 
-      const voting_period = {
-        start_date: values.voting?.start_date,
-        end_date: values.voting?.end_date,
-      };
+    console.table(payload);
+    console.table(nomination_period);
+    console.table(voting_period);
 
-      const { data: EventData, error: EventError } = await db
-        .from("events")
-        .insert(payload)
-        .select("*");
-
-      if (EventError) {
-        toast.error("There's an error submitting the event");
-        return;
-      }
-
-      if (EventData) {
-        const votingPayload = {
-          event_id: EventData[0].id,
-          start_date: voting_period.start_date as unknown as string,
-          end_date: voting_period.end_date as unknown as string,
-        };
-
-        const { data: _, error } = await db
-          .from("voting_period")
-          .insert(votingPayload)
-          .select("*");
-
-        if (error) {
-          return toast.error("Voting period error");
-        }
-
-        if (nomination_period) {
+    await CreateEvent(payload)
+      .then(async (data) => {
+        if (data) {
+          console.log("AFter event creation", data);
+          // Let's create the nomination period
           const nominationPayload = {
-            event_id: EventData[0].id,
-            start_date: nomination_period.start_date as unknown as string,
-            end_date: nomination_period.end_date as unknown as string,
+            event_id: data[0].id,
+            start_date: nomination_period.start_date,
+            end_date: nomination_period.end_date,
           };
-
-          const { data: __, error: NomError } = await db
+          const { data: nomin_period, error } = await supabase
             .from("nomination_period")
             .insert(nominationPayload)
             .select("*");
 
-          if (NomError) return toast("nomination error");
+          if (error) {
+            toast.error("Something went wrong");
+            return;
+          }
+
+          // Let's create the voting period
+          const votingPayload = {
+            event_id: data[0].id,
+            start_date: voting_period.start_date,
+            end_date: voting_period.end_date,
+          };
+
+          const { data: vot_period, error: vot_error } = await supabase
+            .from("voting_period")
+            .insert(votingPayload)
+            .select("*");
+
+          if (vot_error) {
+            toast.error("Something went wrong");
+            return;
+          }
         }
+        router.push(`/events/${data && data[0]?.id}`);
         form.reset();
-        toast.success("Event Created Successfully");
-        router.push(`/events`);
         setSelectedFile;
-      }
-    } catch (err) {
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
+
+        toast.success("Event created successfully");
+      })
+      .catch((error) => toast.error(error.message));
   }
 
   function UploadImageToForm(e: ChangeEvent<HTMLInputElement>) {
@@ -236,7 +237,6 @@ function CreateEventForm() {
                         rows={5}
                       />
                     </FormControl>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -480,10 +480,10 @@ function CreateEventForm() {
               )}
               <Button
                 type="submit"
-                className="tracking-wide gap-2 uppercase w-full my-4"
-                disabled={loading}
+                className="tracking-wide uppercase w-full my-4"
+                disabled={isPending}
               >
-                {loading && <Spinner color="#fff" />}
+                {isPending && <Rotating_Lines />}
                 Submit
               </Button>
             </section>
@@ -527,4 +527,4 @@ function CreateEventForm() {
   );
 }
 
-export default CreateEventForm;
+export default EditEventForm;

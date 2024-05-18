@@ -3,7 +3,5 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <main className="bg-pattern bg-center bg-cover">{children}</main>
-  );
+  return <main className=" bg-patternTwo bg-center bg-cover">{children}</main>;
 }

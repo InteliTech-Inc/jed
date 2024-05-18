@@ -242,7 +242,7 @@ export default function SignupForm() {
               />
               <Button
                 type="submit"
-                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-secondary"
+                className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out gap-2 disabled:bg-secondary"
                 disabled={
                   (inputValues.password.length === 0 &&
                     inputValues.confirm_password.length === 0 &&
@@ -251,7 +251,7 @@ export default function SignupForm() {
                   isPending
                 }
               >
-                {isPending && <Rotating_Lines />}
+                {isPending && <Rotating_Lines color="#fff" />}
                 Sign Up
               </Button>
               <div className="text-center">
