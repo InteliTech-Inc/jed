@@ -56,9 +56,32 @@ export default function GetNominees({ nominees, votes }: any) {
     }
   }
 
+  // Realtime for nominees fetch
+  useEffect(() => {
+    const nominee_channel = supabase
+      .channel("realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "nominees",
+        },
+        () => {
+          router.refresh();
+          console.log("Nominee channel updated");
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(nominee_channel);
+    };
+  }, [supabase, router, nominees]);
+
   // Realtime for votes
   useEffect(() => {
-    const channel = supabase
+    const voting_channel = supabase
       .channel("realtime")
       .on(
         "postgres_changes",
@@ -69,12 +92,13 @@ export default function GetNominees({ nominees, votes }: any) {
         },
         () => {
           router.refresh();
+          console.log("Votes channel updated");
         }
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(voting_channel);
     };
   }, [supabase, router]);
 
