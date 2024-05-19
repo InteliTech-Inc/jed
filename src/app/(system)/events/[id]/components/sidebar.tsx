@@ -5,6 +5,7 @@ import { Home, LineChart, Package, Users, Sidebar } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useParams, usePathname } from "next/navigation";
+import CheckNetwork from "./check_network";
 
 const SidebarLinks = [
   {
@@ -39,7 +40,7 @@ export default function EventsSidebar() {
   return (
     <div className="h-fit sticky top-16 p-2 border-b md:border-b-0 md:h-[calc(100vh_-_5rem)] border-r bg-white">
       <div className="hidden md:block md:flex-1">
-        <nav className="hidden md:grid items-start gap-2 text-neutral-800 px-2 lg:px-4">
+        <nav className="hidden md:grid items-start gap-2 text-neutral-800 px-2 lg:px-4 mb-[18rem]">
           {SidebarLinks.map((item) => {
             const ac =
               activeLink === item.name.toLowerCase()
@@ -129,6 +130,7 @@ export default function EventsSidebar() {
           </Sheet>
         </header>
       </div>
+      <CheckNetwork />
     </div>
   );
 }
