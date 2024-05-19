@@ -102,18 +102,15 @@ export default function GetNominees({ nominees, votes }: any) {
     };
   }, [supabase, router, votes]);
 
+  if (
+    nominees.filter((nominee: Nominee) => nominee.event_id === id).length === 0
+  ) {
+    return <p className="mt-2">No nominee has been added to this category</p>;
+  }
+
   return (
     <section className="flex flex-col md:flex-row md:items-start md:justify-start">
       <div className="grid grid-cols-1 md:flex md:items-start md:justify-start px-2 flex-wrap  mt-4">
-        {nominees.filter((nominee: Nominee) => nominee.event_id === id)
-          .length === 0 && (
-          <div className="w-full flex items-center justify-center">
-            <p className="text-center text-lg text-slate-500">
-              No nominee has been added to this category
-            </p>
-          </div>
-        )}
-
         {nominees
           .filter((nominee: Nominee) => nominee.event_id === id)
           .map((nominee: Nominee) => (
@@ -129,3 +126,5 @@ export default function GetNominees({ nominees, votes }: any) {
     </section>
   );
 }
+
+//
