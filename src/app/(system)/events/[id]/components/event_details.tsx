@@ -10,7 +10,7 @@ export default async function EventDetails({ id }: { id: string }) {
   const db = dbServer(cookies);
   const { data, error } = await db
     .from("events")
-    .select("*, categories(category_name), nominations(*, categories(*))")
+    .select("*, categories(id, category_name), nominations(*, categories(*))")
     .eq("id", id)
     .single();
 

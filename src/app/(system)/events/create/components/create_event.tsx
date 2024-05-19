@@ -15,20 +15,20 @@ import { Input } from "@/components/ui/input";
 import { checkConnection, cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { db } from "@/lib/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ImageDown, CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { PostgrestError } from "@supabase/supabase-js";
 import { differenceInCalendarDays, format } from "date-fns";
 import { z } from "zod";
 import { Calendar } from "@/components/ui/calendar";
 import { Switch } from "@/components/ui/switch";
+import { createEvent, uploadEventImage } from "../functions";
 import {
   Popover,
   PopoverContent,
@@ -75,43 +75,27 @@ function CreateEventForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
-    const {
-      data: { user },
-    } = await db.auth.getUser();
-
-    const randomString = Math.random().toString(36).substring(2, 15);
-
-    const slicedName = selectedFile?.name.slice(
-      selectedFile?.name.lastIndexOf(".")
-    );
-
-    const file = selectedFile;
-
-    if (file === null) {
-      toast.error("Please upload an image");
-      return;
-    }
-
+    checkConnection();
     try {
-      const { data, error } = await db.storage
-        .from("events")
-        .upload(`thumbnails/jed-${randomString}${slicedName}`, file, {
-          contentType: "image/*",
-        });
+      setLoading(true);
+      const {
+        data: { user },
+      } = await db.auth.getUser();
 
-      if (error) return toast.error("there was an error uploading your image");
+      const randomString = Math.random().toString(36).substring(2, 15);
 
-      const payload = {
-        name: values.name,
-        description: values.description,
-        user_id: user?.id!,
-        img_url: data.path,
-        is_completed: false,
-      };
+      const slicedName = selectedFile?.name.slice(
+        selectedFile?.name.lastIndexOf(".")
+      );
+
+      const file = selectedFile;
+
+      if (file === null) {
+        toast.error("Please upload an image");
+        return;
+      }
 
       let nomination_period;
-
       if (values.nominations) {
         nomination_period = {
           start_date: values.nominations?.start_date,
@@ -124,51 +108,59 @@ function CreateEventForm() {
         end_date: values.voting?.end_date,
       };
 
-      const { data: EventData, error: EventError } = await db
-        .from("events")
-        .insert(payload)
-        .select("*");
+      const filePath = `thumbnails/jed-${randomString}${slicedName}`;
 
-      if (EventError) {
+      const payload = {
+        name: values.name,
+        description: values.description,
+        user_id: user?.id!,
+        img_url: filePath,
+        is_completed: false,
+      };
+
+      const [imageResults, EventData] = await Promise.all([
+        uploadEventImage({ file, path: filePath }),
+        createEvent(payload),
+      ]);
+
+      if (EventData instanceof Error || imageResults instanceof Error) {
         toast.error("There's an error submitting the event");
         return;
       }
 
-      if (EventData) {
-        const votingPayload = {
+      const votingPayload = {
+        event_id: EventData[0].id,
+        start_date: voting_period.start_date as unknown as string,
+        end_date: voting_period.end_date as unknown as string,
+      };
+
+      const { data: _, error } = await db
+        .from("voting_period")
+        .insert(votingPayload)
+        .select("*");
+
+      if (error) {
+        return toast.error("Voting period error");
+      }
+
+      if (nomination_period) {
+        const nominationPayload = {
           event_id: EventData[0].id,
-          start_date: voting_period.start_date as unknown as string,
-          end_date: voting_period.end_date as unknown as string,
+          start_date: nomination_period.start_date as unknown as string,
+          end_date: nomination_period.end_date as unknown as string,
         };
 
-        const { data: _, error } = await db
-          .from("voting_period")
-          .insert(votingPayload)
+        const { data: __, error: NomError } = await db
+          .from("nomination_period")
+          .insert(nominationPayload)
           .select("*");
 
-        if (error) {
-          return toast.error("Voting period error");
-        }
-
-        if (nomination_period) {
-          const nominationPayload = {
-            event_id: EventData[0].id,
-            start_date: nomination_period.start_date as unknown as string,
-            end_date: nomination_period.end_date as unknown as string,
-          };
-
-          const { data: __, error: NomError } = await db
-            .from("nomination_period")
-            .insert(nominationPayload)
-            .select("*");
-
-          if (NomError) return toast("nomination error");
-        }
-        form.reset();
-        toast.success("Event Created Successfully");
-        router.push(`/events`);
-        setSelectedFile;
+        if (NomError) return toast("nomination error");
       }
+      form.reset();
+      toast.success("Event Created Successfully");
+      router.push(`/events`);
+      setSelectedFile;
     } catch (err) {
       toast.error("Something went wrong");
     } finally {
