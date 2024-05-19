@@ -28,7 +28,7 @@ import { differenceInCalendarDays, format } from "date-fns";
 import { z } from "zod";
 import { Calendar } from "@/components/ui/calendar";
 import { Switch } from "@/components/ui/switch";
-import { createEvent, uploadEventImage } from "../functions";
+import { createEvent, uploadImage } from "../functions";
 import {
   Popover,
   PopoverContent,
@@ -119,7 +119,7 @@ function CreateEventForm() {
       };
 
       const [imageResults, EventData] = await Promise.all([
-        uploadEventImage({ file, path: filePath }),
+        uploadImage({ file, path: filePath }),
         createEvent(payload),
       ]);
 
