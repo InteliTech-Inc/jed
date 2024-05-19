@@ -17,6 +17,8 @@ async function EventsPage() {
     .select("*")
     .eq("user_id", user?.id!);
 
+  console.log(events);
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center gap-5">

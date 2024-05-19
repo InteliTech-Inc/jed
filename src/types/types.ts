@@ -112,4 +112,18 @@ type EditNominee = {
   };
 };
 
-export type { Post, Nominee, Category_sup, EditNominee };
+type NominationsResponse = {
+  id: string | null;
+  full_name: string | null;
+  email: string | null;
+  phone: string | null;
+  reasons: string | null;
+  created_at: string | null;
+  event_id: string | null;
+  categories: {
+    category_name: string | null;
+  } | null;
+  category_id: string | null;
+};
+
+export type { Post, Nominee, Category_sup, EditNominee, NominationsResponse };
