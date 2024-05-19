@@ -27,10 +27,10 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { ImageDown } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Category_sup as Category, Nominee } from "@/types/types";
+import { Category_sup as Category } from "@/types/types";
 import { checkConnection } from "@/lib/utils";
 
-export default function UpdateNomineeForm({ data, categories }: Nominee) {
+export default function UpdateNomineeForm({ data, categories }: any) {
   const supabase = createClientComponentClient();
 
   const router = useRouter();

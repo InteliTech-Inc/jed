@@ -105,8 +105,19 @@ export default function GetNominees({ nominees, votes }: any) {
   return (
     <section className="flex flex-col md:flex-row md:items-start md:justify-start">
       <div className="grid grid-cols-1 md:flex md:items-start md:justify-start px-2 flex-wrap  mt-4">
-        {nominees.map((nominee: Nominee) => {
-          return nominee.event_id === id ? (
+        {/* Check if particular event has no nominee*/}
+        {nominees.filter((nominee: Nominee) => nominee.event_id === id)
+          .length === 0 && (
+          <div className="w-full flex items-center justify-center">
+            <p className="text-center text-lg text-slate-500">
+              No nominee has been added to this category
+            </p>
+          </div>
+        )}
+
+        {nominees
+          .filter((nominee: Nominee) => nominee.event_id === id)
+          .map((nominee: Nominee) => (
             <div key={nominee.id} className="md:mr-4 md:mb-4">
               <NomineeCard
                 nominee={nominee}
@@ -114,10 +125,7 @@ export default function GetNominees({ nominees, votes }: any) {
                 votes={votes}
               />
             </div>
-          ) : (
-            <div />
-          );
-        })}
+          ))}
       </div>
     </section>
   );
