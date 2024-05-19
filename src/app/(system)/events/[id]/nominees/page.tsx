@@ -1,13 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
 import AddNominees from "./components/add_nominees";
 import { cookies } from "next/headers";
 import { dbServer } from "@/lib/supabase";
 import GetNominees from "./components/get_nominees";
-
-interface VoteCount {
-  count: number;
-  nominee_id: string;
-}
+import Spinner from "@/components/rotating_lines";
 
 export default async function AdminNominee() {
   const db = dbServer(cookies);
@@ -18,19 +14,19 @@ export default async function AdminNominee() {
   const { data: categories } = await db
     .from("events")
     .select(`*, categories(category_name, event_id, id)`)
-    .eq("user_id", user?.id);
+    .eq("user_id", user?.id!);
 
   // Get Nominees
   const { data: nominees } = await db
     .from("nominees")
     .select("*")
-    .eq("user_id", user?.id);
+    .eq("user_id", user?.id!);
 
   // Get Votes and its nominees
   const { data: votes } = await db.from("voting").select(`*, nominees(*)`);
 
   // Get only the count and nominee_id props
-  const votesCount = votes?.map((vote: VoteCount) => ({
+  const votesCount = votes?.map((vote) => ({
     count: vote.count,
     nominee_id: vote.nominee_id,
   }));
@@ -46,7 +42,15 @@ export default async function AdminNominee() {
         </div>
         <AddNominees data={categories} user_id={user?.id} />
       </div>
-      <GetNominees nominees={nominees} votes={votesCount} />
+      <Suspense
+        fallback={
+          <div className=" w-full grid place-content-center">
+            <Spinner />
+          </div>
+        }
+      >
+        <GetNominees nominees={nominees} votes={votesCount} />
+      </Suspense>
     </section>
   );
 }
