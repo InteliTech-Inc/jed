@@ -91,8 +91,8 @@ export default function GetNominees({ nominees, votes }: any) {
           table: "voting",
         },
         () => {
-          router.refresh();
           console.log("Votes channel updated");
+          router.refresh();
         }
       )
       .subscribe();
@@ -100,7 +100,7 @@ export default function GetNominees({ nominees, votes }: any) {
     return () => {
       supabase.removeChannel(voting_channel);
     };
-  }, [supabase, router]);
+  }, [supabase, router, votes]);
 
   return (
     <section className="flex flex-col md:flex-row md:items-start md:justify-start">
