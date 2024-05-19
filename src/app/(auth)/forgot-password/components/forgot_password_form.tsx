@@ -125,7 +125,7 @@ export default function ForgotPasswordForm() {
                 className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out disabled:bg-secondary  gap-2 "
                 disabled={inputValues.email.length === 0 || isPending}
               >
-                {isPending && <Rotating_Lines />}
+                {isPending && <Rotating_Lines color="#fff" />}
                 Send Reset Link
               </Button>
               <div className="text-center">

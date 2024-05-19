@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
-import Link from "next/link";
+import { PlusIcon} from "lucide-react";
 import { toast } from "sonner";
 import { Trash2, Plus } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -112,7 +112,10 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
     <div className="space-x-4">
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="secondary">Add Category</Button>
+          <Button variant="secondary" className=" gap-2">
+            <PlusIcon size={14} />
+            Add Category
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -164,9 +167,6 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
           </form>
         </DialogContent>
       </Dialog>
-      <Link href={`/events/${id}/nominations`}>
-        <Button>Create Nomination</Button>
-      </Link>
     </div>
   );
 }

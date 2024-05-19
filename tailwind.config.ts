@@ -44,6 +44,7 @@ const config = {
       },
       backgroundImage: {
         pattern: "url('/images/hero-image.png')",
+        patternTwo: "url('/images/hero-imagee.png')",
       },
     },
   },

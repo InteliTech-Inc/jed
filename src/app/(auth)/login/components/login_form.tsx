@@ -68,7 +68,6 @@ export default function LoginForm() {
       if (user) {
         router.push("/dashboard");
         toast.success("Login successful");
-        // Clear the form after successful login
         form.reset();
       }
       setIsPending(false);
@@ -153,7 +152,7 @@ export default function LoginForm() {
                   isPending
                 }
               >
-                {isPending && <Rotating_Lines />}
+                {isPending && <Rotating_Lines color="#fff" />}
                 Login
               </Button>
               <div className="text-center">
