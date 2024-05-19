@@ -105,7 +105,6 @@ export default function GetNominees({ nominees, votes }: any) {
   return (
     <section className="flex flex-col md:flex-row md:items-start md:justify-start">
       <div className="grid grid-cols-1 md:flex md:items-start md:justify-start px-2 flex-wrap  mt-4">
-        {/* Check if particular event has no nominee*/}
         {nominees.filter((nominee: Nominee) => nominee.event_id === id)
           .length === 0 && (
           <div className="w-full flex items-center justify-center">
