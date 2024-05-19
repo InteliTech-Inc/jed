@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 export default function NetworkStatus() {
   const [status, setStatus] = useState(navigator.onLine ? "online" : "offline");
   useEffect(() => {
+    setStatus(navigator.onLine ? "online" : "offline");
+
     const goOnline = () => setStatus("online");
     const goOffline = () => setStatus("offline");
 
