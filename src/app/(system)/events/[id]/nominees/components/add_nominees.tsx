@@ -36,6 +36,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ImageDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { checkConnection } from "@/lib/utils";
+import { addNominee, uploadImage } from "../../../create/functions";
 
 // Define the category type
 type Category = {
@@ -132,37 +133,29 @@ export default function AddNominees({ data, user_id }: any) {
     try {
       setIsPending(true);
 
-      const { data, error } = await supabase.storage
-        .from("events")
-        .upload(`nominees/jed-${randomString}${slicedName}`, file, {
-          contentType: "image/*",
-        });
-
-      if (error) {
-        console.log(error);
-        toast.error("Something went wrong");
-        return;
-      }
+      const filePath = `nominees/jed-${randomString}${slicedName}`;
 
       const payload = {
         full_name: values.full_name,
         code: values.code,
         category: values.category,
         event_id: id,
-        img_url: data?.path,
+        img_url: filePath,
         user_id,
       };
-      await CreateNominees(payload)
-        .then(() => {
-          setIsPending(false);
-          toast.success("Nominee added successfully");
-          form.reset();
-          setSelectedFile(null);
-        })
-        .catch((error) => {
-          setIsPending(false);
-          toast.error("An error occurred while adding nominee");
-        });
+      const [nomineeData, imageData] = await Promise.all([
+        addNominee(payload),
+        uploadImage({ file, path: filePath }),
+      ]);
+
+      if (nomineeData instanceof Error || imageData instanceof Error) {
+        toast.error("There's an error adding nominee");
+        return;
+      }
+      toast.success("Nominee added successfully");
+      form.reset();
+      setSelectedFile(null);
+      setIsPending(false);
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -175,7 +168,7 @@ export default function AddNominees({ data, user_id }: any) {
   // Subscribing to the realtime changes
   useEffect(() => {
     const channel = supabase
-      .channel("realtime")
+      .channel("nominee_realtime")
       .on(
         "postgres_changes",
         {
@@ -183,9 +176,11 @@ export default function AddNominees({ data, user_id }: any) {
           schema: "public",
           table: "nominees",
         },
-        () => {
-          router.refresh();
-          console.log("Nominee added successfully");
+        (payload) => {
+          if (payload) {
+            router.refresh();
+            console.log("Nominee changes received");
+          }
         }
       )
       .subscribe();

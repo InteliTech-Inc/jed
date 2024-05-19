@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface Nominee {
@@ -27,7 +26,6 @@ export default function NomineeCard({
   handleNomineeVoting,
   votes,
 }: Props) {
-  const router = useRouter();
   return (
     <div>
       <div className="relative h-[25rem] w-full md:w-[18rem] rounded rounded-top-md rounded-b-none overflow-hidden hover:shadow transition-all duration-150 hover:border border-secondary bg-white group">

@@ -27,10 +27,14 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { ImageDown } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Category_sup as Category, Nominee } from "@/types/types";
+import { Category_sup as Category } from "@/types/types";
 import { checkConnection } from "@/lib/utils";
+import {
+  UpdateNomineeDetails,
+  uploadImage,
+} from "@/app/(system)/events/create/functions";
 
-export default function UpdateNomineeForm({ data, categories }: Nominee) {
+export default function UpdateNomineeForm({ data, categories }: any) {
   const supabase = createClientComponentClient();
 
   const router = useRouter();
@@ -93,46 +97,34 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
     try {
       setIsPending(true);
 
-      const { data: ImageData, error: ImageError } = await supabase.storage
-        .from("events")
-        .upload(`nominees/jed-${randomString}${slicedName}`, file, {
-          contentType: "image/*",
-        });
+      const filePath =
+        file !== null
+          ? `nominees/jed-${randomString}${slicedName}`
+          : data.img_url;
 
-      if (ImageError) {
-        console.log(ImageError);
-        toast.error("Something went wrong");
-        return;
-      }
       const payload = {
         full_name: values.full_name,
         code: values.code,
         category: values.category,
-        img_url: file !== null ? ImageData.path : data.img_url,
+        img_url: filePath,
         event_id: data.event_id,
       };
 
-      const { data: upadatedNominee, error } = await supabase
-        .from("nominees")
-        .update(payload)
-        .eq("id", data.id)
-        .single();
+      const [_, updateRecords] = await Promise.all([
+        uploadImage({ file, path: filePath }),
+        UpdateNomineeDetails(payload, data.id),
+      ]);
 
-      if (error) {
-        console.log(error);
-        toast.error("Something went wrong");
+      if (updateRecords instanceof Error) {
+        toast.error("There's an error updating the records");
         return;
       }
-      if (upadatedNominee) {
-        toast.success("Nominee updated successfully");
-        form.reset();
-        setSelectedFile(null);
-        setIsPending(false);
-      }
+      toast.success("Nominee records updated successfully");
+      form.reset();
+      setSelectedFile(null);
+      setIsPending(false);
     } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
-      }
+      toast.error("Something went wrong!");
     } finally {
       setIsPending(false);
     }
@@ -147,7 +139,7 @@ export default function UpdateNomineeForm({ data, categories }: Nominee) {
         (payload) => {
           if (payload) {
             router.refresh();
-            toast.success("Changes received");
+            console.log("Changes received");
             setTimeout(() => {
               router.back();
             }, 1000);
