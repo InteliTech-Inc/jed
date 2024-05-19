@@ -5,7 +5,7 @@ import { Home, LineChart, Package, Users, Sidebar } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useParams, usePathname } from "next/navigation";
-import CheckNetwork from "./check_network";
+import NetworkStatus from "./check_network";
 
 const SidebarLinks = [
   {
@@ -129,8 +129,10 @@ export default function EventsSidebar() {
             </SheetContent>
           </Sheet>
         </header>
+        <div className=" pl-4">
+          <NetworkStatus />
+        </div>
       </div>
-      <CheckNetwork />
     </div>
   );
 }

@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 
-export default function CheckNetwork() {
+export default function NetworkStatus() {
   const [status, setStatus] = useState(navigator.onLine ? "online" : "offline");
   useEffect(() => {
     const goOnline = () => setStatus("online");
@@ -23,14 +25,12 @@ export default function CheckNetwork() {
 
   return (
     <div
-      className={`hidden md:flex w-[7rem] items-center ${statusColor.container} rounded-full justify-center space-x-2 py-2 `}
+      className={`hidden md:flex items-center ${statusColor.container} rounded-lg justify-center space-x-2 py-1 w-fit px-4 `}
     >
-      <span className={`h-3 w-3 rounded-full ${statusColor.ellipse}`}></span>
-      <p
-        className={`font-bold ${statusColor.text} uppercase text-sm tracking-wider`}
-      >
-        {status}
-      </p>
+      <span
+        className={`w-2 aspect-square rounded-full ${statusColor.ellipse}`}
+      ></span>
+      <p className={`${statusColor.text} capitalize text-sm`}>{status}</p>
     </div>
   );
 }
