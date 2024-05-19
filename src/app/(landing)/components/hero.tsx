@@ -31,7 +31,7 @@ export default function Hero() {
           <div className="flex w-fit mx-auto gap-4">
             <Link
               className="w-fit px-8 py-2 bg-secondary flex items-center rounded-md text-white mx-auto gap-2 hover:gap-3 transition-all duration-300"
-              href={"/dashboard"}
+              href={"/login"}
             >
               Get started for free <ArrowRightIcon size={16} />
             </Link>
