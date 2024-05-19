@@ -180,12 +180,13 @@ export default function AddNominees({ data, user_id }: any) {
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "INSERT",
           schema: "public",
           table: "nominees",
         },
         () => {
           router.refresh();
+          console.log("Nominee added successfully");
         }
       )
       .subscribe();
