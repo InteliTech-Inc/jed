@@ -105,7 +105,7 @@ export default function GetNominees({ nominees, votes }: any) {
   if (
     nominees.filter((nominee: Nominee) => nominee.event_id === id).length === 0
   ) {
-    return <p className="mt-2">No nominee has been added to this category</p>;
+    return <p className="mt-2">No nominee has been added to this event</p>;
   }
 
   return (
