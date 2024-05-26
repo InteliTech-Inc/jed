@@ -197,15 +197,17 @@ export default function AddNominees({ data, user_id }: any) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Nominee</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className=" text-left lg:text-center text-xl">
+            Add Nominee
+          </DialogTitle>
+          <DialogDescription className=" text-left lg:text-center">
             Add the nominee for the event to be voted for by the users
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleNomination)}
-            className="mx-auto font-sans md:w-full flex flex-col justify-center items-center overflow-auto"
+            className="mx-auto font-sans w-full flex flex-col justify-center items-center overflow-auto"
           >
             <div className="flex flex-col w-full items-center justify-center my-3 space-y-4">
               <div className="relative w-full">

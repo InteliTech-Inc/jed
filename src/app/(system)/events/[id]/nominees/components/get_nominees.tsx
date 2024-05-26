@@ -109,12 +109,12 @@ export default function GetNominees({ nominees, votes }: any) {
   }
 
   return (
-    <section className="flex flex-col md:flex-row md:items-start md:justify-start">
-      <div className="grid grid-cols-1 md:flex md:items-start md:justify-start px-2 flex-wrap  mt-4">
+    <section className="">
+      <div className="flex px-2 flex-wrap gap-4 mt-4">
         {nominees
           .filter((nominee: Nominee) => nominee.event_id === id)
           .map((nominee: Nominee) => (
-            <div key={nominee.id} className="md:mr-4 md:mb-4">
+            <div key={nominee.id} className="w-full md:w-80 flex-grow">
               <NomineeCard
                 nominee={nominee}
                 handleNomineeVoting={handleNomineeVoting}

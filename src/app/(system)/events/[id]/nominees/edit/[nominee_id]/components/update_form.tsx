@@ -33,6 +33,7 @@ import {
   UpdateNomineeDetails,
   uploadImage,
 } from "@/app/(system)/events/create/functions";
+import BackButton from "@/components/back";
 
 export default function UpdateNomineeForm({ data, categories }: any) {
   const supabase = createClientComponentClient();
@@ -91,7 +92,6 @@ export default function UpdateNomineeForm({ data, categories }: any) {
       selectedFile?.name.lastIndexOf(".")
     );
 
-    // biome-ignore lint/style/noNonNullAssertion: <the users always upload a picture>
     const file = selectedFile!;
 
     try {
@@ -154,11 +154,9 @@ export default function UpdateNomineeForm({ data, categories }: any) {
   }, [supabase, router]);
   return (
     <div className="my-8 w-full lg:w-4/5 mx-auto h-full px-4">
-      <Button variant={"outline"} onClick={() => router.back()}>
-        Go Back
-      </Button>
+      <BackButton />
       <div>
-        <h3 className="text-3xl text-center mt-2 mb-8  font-bold text-neutral-700">
+        <h3 className="text-3xl md:text-center mt-4 mb-8  font-bold text-neutral-700">
           Update Nominee's Details
         </h3>
       </div>
@@ -270,7 +268,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
             </section>
             <div className=" w-full md:mt-8">
               <section className="border bg-white  w-full md:w-[90%] lg:w-[70%] mx-auto aspect-square rounded-md shadow-sm">
-                <div className="relative h-full w-full rounded overflow-hidden hover:shadow transition-all duration-150 hover:border border-secondary bg-white group">
+                <div className="relative h-full w-full rounded overflow-hidden hover:shadow transition-all duration-150 bg-white group">
                   <Image
                     src={
                       preview
@@ -280,7 +278,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
                     layout="fill"
                     sizes="100%"
                     objectFit="cover"
-                    className="z-0"
+                    className="z-0 scale-110 duration-300 group-hover:scale-100"
                     alt={inputValues.full_name}
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent opacity-50 h-1/2 z-10"></div>

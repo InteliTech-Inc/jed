@@ -38,7 +38,7 @@ export default function EventsSidebar() {
   const activeLink = lastSegment === id ? "details" : lastSegment;
 
   return (
-    <div className="h-fit sticky top-16 p-2 border-b md:border-b-0 md:h-[calc(100vh_-_5rem)] border-r bg-white">
+    <div className="h-fit z-50 sticky top-16 p-2 border-b md:border-b-0 md:h-[calc(100vh_-_5rem)] border-r bg-white">
       <div className="hidden md:block md:flex-1">
         <nav className="hidden md:grid items-start gap-2 text-neutral-800 px-2 lg:px-4 mb-[18rem]">
           {SidebarLinks.map((item) => {
@@ -75,56 +75,25 @@ export default function EventsSidebar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
-              <nav className="grid gap-2 text-lg font-medium">
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Home className="h-5 w-5" />
-                  Edit event
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Package className="h-5 w-5" />
-                  Details
-                </Link>
-                <Link
-                  href="/nominees"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Users className="h-5 w-5" />
-                  Nominees
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Voting
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Nominations
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Ticketing
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Withdraw
-                </Link>
+              <nav className="grid mt-6 gap-2 text-lg font-medium">
+                {SidebarLinks.map((item) => {
+                  const ac =
+                    activeLink === item.name.toLowerCase()
+                      ? "bg-secondary text-white hover:bg-secondary/90"
+                      : "hover:bg-gray-50 ";
+                  return (
+                    <Link
+                      href={`/events/${id}/${
+                        item.name === "Details" ? "" : item.name.toLowerCase()
+                      }`}
+                      key={item.name}
+                      className={`${ac} mx-[-0.65rem] flex items-center gap-4 text-sm rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground`}
+                    >
+                      {item.icon}
+                      {item.name}{" "}
+                    </Link>
+                  );
+                })}
               </nav>
             </SheetContent>
           </Sheet>

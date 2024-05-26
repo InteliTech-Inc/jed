@@ -33,10 +33,12 @@ export default async function AdminNominee() {
 
   return (
     <section className="py-8 px-3 md:px-6 ">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold">Your Nominees</h1>
-          <p className="text-slate-500">
+      <div className="flex flex-col md:flex-row  md:items-center md:justify-between">
+        <div className="mb-4 max-w-screen-sm">
+          <h1 className=" text-4xl text-neutral-700 mb-2 font-semibold">
+            Your Nominees
+          </h1>
+          <p className="text-neutral-600">
             Add nominees to the categories you have created.
           </p>
         </div>

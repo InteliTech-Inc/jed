@@ -67,7 +67,7 @@ export default function LoginForm() {
 
       if (user) {
         router.push("/dashboard");
-        toast.success("Login successful");
+        toast.success("Welcome to JED! 🎉");
         form.reset();
       }
       setIsPending(false);
