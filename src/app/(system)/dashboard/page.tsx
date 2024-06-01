@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import Link from "next/link";
-
 import { Separator } from "@/components/ui/separator";
 // import {
 //   Table,
@@ -28,7 +27,7 @@ import { Separator } from "@/components/ui/separator";
 //   TableRow,
 // } from "@/components/ui/table";
 
-export default function Dashboard() {
+export default async function Dashboard() {
   return (
     <div className="flex min-h-screen w-full p-4 flex-col gap-4 relative z-10 bg-muted/40">
       <div className="py-6">
