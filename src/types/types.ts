@@ -126,4 +126,21 @@ type NominationsResponse = {
   category_id: string | null;
 };
 
-export type { Post, Nominee, Category_sup, EditNominee, NominationsResponse };
+type onSuccessReference = {
+  message: string;
+  redirecturl: string;
+  reference: string;
+  status: string;
+  trans: string;
+  transaction: string;
+  trxref: string;
+};
+
+export type {
+  Post,
+  Nominee,
+  Category_sup,
+  EditNominee,
+  NominationsResponse,
+  onSuccessReference,
+};
