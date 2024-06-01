@@ -17,17 +17,19 @@ interface Vote {
 
 type Props = {
   nominee: Nominee;
+  key: string;
   votes: Vote[];
   handleNomineeVoting: (id: string) => void;
 };
 
 export default function NomineeCard({
+  key,
   nominee,
   handleNomineeVoting,
   votes,
 }: Props) {
   return (
-    <div>
+    <div key={key}>
       <div className="relative h-[25rem] w-full md:w-[18rem] rounded rounded-top-md rounded-b-none overflow-hidden hover:shadow transition-all duration-150 hover:border border-secondary bg-white group">
         <Image
           src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${nominee.img_url}`}

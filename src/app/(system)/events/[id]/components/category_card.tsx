@@ -11,7 +11,7 @@ export default function CategoryCard({ categories }: Props) {
       <div className=" grid grid-cols-2 gap-4">
         {categories.map((category) => {
           return (
-            <ul key={category.id}>
+            <ul key={category.category_name}>
               <li className=" w-full p-6 border  bg-gray-50 rounded-lg ">
                 {category.category_name}
               </li>

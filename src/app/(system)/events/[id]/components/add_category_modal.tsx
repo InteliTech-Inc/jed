@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
-import { PlusIcon} from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Trash2, Plus } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -35,8 +35,7 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
 
   // Submit category form
   async function handleCategory(e: React.FormEvent<HTMLFormElement>) {
-    const isOnline = checkConnection();
-    if (!isOnline) return;
+    checkConnection();
 
     e.preventDefault();
     for (const category of categories) {

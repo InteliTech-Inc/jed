@@ -116,6 +116,7 @@ export default function GetNominees({ nominees, votes }: any) {
           .map((nominee: Nominee) => (
             <div key={nominee.id} className="md:mr-4 md:mb-4">
               <NomineeCard
+                key={nominee.id}
                 nominee={nominee}
                 handleNomineeVoting={handleNomineeVoting}
                 votes={votes}
