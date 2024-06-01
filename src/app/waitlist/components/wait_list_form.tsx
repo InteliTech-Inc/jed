@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import Rotating_Lines from "@/components/rotating_lines";
 import { formSchema } from "@/lib/validations";
 import Confetti from "react-confetti";
+import { sendConfirmationEmail } from "../functions/confirmation_email";
 
 export default function WaitListForm(): JSX.Element {
   const { mutateAsync: AddEmailToWaitlist, isPending } = useCreateMutation({
@@ -26,6 +27,7 @@ export default function WaitListForm(): JSX.Element {
     key: "waitlist",
     showSucessMsg: false,
   });
+  const [emailLoading, setEmailLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,11 +39,19 @@ export default function WaitListForm(): JSX.Element {
   const inputEmail = form.watch("email", "");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    AddEmailToWaitlist({ email: values.email }).then((_) => {
-      toast.success("Your email has been successfully added to the waitlist!.");
-      form.reset();
-      setExpload(true);
-    });
+    try {
+      const res = await sendConfirmationEmail(values.email);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+
+    // AddEmailToWaitlist({ email: values.email }).then((_) => {
+    //   toast.success("Your email has been successfully added to the waitlist!.");
+    //   setEmailLoading(true);
+    //   form.reset();
+    //   setExpload(true);
+    // });
   }
 
   return (

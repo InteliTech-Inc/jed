@@ -112,6 +112,8 @@ type EditNominee = {
   };
 };
 
+
+
 type NominationsResponse = {
   id: string | null;
   full_name: string | null;
