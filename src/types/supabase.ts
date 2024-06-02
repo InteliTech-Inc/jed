@@ -46,6 +46,7 @@ export type Database = {
           img_url: string | null
           is_completed: boolean
           name: string
+          schedules: Json | null
           user_id: string
         }
         Insert: {
@@ -55,6 +56,7 @@ export type Database = {
           img_url?: string | null
           is_completed?: boolean
           name: string
+          schedules?: Json | null
           user_id: string
         }
         Update: {
@@ -64,6 +66,7 @@ export type Database = {
           img_url?: string | null
           is_completed?: boolean
           name?: string
+          schedules?: Json | null
           user_id?: string
         }
         Relationships: []
@@ -157,6 +160,7 @@ export type Database = {
           full_name: string | null
           id: string
           img_url: string | null
+          user_id: string
         }
         Insert: {
           category?: string | null
@@ -166,6 +170,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           img_url?: string | null
+          user_id: string
         }
         Update: {
           category?: string | null
@@ -175,6 +180,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           img_url?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -239,7 +245,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "voting_table_nominee_id_fkey"
+            foreignKeyName: "voting_nominee_id_fkey"
             columns: ["nominee_id"]
             isOneToOne: false
             referencedRelation: "nominees"
@@ -296,6 +302,50 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      withdrawals: {
+        Row: {
+          account_number: string | null
+          amount: string | null
+          bank_name: string | null
+          channel: string | null
+          created_at: string
+          event_id: string | null
+          id: string
+          network_provider: string | null
+          phone_number: string | null
+        }
+        Insert: {
+          account_number?: string | null
+          amount?: string | null
+          bank_name?: string | null
+          channel?: string | null
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          network_provider?: string | null
+          phone_number?: string | null
+        }
+        Update: {
+          account_number?: string | null
+          amount?: string | null
+          bank_name?: string | null
+          channel?: string | null
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          network_provider?: string | null
+          phone_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "withdrawals_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
