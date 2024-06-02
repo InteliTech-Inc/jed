@@ -35,6 +35,8 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
 
   // Submit category form
   async function handleCategory(e: React.FormEvent<HTMLFormElement>) {
+    checkConnection();
+
     e.preventDefault();
     checkConnection();
 

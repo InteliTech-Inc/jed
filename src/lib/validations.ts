@@ -107,3 +107,16 @@ export const nomineeFormShape = z.object({
     message: "Category is required",
   }),
 });
+
+export const payoutShape = z.object({
+  channel: z.string().min(3, {
+    message: "Payment channel is required",
+  }),
+  amount: z.string().min(1, {
+    message: "Amount is required",
+  }),
+  phone_number: z.string().optional(),
+  network_provider: z.string().optional(),
+  account_number: z.string().optional(),
+  bank_name: z.string().optional(),
+});

@@ -47,7 +47,9 @@ export type Database = {
           is_completed: boolean
           name: string
           schedules: Json | null
+          nomination_period: Json | null
           user_id: string
+          voting_period: Json | null
         }
         Insert: {
           created_at?: string
@@ -57,7 +59,9 @@ export type Database = {
           is_completed?: boolean
           name: string
           schedules?: Json | null
+          nomination_period?: Json | null
           user_id: string
+          voting_period?: Json | null
         }
         Update: {
           created_at?: string
@@ -67,7 +71,9 @@ export type Database = {
           is_completed?: boolean
           name?: string
           schedules?: Json | null
+          nomination_period?: Json | null
           user_id?: string
+          voting_period?: Json | null
         }
         Relationships: []
       }

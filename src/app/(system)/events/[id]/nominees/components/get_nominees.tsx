@@ -116,6 +116,7 @@ export default function GetNominees({ nominees, votes }: any) {
           .map((nominee: Nominee) => (
             <div key={nominee.id} className="w-full md:w-80 flex-grow">
               <NomineeCard
+                key={nominee.id}
                 nominee={nominee}
                 handleNomineeVoting={handleNomineeVoting}
                 votes={votes}
