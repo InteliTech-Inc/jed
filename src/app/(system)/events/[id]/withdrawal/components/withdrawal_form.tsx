@@ -17,8 +17,8 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { usePathname, useRouter } from "next/navigation";
+import { db } from "@/lib/supabase";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,13 +29,9 @@ import { toast } from "sonner";
 type Props = {};
 
 export default function WithdrawalForm({}: Props) {
-  const supabase = createClientComponentClient();
-
   const router = useRouter();
 
-  const url = usePathname();
-  const segments = url.split("/");
-  const eventId = segments[segments.length - 2];
+  const { id: eventId } = useParams();
 
   const [isPending, setIsPending] = useState<boolean>(false);
 
@@ -62,7 +58,7 @@ export default function WithdrawalForm({}: Props) {
     } = data;
 
     const payloads = {
-      event_id: eventId,
+      event_id: eventId as string,
       channel,
       amount,
       phone_number: phone_number?.length !== 0 ? phone_number : null,
@@ -74,7 +70,7 @@ export default function WithdrawalForm({}: Props) {
 
     try {
       setIsPending(true);
-      const { error } = await supabase.from("withdrawals").insert([payloads]);
+      const { error } = await db.from("withdrawals").insert(payloads).select();
 
       if (error) {
         console.log(error.message);
@@ -96,14 +92,18 @@ export default function WithdrawalForm({}: Props) {
   const paymentChannel = form.watch("channel");
 
   useEffect(() => {
+    const currentValues = form.getValues();
+
     if (paymentChannel === "mobile_money") {
       form.reset({
+        ...currentValues, //Keeps the current values of all other fields
         channel: paymentChannel,
         bank_name: "",
         account_number: "",
       });
     } else if (paymentChannel === "bank_transfer") {
       form.reset({
+        ...currentValues,
         channel: paymentChannel,
         phone_number: "",
         network_provider: "",
