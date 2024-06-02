@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Rotating_Lines from "@/components/rotating_lines";
@@ -93,7 +93,23 @@ export default function WithdrawalForm({}: Props) {
     }
   }
 
-  const paymentChannel = form.watch();
+  const paymentChannel = form.watch("channel");
+
+  useEffect(() => {
+    if (paymentChannel === "mobile_money") {
+      form.reset({
+        channel: paymentChannel,
+        bank_name: "",
+        account_number: "",
+      });
+    } else if (paymentChannel === "bank_transfer") {
+      form.reset({
+        channel: paymentChannel,
+        phone_number: "",
+        network_provider: "",
+      });
+    }
+  }, [paymentChannel]);
 
   return (
     <div className="my-8 w-full lg:w-4/5 mx-auto px-4">
@@ -147,7 +163,7 @@ export default function WithdrawalForm({}: Props) {
                   </FormItem>
                 )}
               />
-              {paymentChannel.channel === "mobile_money" ? (
+              {paymentChannel === "mobile_money" ? (
                 <div className=" flex flex-col md:flex-row gap-2">
                   <FormField
                     control={form.control}
@@ -198,7 +214,7 @@ export default function WithdrawalForm({}: Props) {
                     )}
                   />
                 </div>
-              ) : paymentChannel.channel === "bank_transfer" ? (
+              ) : paymentChannel === "bank_transfer" ? (
                 <div className=" flex flex-col md:flex-row gap-2">
                   <FormField
                     control={form.control}
