@@ -2,6 +2,7 @@ import { render } from "@react-email/render";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import WaitlistEmail from "@/components/emails/waitlist_confirmation";
+import { addEmailToWaitlist } from "@/lib/server_endpoints";
 
 export async function POST(req: NextRequest) {
   const { email } = (await req.json()) as { email: string };
@@ -20,20 +21,30 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  const emailHtml = render(WaitlistEmail({ email }));
+  try {
+    const data = await addEmailToWaitlist(email);
 
-  const options = {
-    from: `Yaw from JED <${process.env.NEXT_PUBLIC_SMTP_USERNAME}>`,
-    to: email,
-    subject: "You have been added to the JED waitlist!🎉",
-    html: emailHtml,
-  };
+    const emailHtml = render(WaitlistEmail({ email }));
 
-  const value = await transporter.sendMail(options);
+    const options = {
+      from: `Yaw from JED <${process.env.NEXT_PUBLIC_SMTP_USERNAME}>`,
+      to: email,
+      subject: "You have been added to the JED waitlist!🎉",
+      html: emailHtml,
+    };
 
-  if (value.accepted.length > 0) {
-    return NextResponse.json({ message: "Email sent" }, { status: 200 });
+    const value = await transporter.sendMail(options);
+
+    if (value.accepted.length > 0) {
+      return NextResponse.json(
+        {
+          message:
+            "Welcome to the JED waitlist!🎉 A confirmation email has been sent to you.",
+        },
+        { status: 200 }
+      );
+    }
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message }, { status: 400 });
   }
-
-  return NextResponse.json({ message: "Error sending email" }, { status: 500 });
 }

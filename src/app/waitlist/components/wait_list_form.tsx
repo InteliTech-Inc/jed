@@ -14,20 +14,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Arrow from "@/app/assets/arrow.png";
-import { useCreateMutation } from "@/hooks/use_create_mutation";
-import { toast } from "sonner";
-import Rotating_Lines from "@/components/rotating_lines";
+import Spinner from "@/components/spinner";
 import { formSchema } from "@/lib/validations";
 import Confetti from "react-confetti";
-import { sendConfirmationEmail } from "../functions/confirmation_email";
+import { toast } from "sonner";
+import axios from "axios";
+import { AxiosError } from "axios";
 
 export default function WaitListForm(): JSX.Element {
-  const { mutateAsync: AddEmailToWaitlist, isPending } = useCreateMutation({
-    dbName: "waitlist",
-    key: "waitlist",
-    showSucessMsg: false,
-  });
-  const [emailLoading, setEmailLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,18 +35,19 @@ export default function WaitListForm(): JSX.Element {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const res = await sendConfirmationEmail(values.email);
-      console.log(res);
-    } catch (err) {
-      console.log(err);
+      setLoading(true);
+      const res = await axios.post("/api/waitlist", { email: values.email });
+      toast.success(res.data.message);
+      setExpload(true);
+      form.reset(); //reset the form only when it has been submitted.
+    } catch (err: any) {
+      if (err instanceof AxiosError) {
+        return toast.error(err.response?.data.message);
+      }
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    // AddEmailToWaitlist({ email: values.email }).then((_) => {
-    //   toast.success("Your email has been successfully added to the waitlist!.");
-    //   setEmailLoading(true);
-    //   form.reset();
-    //   setExpload(true);
-    // });
   }
 
   return (
@@ -84,11 +80,11 @@ export default function WaitListForm(): JSX.Element {
                   />
                 </FormControl>
                 <Button
-                  className=" w-full lg:w-fit py-3 px-4 flex gap-2 rounded-md font-semibold hover:bg-secondary/80 hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out"
-                  disabled={inputEmail.length < 1 || isPending}
+                  className=" w-full md:w-fit py-3 px-4 flex gap-2 rounded-md font-semibold hover:bg-secondary/80 hover:bg-opacity-80 focus:outline-none transition-colors duration-200 ease-in-out"
+                  disabled={inputEmail.length < 1 || loading}
                   type="submit"
                 >
-                  {isPending && <Rotating_Lines />}
+                  {loading && <Spinner color="#fff" />}
                   Join Waitlist!
                 </Button>
               </div>

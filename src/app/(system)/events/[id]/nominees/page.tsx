@@ -3,7 +3,7 @@ import AddNominees from "./components/add_nominees";
 import { cookies } from "next/headers";
 import { dbServer } from "@/lib/supabase";
 import GetNominees from "./components/get_nominees";
-import Spinner from "@/components/rotating_lines";
+import Spinner from "@/components/spinner";
 
 export default async function AdminNominee() {
   const db = dbServer(cookies);

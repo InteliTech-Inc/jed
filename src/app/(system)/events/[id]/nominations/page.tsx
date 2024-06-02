@@ -1,6 +1,6 @@
 import NominationsTable from "./components/nominations_table";
 import { Suspense } from "react";
-import Spinner from "@/components/rotating_lines";
+import Spinner from "@/components/spinner";
 export default function NominationPage({
   params: { id },
 }: {

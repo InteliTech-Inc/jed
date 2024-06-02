@@ -1,5 +1,5 @@
 "use client";
-import Spinner from "@/components/rotating_lines";
+import Spinner from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,

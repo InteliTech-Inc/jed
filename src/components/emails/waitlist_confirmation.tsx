@@ -25,20 +25,10 @@ export const WaitlistEmail = ({ email }: WaitlistEmailProps) => {
   return (
     <Html>
       <Head />
-      <Font
-        fontFamily="Roboto"
-        fallbackFontFamily="Verdana"
-        webFont={{
-          url: "https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
-          format: "woff2",
-        }}
-        fontWeight={400}
-        fontStyle="normal"
-      />
       <Preview>{previewText}</Preview>
       <Tailwind>
         <Body className="bg-white my-auto mx-auto font-sans px-2">
-          <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
+          <Container className="border border-solid bg-white border-[#eaeaea] rounded my-[40px] mx-auto p-[16px] max-w-[465px]">
             <Section className="mt-[32px]">
               <Img
                 src={`https://cbboxofzpwjfpihaoyhn.supabase.co/storage/v1/object/public/events/static/logo.png`}
@@ -48,20 +38,19 @@ export const WaitlistEmail = ({ email }: WaitlistEmailProps) => {
                 className="my-0 mx-auto"
               />
             </Section>
-            <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
+            <Heading className="text-black text-[26px] font-normal text-center p-0 my-[30px] mx-0">
               Welcome to JED 🎉🎊
             </Heading>
-            <Text className="text-black text-[14px] leading-[24px]">
+            <Text className="text-black text-[16px] leading-[28px]">
               We appreciate your interest in joining the JED waitlist, the best
-              platform for planning events! Having you on board makes us very
-              happy, and we can't wait to show you all the incredible things
-              we've been building.
+              platform for planning events! We can't wait to show you all the
+              incredible things we've been building.
             </Text>
             <Section className="bg-green-50 p-4 rounded-lg">
-              <Heading className=" text-green-500 text-[18px]">
+              <Heading className=" text-green-500 text-[20px]">
                 WHAT IS JED
               </Heading>
-              <Text>
+              <Text className=" text-[16px] leading-[28px]">
                 <Link
                   href={"https://jedvotes.com"}
                   className="text-green-600 no-underline"
@@ -75,13 +64,12 @@ export const WaitlistEmail = ({ email }: WaitlistEmailProps) => {
               </Text>
             </Section>
             <Section className="mt-[16px] mb-[32px]">
-              <Text>
+              <Text className=" text-[16px] leading-[28px]">
                 As a member of our waitlist, you'll be among the first to get
                 exclusive access to JED when we launch. We'll keep you updated
                 with the latest news and developments, so keep an eye on your
                 inbox. In the meantime, feel free to reach out to us if you have
-                any questions or suggestions. We are here to make your event
-                planning experience as smooth and enjoyable as possible.
+                any questions or suggestions.
               </Text>
             </Section>
 
