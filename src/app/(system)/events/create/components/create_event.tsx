@@ -33,7 +33,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { isImageSizeValid, generateFilePath } from "@/lib/utils";
+import { isImageSizeValid } from "@/lib/utils";
 import { getFormData } from "@/lib/utils";
 
 const formSchema = z.object({
