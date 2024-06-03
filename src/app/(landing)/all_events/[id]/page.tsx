@@ -42,10 +42,11 @@ export async function generateMetadata({
 export default async function SingleEventPage({ params: { id } }: Props) {
   const { data: event } = await db
     .from("events")
-    .select(`*, categories(category_name, event_id, id)`)
+    .select(`*, categories(*)`)
     .eq("id", id)
     .single();
 
+  console.log(event);
   return (
     <>
       <SingleEvent event={event} />
