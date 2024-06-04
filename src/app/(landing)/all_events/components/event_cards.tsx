@@ -55,7 +55,7 @@ export default function EventCards({ events: initialEvents }: Props) {
                     />
                   </div>
                   <div className="px-6 py-4">
-                    <h1 className="font-bold text-xl mb-1 text-center">
+                    <h1 className="font-bold text-md mb-1 text-center">
                       {event.name}
                     </h1>
                     <p className="text-gray-700 text-base">
