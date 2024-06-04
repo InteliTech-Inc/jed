@@ -19,15 +19,9 @@ type Props = {
   nominee: Nominee;
   key: string;
   votes: Vote[];
-  handleNomineeVoting: (id: string) => void;
 };
 
-export default function NomineeCard({
-  key,
-  nominee,
-  handleNomineeVoting,
-  votes,
-}: Props) {
+export default function NomineeCard({ key, nominee, votes }: Props) {
   return (
     <div key={key}>
       <div className="relative h-[25rem] w-full md:w-[18rem] rounded rounded-top-md rounded-b-none overflow-hidden hover:shadow transition-all duration-150 hover:border border-secondary bg-white group">
@@ -55,12 +49,6 @@ export default function NomineeCard({
           <Link href={`nominees/edit/${nominee.id}`}>Edit</Link>
         </Button>
       </div>
-      <Button
-        onClick={() => handleNomineeVoting(nominee.id)}
-        className="w-full rounded-b-md rounded-t-none my-2"
-      >
-        Vote
-      </Button>
     </div>
   );
 }

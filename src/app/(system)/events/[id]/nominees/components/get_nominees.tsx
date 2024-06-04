@@ -23,38 +23,38 @@ export default function GetNominees({ nominees, votes }: any) {
   const router = useRouter();
 
   // Let get the nominees id and then add voting logic
-  async function handleNomineeVoting(nomineeId: string) {
-    // Check if the nominee has been voted for
-    const { data: votes, error } = await supabase
-      .from("voting")
-      .select("*")
-      .eq("nominee_id", nomineeId);
+  // async function handleNomineeVoting(nomineeId: string) {
+  //   // Check if the nominee has been voted for
+  //   const { data: votes, error } = await supabase
+  //     .from("voting")
+  //     .select("*")
+  //     .eq("nominee_id", nomineeId);
 
-    if (error) {
-      console.error("Error fetching votes:", error);
-      return;
-    }
+  //   if (error) {
+  //     console.error("Error fetching votes:", error);
+  //     return;
+  //   }
 
-    if (votes && votes.length > 0) {
-      // If the nominee has been voted for, increment the vote count
-      const { error: updateError } = await supabase
-        .from("voting")
-        .update({ count: votes[0].count + 1 })
-        .eq("nominee_id", nomineeId);
+  //   if (votes && votes.length > 0) {
+  //     // If the nominee has been voted for, increment the vote count
+  //     const { error: updateError } = await supabase
+  //       .from("voting")
+  //       .update({ count: votes[0].count + 1 })
+  //       .eq("nominee_id", nomineeId);
 
-      if (updateError) {
-        console.error("Error updating vote count:", updateError);
-      }
-    } else {
-      const { error: insertError } = await supabase
-        .from("voting")
-        .insert({ nominee_id: nomineeId, count: 1 });
+  //     if (updateError) {
+  //       console.error("Error updating vote count:", updateError);
+  //     }
+  //   } else {
+  //     const { error: insertError } = await supabase
+  //       .from("voting")
+  //       .insert({ nominee_id: nomineeId, count: 1 });
 
-      if (insertError) {
-        console.error("Error inserting new vote:", insertError);
-      }
-    }
-  }
+  //     if (insertError) {
+  //       console.error("Error inserting new vote:", insertError);
+  //     }
+  //   }
+  // }
 
   // Realtime for nominees fetch
   useEffect(() => {
@@ -115,12 +115,7 @@ export default function GetNominees({ nominees, votes }: any) {
           .filter((nominee: Nominee) => nominee.event_id === id)
           .map((nominee: Nominee) => (
             <div key={nominee.id} className="md:mr-4 md:mb-4">
-              <NomineeCard
-                key={nominee.id}
-                nominee={nominee}
-                handleNomineeVoting={handleNomineeVoting}
-                votes={votes}
-              />
+              <NomineeCard key={nominee.id} nominee={nominee} votes={votes} />
             </div>
           ))}
       </div>
