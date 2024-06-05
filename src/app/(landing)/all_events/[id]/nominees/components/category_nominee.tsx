@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import VotingResults from "./voting_results";
-import Spinner from "@/components/rotating_lines";
 import Loader from "@/app/(landing)/components/loader";
 
 type Nominees = {

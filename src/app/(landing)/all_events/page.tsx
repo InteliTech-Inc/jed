@@ -3,6 +3,7 @@ import AllEvents from "./components/all_events";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { dbServer } from "@/lib/supabase";
+import Loader from "../components/loader";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -29,13 +30,7 @@ export default async function AllEventsPage() {
           There are no Live Events
         </div>
       ) : (
-        <Suspense
-          fallback={
-            <div className="text-center my-10 text-2xl font-bold text-neutral-600">
-              Loading...
-            </div>
-          }
-        >
+        <Suspense fallback={<Loader />}>
           <AllEvents />
         </Suspense>
       )}
