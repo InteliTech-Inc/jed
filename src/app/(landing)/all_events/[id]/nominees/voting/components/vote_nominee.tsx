@@ -14,11 +14,6 @@ type Nominee = {
   event_id: string | null;
 };
 
-interface Vote {
-  nominee_id: string;
-  count: string;
-}
-
 export default function VoteNomineePage() {
   const [votingNominee, setVotingNominee] = useState<Nominee>();
   const [loading, setLoading] = useState(true);

@@ -1,28 +1,6 @@
-import { Json } from "@/types/supabase";
 import React from "react";
 import CategoriesCard from "./categories_card";
 import { db } from "@/lib/supabase";
-
-type Event = {
-  created_at: string;
-  name: string;
-  description: string;
-  img_url: string | null;
-  is_completed: boolean;
-  user_id: string;
-  id: string;
-  voting_period: Json;
-  nomination_period: Json;
-  categories: {
-    category_name: string | null;
-    event_id: string | null;
-    id: string;
-  }[];
-} | null;
-
-type Props = {
-  event: Event;
-};
 
 const fakeData = {
   created_at: "2022-01-01T00:00:00Z",
@@ -70,7 +48,6 @@ export default async function SingleEvent({ id }: { id: string }) {
         </p>
       </div>
       <div className="flex flex-col items-center justify-center">
-        {/* Event Details */}
         <div className=" flex items-center flex-col md:flex-row justify-center md:gap-28 text-center md:text-left">
           <div className="mt-5">
             {!event?.voting_period && (

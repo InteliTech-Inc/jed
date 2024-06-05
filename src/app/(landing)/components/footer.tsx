@@ -10,7 +10,7 @@ export default function Footer() {
   const date = new Date().getFullYear();
   return (
     <footer className=" border-t border-t-neutral-300 z-10 w-full text-white bg-primary ">
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 p-10 lg:place-items-center">
+      <div className="grid text-center md:grid-cols-2 lg:grid-cols-3 p-10 lg:place-items-center">
         <div className="flex flex-col">
           <h1 className="font-semibold text-xl">Useful Links</h1>
           <div className="flex flex-col  md:text-left my-6 space-y-3 text-md">
@@ -28,7 +28,7 @@ export default function Footer() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-col  md:items-start ">
+        <div className="flex flex-col md:items-start ">
           <h1 className="font-semibold md:text-left text-xl">
             Contact & Address
           </h1>
@@ -43,6 +43,7 @@ export default function Footer() {
               +1 404 903 9843
             </a>
             <p>College of Engineering, KNUST, Kumasi - Ghana</p>
+            <p>Digital Address: AO-K626-6511</p>
           </div>
         </div>
         <div className="flex flex-col items-center w-fit mx-auto md:items-start">

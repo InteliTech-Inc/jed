@@ -7,6 +7,7 @@ import Loader from "../components/loader";
 
 export const metadata: Metadata = {
   title: "Events",
+  description: "Find all ongoing events and vote for preferred nominee",
 };
 
 export default async function AllEventsPage() {

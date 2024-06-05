@@ -6,6 +6,7 @@ type Props = {};
 
 export const metadata: Metadata = {
   title: "Nominees",
+  description: "Nominees for the category",
 };
 
 export default function CategoryNominees({}: Props) {

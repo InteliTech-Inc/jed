@@ -42,7 +42,7 @@ export default function VotingResults() {
         )
         .eq("category_id", id);
       setNominees(nominees);
-      // Get Votes and its nominees
+
       const { data: votes } = await db.from("voting").select(`*, nominees(*)`);
 
       const votesCount = votes?.map((vote) => ({
