@@ -47,8 +47,8 @@ export default function VoteNomineePage() {
   return (
     <section className="container mx-auto mb-8 p-6">
       <div className="flex flex-col md:flex-row items-start justify-center w-full gap-4">
-        <div className="border p-3">
-          <div className=" h-[23rem] md:w-[25rem] mb-4">
+        <div className="border p-3 w-full md:w-[25rem] md:h-[30rem]">
+          <div className="h-full w-full mb-4">
             <Image
               className="h-full w-full object-cover object-bottom rounded-lg"
               src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${votingNominee?.img_url}`}
@@ -58,16 +58,15 @@ export default function VoteNomineePage() {
               priority
             />
           </div>
-          <h1 className="text-xl font-bold my-1">{votingNominee?.full_name}</h1>
-          <p className="text-gray-700">
-            Nominee's Code:{" "}
-            <span className="font-bold text-lg">{votingNominee?.code}</span>{" "}
-          </p>
         </div>
         <div className="my-8 w-full md:w-[40rem] px-4">
           <h1 className="text-4xl font-bold mb-3">
             Vote for {votingNominee?.full_name}
           </h1>
+          <p className="text-gray-700">
+            Nominee's Code:{" "}
+            <span className="font-bold text-lg">{votingNominee?.code}</span>{" "}
+          </p>
           <p className="text-neutral-600">
             You may directly vote offline using the USSD CODE{" "}
             <span className="text-black text-md font-bold">*170*200#</span> and
