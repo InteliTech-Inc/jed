@@ -5,6 +5,7 @@ import { db } from "@/lib/supabase";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import VotingResults from "./voting_results";
 
 type Nominees = {
   category_id: string | null;
@@ -66,9 +67,10 @@ export default function CategoryNomineeCard() {
             alt={event?.name || "Event"}
             priority
           />
-          <h1 className="text-white text-2xl md:text-4xl font-bold text-center mt-2">
+          <h1 className="text-white text-2xl md:text-4xl font-bold text-center my-4">
             {event?.name}
           </h1>
+          <VotingResults />
         </div>
       </div>
       <section className="container mx-auto px-6">
