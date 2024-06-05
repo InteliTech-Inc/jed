@@ -1,9 +1,8 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { db } from "@/lib/supabase";
 import { ArrowRight, Search } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 interface ICategory {
   category_name: string | null;
@@ -17,15 +16,14 @@ type Props = {
 
 export default function CategoriesCard({ categories }: Props) {
   const [search, setSearch] = useState("");
-  const [nomineeLength, setNomineeLength] = useState(null);
 
   const filteredCategories = categories?.filter((category) =>
     category?.category_name?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="my-10">
-      <div className="relative w-full md:w-[30rem] mx-auto">
+    <div className="my-10 w-[25rem] md:w-full px-6">
+      <div className="relative  md:w-[30rem] mx-auto">
         <Input
           type="text"
           placeholder="Search categories"
@@ -38,15 +36,15 @@ export default function CategoriesCard({ categories }: Props) {
           size={40}
         />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full  my-10">
         {filteredCategories!.length > 0 ? (
           filteredCategories?.map((category) => (
             <Link
               href={`/all_events/${category.id}/nominees`}
               key={category.id}
-              className=" p-4  bg-accent hover:bg-transparent transition-all duration-150 ease-in-out hover:border-accent border rounded-3xl text-neutral-600 max-w-[30rem]"
+              className=" p-4 bg-accent hover:bg-transparent transition-all duration-150 ease-in-out hover:border-accent border rounded-3xl text-neutral-600 w-full"
             >
-              <div className="flex justify-between items-center mb-3">
+              <div className="flex justify-between items-center">
                 <span>{category.category_name}</span>
                 <ArrowRight />
               </div>

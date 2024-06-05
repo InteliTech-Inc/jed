@@ -44,7 +44,7 @@ export default function VoteNomineePage() {
     <section className="container mx-auto mb-8 p-6">
       <div className="flex flex-col md:flex-row items-start justify-center w-full gap-4">
         <div className="border p-3">
-          <div className=" h-[23rem] w-[25rem] mb-4">
+          <div className=" h-[23rem] md:w-[25rem] mb-4">
             <Image
               className="h-full w-full object-cover object-bottom rounded-lg"
               src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${votingNominee?.img_url}`}

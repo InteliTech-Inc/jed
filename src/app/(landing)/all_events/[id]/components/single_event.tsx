@@ -1,8 +1,7 @@
-"use client";
 import { Json } from "@/types/supabase";
-import { useRouter } from "next/navigation";
 import React from "react";
 import CategoriesCard from "./categories_card";
+import { db } from "@/lib/supabase";
 
 type Event = {
   created_at: string;
@@ -55,19 +54,24 @@ const fakeData = {
   ],
 };
 
-export default function SingleEvent({ event }: Props) {
-  const router = useRouter();
+export default async function SingleEvent({ id }: { id: string }) {
+  const { data: event } = await db
+    .from("events")
+    .select(`*, categories(*)`)
+    .eq("id", id)
+    .single();
+
   return (
-    <section className="container mx-auto py-10 ">
+    <section className="container mx-auto py-10 overflow-x-hidden ">
       <div className="text-center">
         <h1 className="text-neutral-600 text-3xl font-bold ">{event?.name}</h1>
-        <p className="text-neutral-500 w-[40rem] mx-auto">
+        <p className="text-neutral-500 md:w-[40rem] mx-auto">
           {event?.description}
         </p>
       </div>
       <div className="flex flex-col items-center justify-center">
         {/* Event Details */}
-        <div className=" flex items-center justify-center gap-28">
+        <div className=" flex items-center flex-col md:flex-row justify-center md:gap-28 text-center md:text-left">
           <div className="mt-5">
             <h2 className="text-neutral-600 text-xl font-bold">
               Voting Period

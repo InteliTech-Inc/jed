@@ -1,7 +1,8 @@
 import { Metadata } from "next";
-import React from "react";
+import React, { Suspense } from "react";
 import { db } from "@/lib/supabase";
 import SingleEvent from "./components/single_event";
+import Spinner from "@/components/rotating_lines";
 
 type Props = {
   params: { id: string };
@@ -40,15 +41,15 @@ export async function generateMetadata({
 }
 
 export default async function SingleEventPage({ params: { id } }: Props) {
-  const { data: event } = await db
-    .from("events")
-    .select(`*, categories(*)`)
-    .eq("id", id)
-    .single();
-
   return (
-    <>
-      <SingleEvent event={event} />
-    </>
+    <Suspense
+      fallback={
+        <div className=" w-full grid place-content-center">
+          <Spinner />
+        </div>
+      }
+    >
+      <SingleEvent id={id} />
+    </Suspense>
   );
 }
