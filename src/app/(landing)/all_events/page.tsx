@@ -1,5 +1,5 @@
-import React from "react";
-import EventCards from "./components/event_cards";
+import React, { Suspense } from "react";
+import AllEvents from "./components/all_events";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { dbServer } from "@/lib/supabase";
@@ -29,7 +29,15 @@ export default async function AllEventsPage() {
           There are no Live Events
         </div>
       ) : (
-        <EventCards events={liveEvents || []} />
+        <Suspense
+          fallback={
+            <div className="text-center my-10 text-2xl font-bold text-neutral-600">
+              Loading...
+            </div>
+          }
+        >
+          <AllEvents />
+        </Suspense>
       )}
     </section>
   );
