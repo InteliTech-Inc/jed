@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { db } from "@/lib/supabase";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import VotingResults from "./voting_results";
+import Spinner from "@/components/rotating_lines";
+import Loader from "@/app/(landing)/components/loader";
 
 type Nominees = {
   category_id: string | null;
@@ -20,32 +22,43 @@ type Nominees = {
 
 export default function CategoryNomineeCard() {
   const { id } = useParams();
-  const [nominees, setNominees] = React.useState<Nominees[]>([]);
-  const [event, setEvent] = React.useState<any>(null);
+  const [nominees, setNominees] = useState<Nominees[]>([]);
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    async function fetchCategoryNominees() {
-      const { data, error } = await db
-        .from("nominees")
-        .select("*")
-        .eq("category_id", id);
-      if (error) {
+    (async function fetchCategoryNominees() {
+      try {
+        const nomineeData = await db
+          .from("nominees")
+          .select("*")
+          .eq("category_id", id);
+
+        if (nomineeData.error) {
+          console.error(nomineeData.error);
+        }
+
+        setNominees(nomineeData.data || []);
+
+        const ids = nomineeData.data?.find(
+          (nominee) => nominee?.category_id === id
+        )?.event_id;
+
+        const eventData = await db
+          .from("events")
+          .select("*")
+          .eq("id", ids!)
+          .single();
+
+        setEvent(eventData.data);
+        setLoading(false);
+      } catch (error) {
         console.error(error);
       }
-      // console.log(data);
-      setNominees(data || []);
-      const ids = data?.find(
-        (nominee) => nominee?.category_id === id
-      )?.event_id;
-      const { data: event } = await db
-        .from("events")
-        .select("*")
-        .eq("id", ids!)
-        .single();
-
-      setEvent(event);
-    }
-    fetchCategoryNominees();
+    })();
   }, [id]);
+
+  if (loading) return <Loader />;
 
   return (
     <>
@@ -74,8 +87,6 @@ export default function CategoryNomineeCard() {
         </div>
       </div>
       <section className="container mx-auto px-6">
-        {/* Design a banner with an image that takes the whole with with blur */}
-
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-10">
           {nominees.length > 0 ? (
             nominees.map((nominee) => (

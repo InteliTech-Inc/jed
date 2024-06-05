@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import PaystackPayment from "@/components/paystack_payment";
+import Loader from "@/app/(landing)/components/loader";
 
 type Nominee = {
   category_id: string | null;
@@ -20,11 +21,12 @@ interface Vote {
 
 export default function VoteNomineePage() {
   const [votingNominee, setVotingNominee] = useState<Nominee>();
+  const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
 
   useEffect(() => {
-    async function GetNominees() {
+    (async function GetNominees() {
       try {
         const { data, error } = await db
           .from("nominees")
@@ -33,12 +35,14 @@ export default function VoteNomineePage() {
           .single();
         if (error) throw error;
         setVotingNominee(data!);
+        setLoading(false);
       } catch (error) {
         console.log("error", error);
       }
-    }
-    GetNominees();
+    })();
   }, []);
+
+  if (loading) return <Loader />;
 
   return (
     <section className="container mx-auto mb-8 p-6">

@@ -73,51 +73,57 @@ export default async function SingleEvent({ id }: { id: string }) {
         {/* Event Details */}
         <div className=" flex items-center flex-col md:flex-row justify-center md:gap-28 text-center md:text-left">
           <div className="mt-5">
-            <h2 className="text-neutral-600 text-xl font-bold">
-              Voting Period
-            </h2>
-            <p className="text-neutral-500">
-              {new Date(fakeData.voting_period.start_date).toLocaleDateString(
-                "en-US",
-                {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                }
-              )}{" "}
-              -{" "}
-              {new Date(fakeData.voting_period.end_date).toLocaleDateString(
-                "en-US",
-                {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                }
-              )}
-            </p>
+            {!event?.voting_period && (
+              <>
+                <h2 className="text-neutral-600 text-xl font-bold">
+                  Voting Period
+                </h2>
+                <p className="text-neutral-500">
+                  {new Date(
+                    fakeData.voting_period.start_date
+                  ).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}{" "}
+                  -{" "}
+                  {new Date(fakeData.voting_period.end_date).toLocaleDateString(
+                    "en-US",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }
+                  )}
+                </p>
+              </>
+            )}
           </div>
           <div className="mt-5">
-            <h2 className="text-neutral-600 text-xl font-bold">
-              Nomination Period
-            </h2>
-            <p className="text-neutral-500">
-              {new Date(
-                fakeData.nomination_period.start_date
-              ).toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}{" "}
-              -{" "}
-              {new Date(fakeData.nomination_period.end_date).toLocaleDateString(
-                "en-US",
-                {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                }
-              )}
-            </p>
+            {!event?.nomination_period && (
+              <>
+                <h2 className="text-neutral-600 text-xl font-bold">
+                  Nomination Period
+                </h2>
+                <p className="text-neutral-500">
+                  {new Date(
+                    fakeData.nomination_period.start_date
+                  ).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}{" "}
+                  -{" "}
+                  {new Date(
+                    fakeData.nomination_period.end_date
+                  ).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+              </>
+            )}
           </div>
         </div>
 
