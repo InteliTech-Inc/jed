@@ -19,7 +19,11 @@ export default async function AdminNominee() {
   // Get Nominees
   const { data: nominees } = await db
     .from("nominees")
-    .select("*")
+    .select(
+      `*, 
+    categories:category_id(*)
+    `
+    )
     .eq("user_id", user?.id!);
 
   // Get Votes and its nominees

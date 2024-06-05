@@ -46,7 +46,6 @@ export default async function SingleEventPage({ params: { id } }: Props) {
     .eq("id", id)
     .single();
 
-  console.log(event);
   return (
     <>
       <SingleEvent event={event} />

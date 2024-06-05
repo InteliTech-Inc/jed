@@ -30,6 +30,7 @@ type NomineePayload = {
   full_name: string;
   code: string;
   category_id: string;
+  category?: string;
   img_url: string;
   event_id: string;
   user_id?: string;
@@ -50,7 +51,13 @@ const UpdateNomineeDetails = async (
 };
 
 const addNominee = async (payload: NomineePayload) => {
-  const { data, error } = await db.from("nominees").insert(payload).select("*");
+  const { data, error } = await db
+    .from("nominees")
+    .insert({
+      ...payload,
+      user_id: payload.user_id || "",
+    })
+    .select("*");
   if (error) return new Error(error.message);
   return data;
 };

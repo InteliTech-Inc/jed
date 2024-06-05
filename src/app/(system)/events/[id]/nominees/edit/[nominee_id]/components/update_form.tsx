@@ -57,7 +57,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
   useEffect(() => {
     form.setValue("code", data.code);
     form.setValue("full_name", data.full_name);
-    form.setValue("category", data.category);
+    form.setValue("category", data.categories.category_name);
   }, []);
 
   function UploadImageToForm(e: ChangeEvent<HTMLInputElement>) {
@@ -105,7 +105,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
       const payload = {
         full_name: values.full_name,
         code: values.code,
-        category: values.category,
+        category_id: values.category,
         img_url: filePath,
         event_id: data.event_id,
       };
@@ -242,11 +242,8 @@ export default function UpdateNomineeForm({ data, categories }: any) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {categories[0].categories.map((category: Category) => (
-                          <SelectItem
-                            key={category.id}
-                            value={category.category_name}
-                          >
+                        {categories[0].categories?.map((category: Category) => (
+                          <SelectItem key={category.id} value={category.id}>
                             {category.category_name}
                           </SelectItem>
                         ))}
@@ -269,7 +266,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
               </Button>
             </section>
             <div className=" w-full md:mt-8">
-              <section className="border bg-white  w-full md:w-[90%] lg:w-[70%] mx-auto aspect-square rounded-md shadow-sm">
+              <section className="border bg-white md:h-[18rem] w-full md:w-[90%] lg:w-[70%] mx-auto aspect-square rounded-md shadow-sm">
                 <div className="relative h-full w-full rounded overflow-hidden hover:shadow transition-all duration-150 hover:border border-secondary bg-white group">
                   <Image
                     src={
@@ -283,14 +280,6 @@ export default function UpdateNomineeForm({ data, categories }: any) {
                     className="z-0"
                     alt={inputValues.full_name}
                   />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent opacity-50 h-1/2 z-10"></div>
-                  <div className="absolute bottom-0 left-0 p-4 text-white z-20">
-                    <h2 className="text-xl font-bold">
-                      {inputValues.full_name}
-                    </h2>
-                    <p>{inputValues.category}</p>
-                    <p>Nominee's code: {inputValues.code}</p>
-                  </div>
                 </div>
               </section>
               <div className="">

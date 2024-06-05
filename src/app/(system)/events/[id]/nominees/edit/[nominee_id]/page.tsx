@@ -13,7 +13,11 @@ export default async function EditNominee({
   // Fetch the nominee data
   const { data } = await db
     .from("nominees")
-    .select("*")
+    .select(
+      `*, 
+      categories:category_id(*)
+    `
+    )
     .eq("id", nominee_id)
     .single();
 
@@ -24,6 +28,9 @@ export default async function EditNominee({
   const { data: categories } = await db
     .from("events")
     .select(`*, categories(category_name, event_id, id)`)
-    .eq("user_id", user?.id!);
+    .eq("user_id", user?.id!)
+    .eq("id", data?.event_id!);
+
+  // console.log(categories);
   return <UpdateNomineeForm data={data} categories={categories || []} />;
 }
