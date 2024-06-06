@@ -1,13 +1,9 @@
-"use client";
-import { db } from "@/lib/supabase";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
 import PaystackPayment from "@/components/paystack_payment";
-import Loader from "@/app/(landing)/components/loader";
 import BackButton from "@/components/back";
 
 type Nominee = {
+  id: string;
   category_id: string | null;
   full_name: string | null;
   img_url: string | null;
@@ -15,31 +11,11 @@ type Nominee = {
   event_id: string | null;
 };
 
-export default function VoteNomineePage() {
-  const [votingNominee, setVotingNominee] = useState<Nominee>();
-  const [loading, setLoading] = useState(true);
+type Props = {
+  votingNominee: Nominee;
+};
 
-  const { id } = useParams();
-
-  useEffect(() => {
-    (async function GetNominees() {
-      try {
-        const { data, error } = await db
-          .from("nominees")
-          .select("*")
-          .eq("id", id)
-          .single();
-        if (error) throw error;
-        setVotingNominee(data!);
-        setLoading(false);
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, []);
-
-  if (loading) return <Loader />;
-
+export default function VoteNomineePage({ votingNominee }: Props) {
   return (
     <section className="container mx-auto mb-8 p-6">
       <BackButton />
@@ -69,7 +45,7 @@ export default function VoteNomineePage() {
             <span className="text-black text-md font-bold">*170*200#</span> and
             Nominee Code
           </p>
-          <PaystackPayment />
+          <PaystackPayment id={votingNominee.id} />
         </div>
       </div>
     </section>

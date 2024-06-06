@@ -68,7 +68,7 @@ export default function EventCards({ events }: Props) {
         </form>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
           {filteredEvents?.map((event) => (
-            <Link href={`/all_events/${event.id}`} key={event.id}>
+            <Link href={`/all-events/${event.id}`} key={event.id}>
               <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border">
                 <div className="h-[20rem]">
                   <Image

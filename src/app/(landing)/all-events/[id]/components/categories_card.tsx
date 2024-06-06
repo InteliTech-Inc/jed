@@ -40,7 +40,7 @@ export default function CategoriesCard({ categories }: Props) {
         {filteredCategories!.length > 0 ? (
           filteredCategories?.map((category) => (
             <Link
-              href={`/all_events/${category.id}/nominees`}
+              href={`/all-events/${category.id}/nominees`}
               key={category.id}
               className=" p-4 bg-accent hover:bg-transparent transition-all duration-150 ease-in-out hover:border-accent border rounded-3xl text-neutral-600 w-full"
             >

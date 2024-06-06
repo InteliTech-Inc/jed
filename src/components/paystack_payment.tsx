@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/supabase";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type referenceObj = {
   message: string;
@@ -35,16 +35,12 @@ type FORM_DATA = {
 const formSchema = z.object({
   full_name: z
     .string()
-    .min(3, { message: "Full name must be at least 3 characters" }),
+    .min(2, { message: "Full name must be at least 2 characters" }),
   email: z.string().optional(),
   votes: z.string().min(1, { message: "Number of votes must be at least 1" }),
 });
 
-export default function PaystackPayment(): JSX.Element {
-  const url = usePathname();
-  const segment = url.split("/");
-  const id = segment[segment.length - 3];
-
+export default function PaystackPayment({ id }: { id: string }) {
   const router = useRouter();
   const [ref, setRef] = useState("");
   const [_, setFormData] = useState<FORM_DATA>();
@@ -83,8 +79,6 @@ export default function PaystackPayment(): JSX.Element {
           .from("voting")
           .select("*")
           .eq("nominee_id", id);
-
-        console.log("From Votes", votes);
 
         if (error) {
           console.error("Error fetching votes:", error);
@@ -199,6 +193,7 @@ export default function PaystackPayment(): JSX.Element {
         />
 
         {inputValues.full_name === "" ||
+        inputValues.full_name.length < 2 ||
         inputValues.votes === "0" ||
         inputValues.votes === "" ? (
           <Button

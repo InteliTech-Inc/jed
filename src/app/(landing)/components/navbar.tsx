@@ -19,7 +19,7 @@ export const NavLinks = [
   },
   {
     name: "Events",
-    path: "/all_events",
+    path: "/all-events",
     dropdwon: false,
   },
   {

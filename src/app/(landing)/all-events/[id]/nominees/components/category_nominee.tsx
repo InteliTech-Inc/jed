@@ -1,13 +1,10 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { db } from "@/lib/supabase";
+import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import VotingResults from "./voting_results";
-import Loader from "@/app/(landing)/components/loader";
 import BackButton from "@/components/back";
+import { Json } from "@/types/supabase";
 
 type Nominees = {
   category_id: string | null;
@@ -20,47 +17,26 @@ type Nominees = {
   user_id: string;
 } | null;
 
-export default function CategoryNomineeCard() {
-  const { id } = useParams();
-  const [nominees, setNominees] = useState<Nominees[]>([]);
-  const [event, setEvent] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+type Event = {
+  created_at: string;
+  description: string;
+  id: string;
+  img_url: string | null;
+  is_completed: boolean;
+  name: string;
+  nomination_period: Json;
+  user_id: string;
+  voting_period: Json;
+} | null;
 
-  useEffect(() => {
-    (async function fetchCategoryNominees() {
-      try {
-        const nomineeData = await db
-          .from("nominees")
-          .select("*")
-          .eq("category_id", id);
-
-        if (nomineeData.error) {
-          console.error(nomineeData.error);
-        }
-
-        setNominees(nomineeData.data || []);
-
-        const ids = nomineeData.data?.find(
-          (nominee) => nominee?.category_id === id
-        )?.event_id;
-
-        const eventData = await db
-          .from("events")
-          .select("*")
-          .eq("id", ids!)
-          .single();
-
-        setEvent(eventData.data);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  }, [id]);
-
-  if (loading) return <Loader />;
-
-  if (nominees.length === 0) {
+export default async function CategoryNomineeCard({
+  nominees,
+  event,
+}: {
+  nominees: Nominees[] | null;
+  event: Event;
+}) {
+  if (nominees?.length === 0) {
     return (
       <div className="p-10">
         <BackButton />
@@ -81,7 +57,7 @@ export default function CategoryNomineeCard() {
           src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event?.img_url}`}
           width={2000}
           height={2000}
-          alt={event?.name || "Event"}
+          alt={event?.name!}
           priority
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center flex-col justify-center">
@@ -90,7 +66,7 @@ export default function CategoryNomineeCard() {
             src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event?.img_url}`}
             width={2000}
             height={2000}
-            alt={event?.name || "Event"}
+            alt={event?.name!}
             priority
           />
           <h1 className="text-white text-2xl md:text-4xl font-bold text-center my-4">
@@ -101,8 +77,8 @@ export default function CategoryNomineeCard() {
       </div>
       <section className="container mx-auto px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-10">
-          {nominees.length > 0 &&
-            nominees.map((nominee) => (
+          {nominees?.length! > 0 &&
+            nominees?.map((nominee) => (
               <div
                 className="transition-all duration-150 hover:shadow-lg rounded-xl cursor-pointer border"
                 key={nominee?.id}
@@ -113,7 +89,7 @@ export default function CategoryNomineeCard() {
                     src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${nominee?.img_url}`}
                     width={2000}
                     height={2000}
-                    alt={nominee?.full_name || "Nominee"}
+                    alt={nominee?.full_name!}
                     priority
                   />
                 </div>
@@ -124,7 +100,7 @@ export default function CategoryNomineeCard() {
                   <h1 className="font-normal text-neutral-600  mb-1 text-center">
                     Nominee's Code: {nominee?.code}
                   </h1>
-                  <Link href={`/all_events/${nominee?.id}/nominees/voting`}>
+                  <Link href={`/all-events/${nominee?.id}/nominees/voting`}>
                     <Button className="w-full">Vote Nominee</Button>
                   </Link>
                 </div>
