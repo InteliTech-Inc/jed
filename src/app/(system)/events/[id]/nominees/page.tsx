@@ -37,7 +37,7 @@ export default async function AdminNominee() {
 
   return (
     <section className="py-8 px-3 md:px-6 ">
-      <div className="flex items-center justify-between">
+      <div className="flex md:items-center flex-col md:flex-row justify-between">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold">Your Nominees</h1>
           <p className="text-slate-500">
