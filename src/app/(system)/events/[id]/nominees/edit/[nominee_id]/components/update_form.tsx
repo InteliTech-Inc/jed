@@ -105,10 +105,11 @@ export default function UpdateNomineeForm({ data, categories }: any) {
       const payload = {
         full_name: values.full_name,
         code: values.code,
-        category_id: values.category,
         img_url: filePath,
         event_id: data.event_id,
       };
+
+      console.log("Payload", payload);
 
       const [_, updateRecords] = await Promise.all([
         uploadImage({ file, path: filePath }),
@@ -232,7 +233,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger disabled>
                           <SelectValue
                             placeholder={
                               form.getValues("category") ||

@@ -1,7 +1,7 @@
 "use client";
 import { db } from "@/lib/supabase";
 import React, { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,25 +52,24 @@ export default function NominationForm() {
   const [event, setEvent] = useState<Event>({} as Event);
   const [isPending, setIsPending] = useState<boolean>(false);
 
-  const url = usePathname();
-  const segments = url.split("/");
-  const eventId = segments[segments.length - 2];
+  const { id } = useParams();
 
   const router = useRouter();
 
   useEffect(() => {
     db.from("events")
       .select("*, categories(category_name, id, event_id)")
-      .eq("id", eventId)
+      .eq("id", id)
       .single()
       .then(({ data, error }) => {
         if (error) {
           toast.error("Error fetching data...");
         } else {
-          setEvent(data as Event);
+          const eventData = data as unknown as Event;
+          setEvent(eventData);
         }
       });
-  }, [eventId]);
+  }, [id]);
 
   const form = useForm<z.infer<typeof nominationShape>>({
     resolver: zodResolver(nominationShape),
@@ -102,13 +101,13 @@ export default function NominationForm() {
         phone: values.telephone,
         category_id: values.category,
         reasons: values.reasons,
-        event_id: eventId,
+        event_id: id,
       };
       CreateNomination(payload)
         .then((_) => {
           toast.success("Nomination submitted successfully..");
           form.reset();
-          router.push(`/events/${eventId}`);
+          router.push(`/events/${id}`);
           setIsPending(false);
         })
         .catch((error) => {

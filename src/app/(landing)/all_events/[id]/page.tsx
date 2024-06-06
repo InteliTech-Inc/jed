@@ -11,7 +11,7 @@ type Props = {
 export async function generateStaticParams() {
   const { data: events } = await db.from("events").select("id");
 
-  const idRoutes = events && events.map((event) => event.id);
+  const idRoutes = events ? events.map((event) => event.id) : [];
 
   return idRoutes?.map((id) => ({
     id,

@@ -29,7 +29,7 @@ const createEvent = async (payload: EventPayload) => {
 type NomineePayload = {
   full_name: string;
   code: string;
-  category_id: string;
+  category_id?: string;
   category?: string;
   img_url: string;
   event_id: string;

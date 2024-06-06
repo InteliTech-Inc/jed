@@ -3,6 +3,36 @@ import { useQueryClient } from "@tanstack/react-query";
 import { db } from "@/lib/supabase";
 import { toast } from "sonner";
 import { QueryError } from "@supabase/supabase-js";
+import { Json } from "@/types/supabase";
+
+type TableName =
+  | "events"
+  | "categories"
+  | "nominees"
+  | "nomination_period"
+  | "nominations"
+  | "schedules"
+  | "voting"
+  | "voting_period"
+  | "waitlist"
+  | "withdrawals";
+
+type Payload =
+  | {
+      category_name?: string | null | undefined;
+      created_at?: string | undefined;
+      event_id?: string | null | undefined;
+      id?: string | undefined;
+    }
+  | {
+      created_at?: string | undefined;
+      // ... 7 more properties ...
+      voting_period?: Json | undefined;
+    }
+  | {
+      // ... 7 more objects ...
+      // add any additional properties here
+    };
 
 /**
  * This function is responsible for creating a mutation (i.e POST, DELETE, & PATCH).
@@ -17,14 +47,14 @@ function useCreateRequest({
   method = "post",
   showSucessMsg = true,
 }: {
-  dbName: string;
+  dbName: TableName;
   key: string;
   method?: "post" | "patch" | "delete";
   showSucessMsg?: boolean;
 }) {
   const queryClient = useQueryClient();
   const { mutateAsync, status, isError, isSuccess, isPending } = useMutation({
-    mutationFn: async (payload: unknown) => {
+    mutationFn: async (payload: Payload) => {
       if (method === "patch") {
         const { data, error } = await db.from(dbName).update(payload);
 
@@ -33,7 +63,10 @@ function useCreateRequest({
         if (data) return data;
       }
 
-      const { data, error } = await db.from(dbName).insert(payload).select();
+      const { data, error } = await db
+        .from(dbName)
+        .insert(payload || {})
+        .select();
 
       if (error) throw error; //supabase does not throw error when there is an error. We are throwing an error here so we can handle the error in the onError callback from react-query
 

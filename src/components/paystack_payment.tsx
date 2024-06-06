@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/supabase";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 type referenceObj = {
   message: string;
@@ -41,7 +41,10 @@ const formSchema = z.object({
 });
 
 export default function PaystackPayment(): JSX.Element {
-  const { id } = useParams();
+  const url = usePathname();
+  const segment = url.split("/");
+  const id = segment[segment.length - 3];
+
   const router = useRouter();
   const [ref, setRef] = useState("");
   const [_, setFormData] = useState<FORM_DATA>();
