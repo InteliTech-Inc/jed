@@ -1,8 +1,8 @@
 "use client";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import NomineeCard from "./nominee_card";
+import { db } from "@/lib/supabase";
 
 type Nominee = {
   id: string;
@@ -14,8 +14,6 @@ type Nominee = {
 };
 
 export default function GetNominees({ nominees, votes }: any) {
-  const supabase = createClientComponentClient();
-
   const url = usePathname();
   const segments = url.split("/");
   const id = segments[segments.length - 2];
@@ -25,7 +23,7 @@ export default function GetNominees({ nominees, votes }: any) {
   // Let get the nominees id and then add voting logic
   async function handleNomineeVoting(nomineeId: string) {
     // Check if the nominee has been voted for
-    const { data: votes, error } = await supabase
+    const { data: votes, error } = await db
       .from("voting")
       .select("*")
       .eq("nominee_id", nomineeId);
@@ -37,7 +35,7 @@ export default function GetNominees({ nominees, votes }: any) {
 
     if (votes && votes.length > 0) {
       // If the nominee has been voted for, increment the vote count
-      const { error: updateError } = await supabase
+      const { error: updateError } = await db
         .from("voting")
         .update({ count: votes[0].count + 1 })
         .eq("nominee_id", nomineeId);
@@ -46,7 +44,7 @@ export default function GetNominees({ nominees, votes }: any) {
         console.error("Error updating vote count:", updateError);
       }
     } else {
-      const { error: insertError } = await supabase
+      const { error: insertError } = await db
         .from("voting")
         .insert({ nominee_id: nomineeId, count: 1 });
 
@@ -58,7 +56,7 @@ export default function GetNominees({ nominees, votes }: any) {
 
   // Realtime for nominees fetch
   useEffect(() => {
-    const nominee_channel = supabase
+    const nominee_channel = db
       .channel("realtime")
       .on(
         "postgres_changes",
@@ -69,19 +67,18 @@ export default function GetNominees({ nominees, votes }: any) {
         },
         () => {
           router.refresh();
-          console.log("Nominee channel updated");
         }
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(nominee_channel);
+      db.removeChannel(nominee_channel);
     };
-  }, [supabase, router, nominees]);
+  }, [nominees]);
 
   // Realtime for votes
   useEffect(() => {
-    const voting_channel = supabase
+    const voting_channel = db
       .channel("realtime")
       .on(
         "postgres_changes",
@@ -91,16 +88,15 @@ export default function GetNominees({ nominees, votes }: any) {
           table: "voting",
         },
         () => {
-          console.log("Votes channel updated");
           router.refresh();
         }
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(voting_channel);
+      db.removeChannel(voting_channel);
     };
-  }, [supabase, router, votes]);
+  }, [votes]);
 
   if (
     nominees.filter((nominee: Nominee) => nominee.event_id === id).length === 0

@@ -5,7 +5,11 @@ import { dbServer } from "@/lib/supabase";
 import GetNominees from "./components/get_nominees";
 import Spinner from "@/components/spinner";
 
-export default async function AdminNominee() {
+export default async function AdminNominee({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
   const db = dbServer(cookies);
   const {
     data: { user },
@@ -15,12 +19,14 @@ export default async function AdminNominee() {
     .from("events")
     .select(`*, categories(category_name, event_id, id)`)
     .eq("user_id", user?.id!);
+  // .eq("event_id", id);
 
   // Get Nominees
   const { data: nominees } = await db
     .from("nominees")
     .select("*")
     .eq("user_id", user?.id!);
+  // .eq("event_id", id);
 
   // Get Votes and its nominees
   const { data: votes } = await db.from("voting").select(`*, nominees(*)`);
@@ -30,6 +36,8 @@ export default async function AdminNominee() {
     count: vote.count,
     nominee_id: vote.nominee_id,
   }));
+
+  console.log(nominees);
 
   return (
     <section className="py-8 px-3 md:px-6 ">
@@ -44,7 +52,7 @@ export default async function AdminNominee() {
         </div>
         <AddNominees data={categories} user_id={user?.id} />
       </div>
-      <Suspense
+      {/* <Suspense
         fallback={
           <div className=" w-full grid place-content-center">
             <Spinner />
@@ -52,7 +60,7 @@ export default async function AdminNominee() {
         }
       >
         <GetNominees nominees={nominees} votes={votesCount} />
-      </Suspense>
+      </Suspense> */}
     </section>
   );
 }

@@ -29,8 +29,8 @@ export default function NomineeCard({
   votes,
 }: Props) {
   return (
-    <div key={key}>
-      <div className="relative h-[25rem] w-full md:w-[18rem] rounded rounded-top-md rounded-b-none overflow-hidden hover:shadow transition-all duration-150 hover:border border-secondary bg-white group">
+    <div key={key} className=" w-full">
+      <div className="relative h-[20rem] w-full flex-grow rounded-lg rounded-b-none overflow-hidden hover:shadow transition-all duration-150 bg-white group">
         <Image
           src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${nominee.img_url}`}
           className="z-0 h-full object-cover w-full transition-all scale-110 duration-300 group-hover:scale-100"
@@ -38,7 +38,7 @@ export default function NomineeCard({
           height={2000}
           alt={nominee.full_name}
         />
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent opacity-100 h-1/2 z-10"></div>
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent opacity-100 h-3/4 z-10"></div>
         <div className="absolute bottom-0 left-0 p-4 text-white z-20">
           <h2 className="text-xl font-bold">{nominee.full_name}</h2>
           <p>{nominee.category}</p>
@@ -48,12 +48,13 @@ export default function NomineeCard({
             {votes.find((vote) => vote.nominee_id === nominee.id)?.count || 0}
           </p>
         </div>
-        <Button
-          variant={"outline"}
+
+        <Link
+          href={`nominees/edit/${nominee.id}`}
           className="absolute top-0 right-0 m-4 font-bold py-2 px-4 rounded-full opacity-0 group-hover:opacity-100 z-30"
         >
-          <Link href={`nominees/edit/${nominee.id}`}>Edit</Link>
-        </Button>
+          Edit
+        </Link>
       </div>
       <Button
         onClick={() => handleNomineeVoting(nominee.id)}

@@ -37,7 +37,9 @@ import { ImageDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { checkConnection } from "@/lib/utils";
 import { addNominee, uploadImage } from "../../../create/functions";
-
+import { generateCode } from "@/lib/utils";
+import { db } from "@/lib/supabase";
+import { useParams } from "next/navigation";
 // Define the category type
 type Category = {
   id: string;
@@ -46,17 +48,11 @@ type Category = {
 };
 
 export default function AddNominees({ data, user_id }: any) {
-  const supabase = createClientComponentClient();
-
-  const url = usePathname();
-  const segments = url.split("/");
-  const id = segments[segments.length - 2];
-
-  const router = useRouter();
-
+  const { id } = useParams();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof nomineeFormShape>>({
     resolver: zodResolver(nomineeFormShape),
@@ -70,26 +66,8 @@ export default function AddNominees({ data, user_id }: any) {
   const inputValues = form.watch();
 
   // Generate a random code logic here
-  const generateCode = () => {
-    // Generate two random characters between a and z
-    let char1 = String.fromCharCode(97 + Math.floor(Math.random() * 26));
-    let char2 = String.fromCharCode(97 + Math.floor(Math.random() * 26));
-
-    // Generate two random integers between 0 and 9
-    let int1 = Math.floor(Math.random() * 10);
-    let int2 = Math.floor(Math.random() * 10);
-
-    // Combine the random characters and integers
-    let randomCode = char1 + char2 + int1 + int2;
-
-    form.setValue("code", randomCode.toString().toUpperCase());
-  };
-
-  const { mutateAsync: CreateNominees } = useCreateMutation({
-    dbName: "nominees",
-    key: "nominee",
-    showSucessMsg: false,
-  });
+  const code = generateCode();
+  form.setValue("code", code);
 
   function UploadImageToForm(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -139,7 +117,7 @@ export default function AddNominees({ data, user_id }: any) {
         full_name: values.full_name,
         code: values.code,
         category: values.category,
-        event_id: id,
+        event_id: id as string,
         img_url: filePath,
         user_id,
       };
@@ -167,7 +145,7 @@ export default function AddNominees({ data, user_id }: any) {
 
   // Subscribing to the realtime changes
   useEffect(() => {
-    const channel = supabase
+    const channel = db
       .channel("nominee_realtime")
       .on(
         "postgres_changes",
@@ -179,16 +157,15 @@ export default function AddNominees({ data, user_id }: any) {
         (payload) => {
           if (payload) {
             router.refresh();
-            console.log("Nominee changes received");
           }
         }
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      db.removeChannel(channel);
     };
-  }, [supabase, router]);
+  }, []);
 
   return (
     <Dialog>
@@ -197,10 +174,8 @@ export default function AddNominees({ data, user_id }: any) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className=" text-left lg:text-center text-xl">
-            Add Nominee
-          </DialogTitle>
-          <DialogDescription className=" text-left lg:text-center">
+          <DialogTitle className=" text-left text-xl">Add Nominee</DialogTitle>
+          <DialogDescription className=" text-left">
             Add the nominee for the event to be voted for by the users
           </DialogDescription>
         </DialogHeader>
@@ -221,7 +196,6 @@ export default function AddNominees({ data, user_id }: any) {
                         <Input
                           id="code"
                           type="text"
-                          autoComplete="off"
                           placeholder="Please generate a code for the nominee"
                           readOnly
                           disabled
@@ -255,7 +229,6 @@ export default function AddNominees({ data, user_id }: any) {
                       <Input
                         id="full_name"
                         type="text"
-                        autoComplete="off"
                         placeholder="Enter nominee's full name"
                         className="border border-accent focus:border-secondary focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                         {...field}
