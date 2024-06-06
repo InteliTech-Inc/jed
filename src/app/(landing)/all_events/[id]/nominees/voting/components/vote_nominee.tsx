@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import PaystackPayment from "@/components/paystack_payment";
 import Loader from "@/app/(landing)/components/loader";
+import BackButton from "@/components/back";
 
 type Nominee = {
   category_id: string | null;
@@ -41,8 +42,9 @@ export default function VoteNomineePage() {
 
   return (
     <section className="container mx-auto mb-8 p-6">
+      <BackButton />
       <div className="flex flex-col md:flex-row items-start justify-center w-full gap-4">
-        <div className="border p-3 w-full md:w-[25rem] md:h-[30rem]">
+        <div className="border rounded-lg p-3 w-full md:w-[25rem] md:h-[30rem]">
           <div className="h-full w-full mb-4">
             <Image
               className="h-full w-full object-cover object-bottom rounded-lg"
