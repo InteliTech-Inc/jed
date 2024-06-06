@@ -198,7 +198,9 @@ export default function PaystackPayment(): JSX.Element {
           )}
         />
 
-        {inputValues.full_name === "" || inputValues.votes === "" ? (
+        {inputValues.full_name === "" ||
+        inputValues.votes === "0" ||
+        inputValues.votes === "" ? (
           <Button
             disabled
             className="bg-secondary text-white py-2 px-4 rounded-md w-full disabled:cursor-not-allowed"
