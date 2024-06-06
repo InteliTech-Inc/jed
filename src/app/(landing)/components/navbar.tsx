@@ -18,8 +18,8 @@ export const NavLinks = [
     dropdown: <NavbarProductsDropdown />,
   },
   {
-    name: "Competitions",
-    path: "/competitions",
+    name: "Events",
+    path: "/all-events",
     dropdwon: false,
   },
   {

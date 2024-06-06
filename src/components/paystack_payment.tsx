@@ -1,48 +1,214 @@
 "use client";
-import React from "react";
-import { usePaystackPayment } from "react-paystack";
-import { Button } from "./ui/button";
-import { onSuccessReference } from "@/types/types";
+import { PaystackButton } from "react-paystack";
+import { PaystackProps } from "react-paystack/dist/types";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
-const STATIC_PRICE = 50;
-const conversionBy100 = 100;
-const charge = (STATIC_PRICE * conversionBy100) / 100;
-const final_rate = STATIC_PRICE * conversionBy100 + charge;
+type referenceObj = {
+  message: string;
+  reference: string;
+  status: "success" | "failure";
+  trans: string;
+  transaction: string;
+  trxref: string;
+};
 
-export default function PaystackPayment() {
-  const config = {
-    reference: new Date().getTime().toString(),
-    email: "jedvotes@gmail.com",
+type FORM_DATA = {
+  full_name: string;
+  email?: string;
+  votes: string;
+};
+
+const formSchema = z.object({
+  full_name: z
+    .string()
+    .min(2, { message: "Full name must be at least 2 characters" }),
+  email: z.string().optional(),
+  votes: z.string().min(1, { message: "Number of votes must be at least 1" }),
+});
+
+export default function PaystackPayment({ id }: { id: string }) {
+  const router = useRouter();
+  const [ref, setRef] = useState("");
+  const [_, setFormData] = useState<FORM_DATA>();
+
+  const [success, setSuccess] = useState(false);
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      full_name: "",
+      email: "",
+      votes: "1",
+    },
+  });
+
+  useEffect(() => {
+    setSuccess(false);
+    setRef("" + Math.floor(Math.random() * 1000000000 + 1));
+  }, [success]);
+
+  const config: PaystackProps = {
+    reference: ref,
+    email: form.watch("email") || "info.jedvotes@gmail.com",
+    firstname: form.watch("full_name"),
+    amount: Number(form.watch("votes")) * 100,
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
     currency: "GHS",
-    amount: final_rate,
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
   };
 
-  // you can call this function anything
-  const onSuccess = (reference: onSuccessReference) => {
-    // Implementation for whatever you want to do with reference and after success call.
-    console.log(reference);
+  const onSuccess = (response: referenceObj) => {
+    if (response.status === "success" && response.message === "Approved") {
+      // Check if the nominee has been voted for
+      const toDatabase = async () => {
+        const { votes: voting } = form.getValues();
+        const { data: votes, error } = await db
+          .from("voting")
+          .select("*")
+          .eq("nominee_id", id);
+
+        if (error) {
+          console.error("Error fetching votes:", error);
+          return;
+        }
+
+        if (votes && votes.length > 0) {
+          // If the nominee has been voted for, increment the vote count
+          const { error: updateError } = await db
+            .from("voting")
+            .update({ count: votes[0].count! + Number(voting) })
+            .eq("nominee_id", id);
+
+          if (updateError) {
+            console.error("Error updating vote count:", updateError);
+          }
+        } else {
+          const { error: insertError } = await db
+            .from("voting")
+            .insert({ nominee_id: id, count: Number(voting) });
+
+          if (insertError) {
+            console.error("Error inserting new vote:", insertError);
+          }
+        }
+      };
+      toDatabase();
+      router.back();
+      form.reset();
+    }
   };
 
-  // you can call this function anything
+  const handleVoting = async (data: z.infer<typeof formSchema>) => {
+    setFormData(data);
+  };
+
   const onClose = () => {
-    // implementation for  whatever you want to do when the Paystack dialog closed.
-    console.log("closed");
+    alert("Payment cancelled.");
   };
 
-  const initializePayment = usePaystackPayment(config);
+  const componentProps = {
+    ...config,
+    text: `Vote Now`,
+    onSuccess,
+    onClose,
+  };
+
+  const inputValues = form.watch();
   return (
-    <div>
-      <Button
-        onClick={() => {
-          initializePayment({
-            onSuccess,
-            onClose,
-          });
-        }}
+    <Form {...form}>
+      <form
+        className="mt-4 space-y-3"
+        onSubmit={form.handleSubmit(handleVoting)}
       >
-        Send Payment
-      </Button>
-    </div>
+        <FormField
+          control={form.control}
+          name="full_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="full_name">Your Full Name</FormLabel>
+              <FormControl>
+                <Input
+                  id="full_name"
+                  type="text"
+                  placeholder="Enter your full name"
+                  className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="email">Your Email</FormLabel>
+              <FormControl>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="votes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="votes">
+                Number of Votes{" "}
+                <span className="font-bold">(GHS 1.00 per Vote)</span>
+              </FormLabel>
+              <FormControl>
+                <Input
+                  id="votes"
+                  type="number"
+                  min="1"
+                  placeholder="Enter number of votes"
+                  className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        {inputValues.full_name === "" ||
+        inputValues.full_name.length < 2 ||
+        inputValues.votes === "0" ||
+        inputValues.votes === "" ? (
+          <Button
+            disabled
+            className="bg-secondary text-white py-2 px-4 rounded-md w-full disabled:cursor-not-allowed"
+          >
+            Vote Now
+          </Button>
+        ) : (
+          <PaystackButton
+            {...componentProps}
+            className="bg-secondary text-white py-2 px-4 rounded-md w-full disabled:cursor-not-allowed"
+          />
+        )}
+      </form>
+    </Form>
   );
 }

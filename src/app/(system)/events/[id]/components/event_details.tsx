@@ -46,15 +46,17 @@ export default async function EventDetails({ id }: { id: string }) {
               <h3 className="text-2xl my-2 font-semibold">
                 Categories ({data.categories.length})
               </h3>
-              <ul className=" grid md:grid-cols-2 gap-4">
+              <div className=" grid md:grid-cols-2 gap-4">
                 {data.categories.map((category) => {
                   return (
-                    <li className=" w-full p-6 border  bg-gray-50 rounded-lg ">
-                      {category.category_name}
-                    </li>
+                    <ul key={category.id}>
+                      <li className=" w-full p-6 border  bg-gray-50 rounded-lg ">
+                        {category.category_name}
+                      </li>
+                    </ul>
                   );
                 })}
-              </ul>
+              </div>
             </section>
           </div>
         </div>

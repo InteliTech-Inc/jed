@@ -85,12 +85,6 @@ export default function AddNominees({ data, user_id }: any) {
     form.setValue("code", randomCode.toString().toUpperCase());
   };
 
-  const { mutateAsync: CreateNominees } = useCreateMutation({
-    dbName: "nominees",
-    key: "nominee",
-    showSucessMsg: false,
-  });
-
   function UploadImageToForm(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
@@ -138,7 +132,7 @@ export default function AddNominees({ data, user_id }: any) {
       const payload = {
         full_name: values.full_name,
         code: values.code,
-        category: values.category,
+        category_id: values.category,
         event_id: id,
         img_url: filePath,
         user_id,
@@ -287,7 +281,7 @@ export default function AddNominees({ data, user_id }: any) {
                                 return (
                                   <SelectItem
                                     key={category.id}
-                                    value={category.category_name}
+                                    value={category.id}
                                   >
                                     {category.category_name}
                                   </SelectItem>
