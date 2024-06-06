@@ -1,6 +1,7 @@
 import React from "react";
 import CategoriesCard from "./categories_card";
 import { db } from "@/lib/supabase";
+import BackButton from "@/components/back";
 
 const fakeData = {
   created_at: "2022-01-01T00:00:00Z",
@@ -41,6 +42,7 @@ export default async function SingleEvent({ id }: { id: string }) {
 
   return (
     <section className="container mx-auto py-10 overflow-x-hidden ">
+      <BackButton />
       <div className="text-center">
         <h1 className="text-neutral-600 text-3xl font-bold ">{event?.name}</h1>
         <p className="text-neutral-500 md:w-[40rem] mx-auto">
