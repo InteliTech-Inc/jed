@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import VotingResults from "./voting_results";
 import Loader from "@/app/(landing)/components/loader";
+import BackButton from "@/components/back";
 
 type Nominees = {
   category_id: string | null;
@@ -59,6 +60,19 @@ export default function CategoryNomineeCard() {
 
   if (loading) return <Loader />;
 
+  if (nominees.length === 0) {
+    return (
+      <div className="p-10">
+        <BackButton />
+        <div className="flex items-center justify-center py-24">
+          <h1 className="text-xl font-bold text-center">
+            Sorry, there are no nominees for this category yet!
+          </h1>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="h-96 md:h-[30rem] relative mb-14">
@@ -87,7 +101,7 @@ export default function CategoryNomineeCard() {
       </div>
       <section className="container mx-auto px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-10">
-          {nominees.length > 0 ? (
+          {nominees.length > 0 &&
             nominees.map((nominee) => (
               <div
                 className="transition-all duration-150 hover:shadow-lg rounded-xl cursor-pointer border"
@@ -115,12 +129,7 @@ export default function CategoryNomineeCard() {
                   </Link>
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="col-span-full text-center text-xl font-medium">
-              Sorry, there are no nominees for this category
-            </div>
-          )}
+            ))}
         </div>
       </section>
     </>
