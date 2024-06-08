@@ -37,7 +37,7 @@ export default function GetNominees({ nominees, votes }: any) {
       // If the nominee has been voted for, increment the vote count
       const { error: updateError } = await db
         .from("voting")
-        .update({ count: votes[0].count + 1 })
+        .update({ count: votes[0].count! + 1 })
         .eq("nominee_id", nomineeId);
 
       if (updateError) {

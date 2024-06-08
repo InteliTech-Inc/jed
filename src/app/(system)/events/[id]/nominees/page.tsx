@@ -20,20 +20,20 @@ export default async function AdminNominee({
     .select(`*, categories(category_name, event_id, id)`)
     .eq("user_id", user?.id!);
 
-  // // Get Nominees
-  // const { data: nominees } = await db
-  //   .from("nominees")
-  //   .select("*")
-  //   .eq("user_id", user?.id!);
+  // Get Nominees
+  const { data: nominees } = await db
+    .from("nominees")
+    .select("*")
+    .eq("user_id", user?.id!);
 
   // Get Votes and its nominees
   const { data: votes } = await db.from("voting").select(`*, nominees(*)`);
 
   // Get only the count and nominee_id props
-  // const votesCount = votes?.map((vote) => ({
-  //   count: vote.count,
-  //   nominee_id: vote.nominee_id,
-  // }));
+  const votesCount = votes?.map((vote) => ({
+    count: vote.count,
+    nominee_id: vote.nominee_id,
+  }));
 
   return (
     <section className="py-8 px-3 md:px-6 ">
@@ -48,7 +48,7 @@ export default async function AdminNominee({
         </div>
         <AddNominees data={categories} user_id={user?.id} />
       </div>
-      {/* <Suspense
+      <Suspense
         fallback={
           <div className=" w-full grid place-content-center">
             <Spinner />
@@ -56,7 +56,7 @@ export default async function AdminNominee({
         }
       >
         <GetNominees nominees={nominees} votes={votesCount} />
-      </Suspense> */}
+      </Suspense>
     </section>
   );
 }
