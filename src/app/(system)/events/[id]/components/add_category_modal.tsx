@@ -38,6 +38,8 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
     checkConnection();
 
     e.preventDefault();
+    checkConnection();
+
     for (const category of categories) {
       const payload = {
         category_name: category,
@@ -118,8 +120,10 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Event Category </DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-left text-xl">
+              Add Event Category{" "}
+            </DialogTitle>
+            <DialogDescription className="text-left">
               Add a category to your event to help organize your nominations.
             </DialogDescription>
           </DialogHeader>

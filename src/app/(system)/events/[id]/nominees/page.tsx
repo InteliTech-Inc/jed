@@ -3,9 +3,13 @@ import AddNominees from "./components/add_nominees";
 import { cookies } from "next/headers";
 import { dbServer } from "@/lib/supabase";
 import GetNominees from "./components/get_nominees";
-import Spinner from "@/components/rotating_lines";
+import Spinner from "@/components/spinner";
 
-export default async function AdminNominee() {
+export default async function AdminNominee({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
   const db = dbServer(cookies);
   const {
     data: { user },
@@ -37,8 +41,8 @@ export default async function AdminNominee() {
 
   return (
     <section className="py-8 px-3 md:px-6 ">
-      <div className="flex md:items-center flex-col md:flex-row justify-between">
-        <div>
+      <div className="flex md:items-center flex-col md:flex-row gap-4 justify-between">
+        <div className="">
           <h1 className="text-2xl md:text-3xl font-bold">Your Nominees</h1>
           <p className="text-slate-500">
             Add nominees to the categories you have created.

@@ -20,7 +20,7 @@ type EventPayload = {
 };
 
 const createEvent = async (payload: EventPayload) => {
-  const { data, error } = await db.from("events").insert(payload).select("*");
+  const { data, error } = await db.from("events").insert(payload).select();
 
   if (error) return new Error(error.message);
   return data;

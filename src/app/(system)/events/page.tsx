@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { Suspense } from "react";
 import { cookies } from "next/headers";
 import EventsCard from "./components/events_card";
-import Spinner from "@/components/rotating_lines";
+import Spinner from "@/components/spinner";
 
 async function EventsPage() {
   const db = dbServer(cookies);
@@ -13,6 +13,12 @@ async function EventsPage() {
   const {
     data: { user },
   } = await db.auth.getUser();
+
+  const { data: events } = await db
+
+    .from("events")
+    .select("*")
+    .eq("user_id", user?.id!);
 
   return (
     <div className="p-6">

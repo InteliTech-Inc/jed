@@ -22,7 +22,7 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Rotating_Lines from "@/components/rotating_lines";
+import Spinner from "@/components/spinner";
 import { payoutShape } from "@/lib/validations";
 import { toast } from "sonner";
 
@@ -258,7 +258,7 @@ export default function WithdrawalForm({}: Props) {
                 className="tracking-wide uppercase w-full my-4"
                 disabled={isPending}
               >
-                {isPending ? <Rotating_Lines /> : "Request Payout"}
+                {isPending ? <Spinner /> : "Request Payout"}
               </Button>
             </section>
           </div>

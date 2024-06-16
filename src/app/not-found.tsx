@@ -2,14 +2,16 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { Metadata } from "next";
+import { useRouter } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Page not found",
 };
 
 export default function NotFound() {
+  const router = useRouter();
   const goBack = (): void => {
-    return window.history.back();
+    return router.back();
   };
 
   return (

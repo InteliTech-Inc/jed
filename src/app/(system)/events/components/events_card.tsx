@@ -15,11 +15,17 @@ export default async function EventsCard({ id }: { id: string }) {
   return (
     <>
       {events?.length === 0 ? (
-        <div className="w-full grid place-content-center">
-          <h3 className="text-2xl font-bold text-center">
-            There are no published event yet!
-          </h3>
-        </div>
+        <section className="flex min-h-[55dvh] flex-col items-center justify-center">
+          <Image
+            src={"/images/no-docs.svg"}
+            width={200}
+            height={200}
+            alt={"Empty notification inbox"}
+          />
+          <p className="mt-5 text-center font-medium text-gray-600">
+            Sorry, you have not published any event yet!
+          </p>
+        </section>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
           {events?.map((event) => {

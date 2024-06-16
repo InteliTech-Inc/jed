@@ -25,7 +25,7 @@ import {
 import { resetPasswordShape } from "@/lib/validations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import Rotating_Lines from "@/components/rotating_lines";
+import Rotating_Lines from "@/components/spinner";
 import { useState } from "react";
 import Checkbox_Show_Password from "@/components/checkbox_show_password";
 import Logo from "@/components/logo";

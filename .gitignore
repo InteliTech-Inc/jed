@@ -32,6 +32,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+#email template viewer
+/react-email-starter
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

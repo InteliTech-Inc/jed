@@ -19,8 +19,12 @@ export default function WaitListPage(): JSX.Element {
         <p className="text-center font-normal text-md mt-3">
           Be among the first to experience the next evolution in online voting
           and ticketing systems. By signing up, you&apos;ll secure exclusive
-          early access to the JED Platforms, revolutionizing how you manage
-          voting and ticketing processes online.
+          early access to the{" "}
+          <Link href={"/"} className="text-secondary">
+            JED
+          </Link>{" "}
+          Platforms, revolutionizing how you manage voting and ticketing
+          processes online.
         </p>
         <WaitListForm />
         <div>

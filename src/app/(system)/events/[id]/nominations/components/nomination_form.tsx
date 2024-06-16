@@ -25,7 +25,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Rotating_Lines from "@/components/rotating_lines";
+import Rotating_Lines from "@/components/spinner";
 import { nominationShape } from "@/lib/validations";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { checkConnection } from "@/lib/utils";
@@ -48,15 +48,14 @@ type Category = {
   event_id: string | null;
 };
 
-export default function NominationForm() {
+export default function NominationForm({ id }: { id: string }) {
   const [event, setEvent] = useState<Event>({} as Event);
   const [isPending, setIsPending] = useState<boolean>(false);
-
-  const { id } = useParams();
 
   const router = useRouter();
 
   useEffect(() => {
+    setIsPending(true);
     db.from("events")
       .select("*, categories(category_name, id, event_id)")
       .eq("id", id)
@@ -67,6 +66,7 @@ export default function NominationForm() {
         } else {
           const eventData = data as unknown as Event;
           setEvent(eventData);
+          setIsPending(false);
         }
       });
   }, [id]);
@@ -107,7 +107,7 @@ export default function NominationForm() {
         .then((_) => {
           toast.success("Nomination submitted successfully..");
           form.reset();
-          router.push(`/events/${id}`);
+          router.push("/");
           setIsPending(false);
         })
         .catch((error) => {
@@ -137,16 +137,16 @@ export default function NominationForm() {
           />
         </div>
         <div className="absolute inset-0 bg-black bg-opacity-50 text-center flex flex-col items-center justify-center">
-          <h1 className="text-4xl text-white font-bold uppercase tracking-wider">
+          <p className="text-4xl text-white font-bold capitalize tracking-wider">
             {event?.name}
-          </h1>
+          </p>
           <p className="text-white text-2xl tracking-wider ">Nomination Form</p>
         </div>
       </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleNomination)}
-          className="mx-auto font-sans md:w-[45rem] pb-4 flex flex-col justify-center items-center"
+          className="mx-auto font-sans md:w-[45rem] pb-4 flex flex-col justify-center items-center px-10"
         >
           <div className="flex flex-col w-full items-center justify-center gap-x-6 my-4 space-y-3">
             <FormField

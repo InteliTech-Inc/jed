@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Rotating_Lines from "@/components/rotating_lines";
+import Rotating_Lines from "@/components/spinner";
 import { nomineeFormShape } from "@/lib/validations";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
@@ -33,6 +33,7 @@ import {
   UpdateNomineeDetails,
   uploadImage,
 } from "@/app/(system)/events/create/functions";
+import BackButton from "@/components/back";
 
 export default function UpdateNomineeForm({ data, categories }: any) {
   const supabase = createClientComponentClient();
@@ -91,7 +92,6 @@ export default function UpdateNomineeForm({ data, categories }: any) {
       selectedFile?.name.lastIndexOf(".")
     );
 
-    // biome-ignore lint/style/noNonNullAssertion: <the users always upload a picture>
     const file = selectedFile!;
 
     try {
@@ -155,11 +155,9 @@ export default function UpdateNomineeForm({ data, categories }: any) {
   }, [supabase, router]);
   return (
     <div className="my-8 w-full lg:w-4/5 mx-auto h-full px-4">
-      <Button variant={"outline"} onClick={() => router.back()}>
-        Go Back
-      </Button>
+      <BackButton />
       <div>
-        <h3 className="text-3xl text-center mt-2 mb-8  font-bold text-neutral-700">
+        <h3 className="text-3xl md:text-center mt-4 mb-8  font-bold text-neutral-700">
           Update Nominee's Details
         </h3>
       </div>
@@ -262,7 +260,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
                 className="tracking-wide uppercase w-full my-4"
                 disabled={isPending}
               >
-                {isPending && <Rotating_Lines />}
+                {isPending && <Rotating_Lines color="#fff" />}
                 Submit
               </Button>
             </section>
@@ -278,7 +276,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
                     layout="fill"
                     sizes="100%"
                     objectFit="cover"
-                    className="z-0"
+                    className="z-0 scale-110 duration-300 group-hover:scale-100"
                     alt={inputValues.full_name}
                   />
                 </div>
