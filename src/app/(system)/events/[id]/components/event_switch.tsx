@@ -15,7 +15,7 @@ export default function EventSwitch({ id }: Props) {
   const handleToggle = () => {
     toast.warning(
       `Are you sure you want to ${
-        !publishNomination ? "display" : "remove"
+        !publishNomination ? "publish" : "unpublish"
       } this event?`,
       {
         action: {
@@ -31,7 +31,7 @@ export default function EventSwitch({ id }: Props) {
                   setPublishNomination(!publishNomination); // Update state only on successful DB update
                   toast.success(
                     `Event ${
-                      !publishNomination ? "displayed" : "removed"
+                      !publishNomination ? "published" : "unpublished"
                     } successfully`
                   );
                   return;
@@ -51,7 +51,7 @@ export default function EventSwitch({ id }: Props) {
   return (
     <div className="flex items-center gap-x-3">
       <p className="hidden md:block">
-        {!publishNomination ? "Display Event" : "Hide Event"}
+        {!publishNomination ? "Publish Event" : "Unpublish Event"}
       </p>
       <Switch
         aria-readonly

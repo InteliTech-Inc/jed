@@ -38,8 +38,6 @@ export default async function EventDetails({ id }: { id: string }) {
     .eq("id", id)
     .single()) as Data;
 
-  console.log("error", error);
-
   if (!data) {
     return (
       <div className="grid place-content-center">
