@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import Spinner from "@/components/rotating_lines";
+import Spinner from "@/components/spinner";
 import EventDetails from "./components/event_details";
 
 type Props = {

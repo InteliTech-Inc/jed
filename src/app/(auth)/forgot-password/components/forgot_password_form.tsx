@@ -26,7 +26,7 @@ import { authShape } from "@/lib/validations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Rotating_Lines from "@/components/rotating_lines";
+import Rotating_Lines from "@/components/spinner";
 import Logo from "@/components/logo";
 import { checkConnection } from "@/lib/utils";
 

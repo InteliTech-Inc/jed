@@ -10,7 +10,7 @@ import UserDropdown from "./components/user_dropdown";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen w-full flex-col max-w-screen-2xl mx-auto ">
-      <header className="sticky top-0 flex h-16 items-center bg-white/60 backdrop-blur-md saturate-150 z-50 gap-4 border-b px-4 md:px-6">
+      <header className="sticky top-0 flex h-16 items-center bg-white z-50 gap-4 border-b px-4 md:px-6">
         <Link className="hidden lg:block" href={"/"}>
           <Logo />
         </Link>

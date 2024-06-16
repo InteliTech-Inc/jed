@@ -34,7 +34,7 @@ export default function TopButtons({
         CATEGORY: r.categories?.category_name!,
         "PHONE NUMBER": r.phone!,
         REASON: r.reasons!,
-        "SUBMITTED AT": format(new Date(r.created_at!), "dd/MM/yyyy"),
+        "SUBMITTED ON": format(new Date(r.created_at!), "dd/MM/yyyy"),
       };
     });
     exportToCSV(data, "Nominations Results");

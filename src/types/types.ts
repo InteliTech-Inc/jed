@@ -1,5 +1,9 @@
 import { StaticImageData } from "next/image";
 
+interface JSONObject {
+  [key: string]: string;
+}
+
 export type EventsFields = {
   _id: number;
   title: string;
@@ -10,6 +14,21 @@ export type EventsFields = {
   date: string;
   location: string;
 };
+
+export interface Schedule {
+  start_date: string | null;
+  end_date: string | null;
+}
+
+export interface Payload {
+  name: string;
+  description: string;
+  user_id: string;
+  img_file: File;
+  is_completed: boolean;
+  nomination_period?: string;
+  voting_period: string;
+}
 
 interface Base {
   _createdAt: string;

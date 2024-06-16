@@ -1,5 +1,5 @@
 "use client";
-import Spinner from "@/components/rotating_lines";
+import Spinner from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { checkConnection, cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { db } from "@/lib/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageDown, CalendarIcon } from "lucide-react";
 import Image from "next/image";
@@ -23,17 +22,19 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { PostgrestError } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 import { differenceInCalendarDays, format } from "date-fns";
 import { z } from "zod";
 import { Calendar } from "@/components/ui/calendar";
 import { Switch } from "@/components/ui/switch";
-import { createEvent, uploadImage } from "../functions";
+import axios from "axios";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { isImageSizeValid } from "@/lib/utils";
+import { getFormData } from "@/lib/utils";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -48,8 +49,8 @@ const formSchema = z.object({
   }),
   nominations: z
     .object({
-      start_date: z.date(),
-      end_date: z.date(),
+      start_date: z.date().optional(),
+      end_date: z.date().optional(),
     })
     .optional(),
 });
@@ -59,13 +60,12 @@ const defaultValues = {
   description: "",
 };
 
-function CreateEventForm() {
-  const router = useRouter();
-
+function CreateEventForm({ user }: { user: User | null }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [addNomination, setAddNomination] = useState(false);
   const [preview, setPreview] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,92 +75,50 @@ function CreateEventForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    checkConnection();
+    const file = selectedFile;
+
+    if (file === null) {
+      toast.error("Please upload an image");
+      return;
+    }
+
+    if (!isImageSizeValid(file)) {
+      toast.error("Please upload an image smaller than 2MB");
+      return;
+    }
+
     try {
+      checkConnection();
       setLoading(true);
-      const {
-        data: { user },
-      } = await db.auth.getUser();
-
-      const randomString = Math.random().toString(36).substring(2, 15);
-
-      const slicedName = selectedFile?.name.slice(
-        selectedFile?.name.lastIndexOf(".")
-      );
-
-      const file = selectedFile;
-
-      if (file === null) {
-        toast.error("Please upload an image");
-        return;
-      }
-
-      let nomination_period;
-      if (values.nominations) {
-        nomination_period = {
-          start_date: values.nominations?.start_date,
-          end_date: values.nominations?.end_date,
-        };
-      }
-
-      const voting_period = {
-        start_date: values.voting?.start_date,
-        end_date: values.voting?.end_date,
-      };
-
-      const filePath = `thumbnails/jed-${randomString}${slicedName}`;
 
       const payload = {
         name: values.name,
         description: values.description,
         user_id: user?.id!,
-        img_url: filePath,
+        img_file: file,
         is_completed: false,
+        nomination_period: {
+          start_date: values.nominations?.start_date?.toString(),
+          end_date: values.nominations?.end_date?.toString(),
+        },
+        voting_period: {
+          start_date: values.voting?.start_date.toString(),
+          end_date: values.voting?.end_date.toString(),
+        },
       };
 
-      const [imageResults, EventData] = await Promise.all([
-        uploadImage({ file, path: filePath }),
-        createEvent(payload),
-      ]);
+      const formData = getFormData(payload);
 
-      if (EventData instanceof Error || imageResults instanceof Error) {
-        toast.error("There's an error submitting the event");
-        return;
-      }
+      const data = await axios.post("/api/create-events", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-      const votingPayload = {
-        event_id: EventData[0].id,
-        start_date: voting_period.start_date as unknown as string,
-        end_date: voting_period.end_date as unknown as string,
-      };
-
-      const { data: _, error } = await db
-        .from("voting_period")
-        .insert(votingPayload)
-        .select("*");
-
-      if (error) {
-        return toast.error("Voting period error");
-      }
-
-      if (nomination_period) {
-        const nominationPayload = {
-          event_id: EventData[0].id,
-          start_date: nomination_period.start_date as unknown as string,
-          end_date: nomination_period.end_date as unknown as string,
-        };
-
-        const { data: __, error: NomError } = await db
-          .from("nomination_period")
-          .insert(nominationPayload)
-          .select("*");
-
-        if (NomError) return toast("nomination error");
-      }
       form.reset();
       toast.success("Event Created Successfully");
       router.push(`/events`);
-      setSelectedFile;
+      setSelectedFile(null);
     } catch (err) {
       toast.error("Something went wrong");
     } finally {
@@ -458,7 +416,7 @@ function CreateEventForm() {
                             )}
                           {field.value &&
                             differenceInCalendarDays(
-                              form.getValues("nominations.start_date"),
+                              form.getValues("nominations.start_date") as Date,
                               field.value
                             ) >= 0 &&
                             toast.error(
@@ -480,7 +438,7 @@ function CreateEventForm() {
               </Button>
             </section>
             <div className=" w-full md:mt-8">
-              <section className="border bg-white  w-full md:w-[90%] lg:w-[70%] mx-auto aspect-square rounded-md shadow-sm">
+              <section className="border bg-white grid place-content-center  w-full md:w-[90%] lg:w-[70%] mx-auto aspect-square rounded-md shadow-sm">
                 {preview ? (
                   <Image
                     src={preview}
@@ -490,7 +448,15 @@ function CreateEventForm() {
                     className="object-center h-full object-cover rounded-t-md"
                   />
                 ) : (
-                  <div />
+                  <div className=" ">
+                    <Image
+                      src={"/images/no-images.svg"}
+                      alt="preview_image"
+                      width={2000}
+                      height={2000}
+                      className="object-center h-full object-contain rounded-t-md"
+                    />
+                  </div>
                 )}
               </section>
               <div className="">

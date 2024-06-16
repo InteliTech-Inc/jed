@@ -29,7 +29,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Rotating_Lines from "@/components/rotating_lines";
+import Rotating_Lines from "@/components/spinner";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { nomineeFormShape } from "@/lib/validations";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -37,7 +37,9 @@ import { ImageDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { checkConnection } from "@/lib/utils";
 import { addNominee, uploadImage } from "../../../create/functions";
-
+import { db } from "@/lib/supabase";
+import { useParams } from "next/navigation";
+import { PlusIcon } from "lucide-react";
 // Define the category type
 type Category = {
   id: string;
@@ -46,17 +48,11 @@ type Category = {
 };
 
 export default function AddNominees({ data, user_id }: any) {
-  const supabase = createClientComponentClient();
-
-  const url = usePathname();
-  const segments = url.split("/");
-  const id = segments[segments.length - 2];
-
-  const router = useRouter();
-
+  const { id } = useParams();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof nomineeFormShape>>({
     resolver: zodResolver(nomineeFormShape),
@@ -82,7 +78,8 @@ export default function AddNominees({ data, user_id }: any) {
     // Combine the random characters and integers
     let randomCode = char1 + char2 + int1 + int2;
 
-    form.setValue("code", randomCode.toString().toUpperCase());
+    const code = randomCode.toString().toUpperCase();
+    form.setValue("code", code);
   };
 
   function UploadImageToForm(e: ChangeEvent<HTMLInputElement>) {
@@ -133,7 +130,7 @@ export default function AddNominees({ data, user_id }: any) {
         full_name: values.full_name,
         code: values.code,
         category_id: values.category,
-        event_id: id,
+        event_id: id as string,
         img_url: filePath,
         user_id,
       };
@@ -161,7 +158,7 @@ export default function AddNominees({ data, user_id }: any) {
 
   // Subscribing to the realtime changes
   useEffect(() => {
-    const channel = supabase
+    const channel = db
       .channel("nominee_realtime")
       .on(
         "postgres_changes",
@@ -173,33 +170,36 @@ export default function AddNominees({ data, user_id }: any) {
         (payload) => {
           if (payload) {
             router.refresh();
-            console.log("Nominee changes received");
           }
         }
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      db.removeChannel(channel);
     };
-  }, [supabase, router]);
+  }, []);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary">Add Nominee</Button>
+        <Button variant="secondary">
+          {" "}
+          <PlusIcon size={14} />
+          Add Nominee
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Nominee</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className=" text-left text-xl">Add Nominee</DialogTitle>
+          <DialogDescription className=" text-left">
             Add the nominee for the event to be voted for by the users
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleNomination)}
-            className="mx-auto font-sans md:w-full flex flex-col justify-center items-center overflow-auto"
+            className="mx-auto font-sans w-full flex flex-col justify-center items-center overflow-auto"
           >
             <div className="flex flex-col w-full items-center justify-center my-3 space-y-4">
               <div className="relative w-full">
@@ -213,7 +213,6 @@ export default function AddNominees({ data, user_id }: any) {
                         <Input
                           id="code"
                           type="text"
-                          autoComplete="off"
                           placeholder="Please generate a code for the nominee"
                           readOnly
                           disabled
@@ -247,7 +246,6 @@ export default function AddNominees({ data, user_id }: any) {
                       <Input
                         id="full_name"
                         type="text"
-                        autoComplete="off"
                         placeholder="Enter nominee's full name"
                         className="border border-accent focus:border-secondary focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
                         {...field}
@@ -329,7 +327,7 @@ export default function AddNominees({ data, user_id }: any) {
                 isPending
               }
             >
-              {isPending && <Rotating_Lines />}
+              {isPending && <Rotating_Lines color="#fff" />}
               Create Nominee
             </Button>
           </form>
