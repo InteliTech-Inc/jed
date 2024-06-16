@@ -42,11 +42,11 @@ export default function CategoriesCard({ categories }: Props) {
             <Link
               href={`/all-events/${category.id}/nominees`}
               key={category.id}
-              className=" p-4 bg-accent hover:bg-transparent transition-all duration-150 ease-in-out hover:border-accent border rounded-3xl text-neutral-600 w-full"
+              className=" p-4 bg-accent/60 hover:bg-accent transition-all duration-150 ease-in-out hover:border-accent border border-secondary rounded-3xl text-neutral-600 w-full"
             >
               <div className="flex justify-between items-center">
                 <span>{category.category_name}</span>
-                <ArrowRight />
+                <ArrowRight size={14} />
               </div>
             </Link>
           ))

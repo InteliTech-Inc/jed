@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useParams, usePathname } from "next/navigation";
 import NetworkStatus from "./check_network";
+import { useState } from "react";
 
 const SidebarLinks = [
   {
@@ -34,6 +35,7 @@ export default function EventsSidebar() {
   const { id } = useParams();
   const segments = path.split("/");
   const lastSegment = segments[segments.length - 1];
+  const [navIsOpen, setNavIsOpen] = useState(false);
 
   const activeLink = lastSegment === id ? "details" : lastSegment;
 
@@ -63,7 +65,7 @@ export default function EventsSidebar() {
       </div>
       <div className="flex h-fit">
         <header className="flex items-center gap-4 bg-muted/40 px-2 md:hidden">
-          <Sheet>
+          <Sheet open={navIsOpen} onOpenChange={setNavIsOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="outline"
@@ -87,6 +89,7 @@ export default function EventsSidebar() {
                         item.name === "Details" ? "" : item.name.toLowerCase()
                       }`}
                       key={item.name}
+                      onClick={() => setNavIsOpen(false)}
                       className={`${ac} mx-[-0.65rem] flex items-center gap-4 text-sm rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground`}
                     >
                       {item.icon}

@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import { dbServer } from "@/lib/supabase";
 import { cookies } from "next/headers";
 import Loader from "@/app/(landing)/components/loader";
+import BackButton from "@/components/back";
 
 type Props = {
   params: {
@@ -39,8 +40,10 @@ export default async function CategoryNominees({ params: { id } }: Props) {
     .single();
 
   return (
-    <Suspense fallback={<Loader />}>
-      <CategoryNomineeCard nominees={nomineeData} event={eventData} />;
-    </Suspense>
+    <div>
+      <Suspense fallback={<Loader />}>
+        <CategoryNomineeCard nominees={nomineeData} event={eventData} />
+      </Suspense>
+    </div>
   );
 }
