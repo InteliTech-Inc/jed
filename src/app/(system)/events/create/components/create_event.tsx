@@ -49,8 +49,8 @@ const formSchema = z.object({
   }),
   nominations: z
     .object({
-      start_date: z.date(),
-      end_date: z.date(),
+      start_date: z.date().optional(),
+      end_date: z.date().optional(),
     })
     .optional(),
 });
@@ -98,8 +98,8 @@ function CreateEventForm({ user }: { user: User | null }) {
         img_file: file,
         is_completed: false,
         nomination_period: {
-          start_date: values.nominations?.start_date.toString(),
-          end_date: values.nominations?.end_date.toString(),
+          start_date: values.nominations?.start_date?.toString(),
+          end_date: values.nominations?.end_date?.toString(),
         },
         voting_period: {
           start_date: values.voting?.start_date.toString(),
@@ -416,7 +416,7 @@ function CreateEventForm({ user }: { user: User | null }) {
                             )}
                           {field.value &&
                             differenceInCalendarDays(
-                              form.getValues("nominations.start_date"),
+                              form.getValues("nominations.start_date") as Date,
                               field.value
                             ) >= 0 &&
                             toast.error(
@@ -438,7 +438,7 @@ function CreateEventForm({ user }: { user: User | null }) {
               </Button>
             </section>
             <div className=" w-full md:mt-8">
-              <section className="border bg-white  w-full md:w-[90%] lg:w-[70%] mx-auto aspect-square rounded-md shadow-sm">
+              <section className="border bg-white grid place-content-center  w-full md:w-[90%] lg:w-[70%] mx-auto aspect-square rounded-md shadow-sm">
                 {preview ? (
                   <Image
                     src={preview}
@@ -448,7 +448,15 @@ function CreateEventForm({ user }: { user: User | null }) {
                     className="object-center h-full object-cover rounded-t-md"
                   />
                 ) : (
-                  <div />
+                  <div className=" ">
+                    <Image
+                      src={"/images/no-images.svg"}
+                      alt="preview_image"
+                      width={2000}
+                      height={2000}
+                      className="object-center h-full object-contain rounded-t-md"
+                    />
+                  </div>
                 )}
               </section>
               <div className="">

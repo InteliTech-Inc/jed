@@ -111,18 +111,3 @@ export function formDataToObject(formData: FormData): Record<string, any> {
 
   return obj;
 }
-
- export const generateCode = () => {
-   // Generate two random characters between a and z
-   let char1 = String.fromCharCode(97 + Math.floor(Math.random() * 26));
-   let char2 = String.fromCharCode(97 + Math.floor(Math.random() * 26));
-
-   // Generate two random integers between 0 and 9
-   let int1 = Math.floor(Math.random() * 10);
-   let int2 = Math.floor(Math.random() * 10);
-
-   // Combine the random characters and integers
-   let randomCode = char1 + char2 + int1 + int2;
-
-   return randomCode.toString().toUpperCase();
- };

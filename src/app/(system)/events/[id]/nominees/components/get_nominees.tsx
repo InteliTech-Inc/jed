@@ -106,22 +106,13 @@ export default function GetNominees({ nominees, votes }: any) {
     return <p className="mt-2">No nominee has been added to this event</p>;
   }
 
-  if (loading) return <Loader />;
-
   return (
     <section className="">
       <div className="flex px-2 flex-wrap gap-4 mt-4">
         {nominees
           .filter((nominee: Nominee) => nominee?.event_id === id)
           .map((nominee: Nominee) => (
-            <div key={nominee.id} className="w-full md:w-80 flex-grow">
-              <NomineeCard
-                key={nominee.id}
-                nominee={nominee}
-                handleNomineeVoting={handleNomineeVoting}
-                votes={votes}
-              />
-            </div>
+            <NomineeCard key={nominee.id} nominee={nominee} votes={votes} />
           ))}
       </div>
     </section>

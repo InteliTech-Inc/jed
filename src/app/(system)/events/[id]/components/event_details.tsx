@@ -18,7 +18,7 @@ export default async function EventDetails({ id }: { id: string }) {
     return <div>No event found</div>;
   }
   return (
-    <div>
+    <div className="break-words">
       <div className="flex items-center justify-end gap-x-4">
         <AddCategoryModal event_id={data} />
         <Button className=" gap-2">
@@ -36,12 +36,12 @@ export default async function EventDetails({ id }: { id: string }) {
             className="w-full h-full object-cover object-center"
           />
         </div>
-        <div className="px-6">
+        <div className="px-6 break-words">
           <h1 className=" mb-5 text-3xl font-semibold text-neutral-700">
             {data.name}
           </h1>
-          <div className="">
-            <p>{data.description}</p>
+          <div className="w-full">
+            <p className=" break-words">{data.description}</p>
             <section className=" py-4">
               <h3 className="text-2xl my-2 font-semibold">
                 Categories ({data.categories.length})

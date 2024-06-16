@@ -98,9 +98,7 @@ export default function EventsSidebar() {
             </SheetContent>
           </Sheet>
         </header>
-        <div className=" pl-4">
-          <NetworkStatus />
-        </div>
+        <div className=" pl-4">{/* <NetworkStatus /> */}</div>
       </div>
     </div>
   );

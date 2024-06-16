@@ -19,7 +19,8 @@ export default async function middleware(req: NextRequest) {
     req.nextUrl.pathname.match(/products(.*)/) ||
     req.nextUrl.pathname.match(/resources\/?(.*)/) ||
     req.nextUrl.pathname.match(/blog\/?(.*)/) ||
-    req.nextUrl.pathname.match(/all-events\/?(.*)/)
+    req.nextUrl.pathname.match(/all-events\/?(.*)/) ||
+    req.nextUrl.pathname.match(/nom\/?(.*)/)
   ) {
     return res;
   }

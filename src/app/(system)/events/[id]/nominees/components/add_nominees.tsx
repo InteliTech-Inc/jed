@@ -37,9 +37,9 @@ import { ImageDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { checkConnection } from "@/lib/utils";
 import { addNominee, uploadImage } from "../../../create/functions";
-import { generateCode } from "@/lib/utils";
 import { db } from "@/lib/supabase";
 import { useParams } from "next/navigation";
+import { PlusIcon } from "lucide-react";
 // Define the category type
 type Category = {
   id: string;
@@ -66,8 +66,21 @@ export default function AddNominees({ data, user_id }: any) {
   const inputValues = form.watch();
 
   // Generate a random code logic here
-  const code = generateCode();
-  form.setValue("code", code);
+  const generateCode = () => {
+    // Generate two random characters between a and z
+    let char1 = String.fromCharCode(97 + Math.floor(Math.random() * 26));
+    let char2 = String.fromCharCode(97 + Math.floor(Math.random() * 26));
+
+    // Generate two random integers between 0 and 9
+    let int1 = Math.floor(Math.random() * 10);
+    let int2 = Math.floor(Math.random() * 10);
+
+    // Combine the random characters and integers
+    let randomCode = char1 + char2 + int1 + int2;
+
+    const code = randomCode.toString().toUpperCase();
+    form.setValue("code", code);
+  };
 
   function UploadImageToForm(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -116,7 +129,7 @@ export default function AddNominees({ data, user_id }: any) {
       const payload = {
         full_name: values.full_name,
         code: values.code,
-        category: values.category,
+        category_id: values.category,
         event_id: id as string,
         img_url: filePath,
         user_id,
@@ -170,7 +183,11 @@ export default function AddNominees({ data, user_id }: any) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary">Add Nominee</Button>
+        <Button variant="secondary">
+          {" "}
+          <PlusIcon size={14} />
+          Add Nominee
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -310,7 +327,7 @@ export default function AddNominees({ data, user_id }: any) {
                 isPending
               }
             >
-              {isPending && <Rotating_Lines />}
+              {isPending && <Rotating_Lines color="#fff" />}
               Create Nominee
             </Button>
           </form>

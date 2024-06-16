@@ -260,7 +260,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
                 className="tracking-wide uppercase w-full my-4"
                 disabled={isPending}
               >
-                {isPending && <Rotating_Lines />}
+                {isPending && <Rotating_Lines color="#fff" />}
                 Submit
               </Button>
             </section>
