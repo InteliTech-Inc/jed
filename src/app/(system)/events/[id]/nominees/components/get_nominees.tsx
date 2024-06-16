@@ -7,7 +7,9 @@ import { db } from "@/lib/supabase";
 type Nominee = {
   id: string;
   full_name: string;
-  category: string;
+  categories: {
+    category_name: string;
+  };
   code: string;
   img_url: string;
   event_id: string;
@@ -99,16 +101,18 @@ export default function GetNominees({ nominees, votes }: any) {
   }, [votes]);
 
   if (
-    nominees.filter((nominee: Nominee) => nominee.event_id === id).length === 0
+    nominees.filter((nominee: Nominee) => nominee?.event_id === id).length === 0
   ) {
     return <p className="mt-2">No nominee has been added to this event</p>;
   }
+
+  if (loading) return <Loader />;
 
   return (
     <section className="">
       <div className="flex px-2 flex-wrap gap-4 mt-4">
         {nominees
-          .filter((nominee: Nominee) => nominee.event_id === id)
+          .filter((nominee: Nominee) => nominee?.event_id === id)
           .map((nominee: Nominee) => (
             <div key={nominee.id} className="w-full md:w-80 flex-grow">
               <NomineeCard

@@ -262,7 +262,7 @@ export default function AddNominees({ data, user_id }: any) {
                                 return (
                                   <SelectItem
                                     key={category.id}
-                                    value={category.category_name}
+                                    value={category.id}
                                   >
                                     {category.category_name}
                                   </SelectItem>
