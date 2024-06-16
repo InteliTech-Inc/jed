@@ -115,8 +115,7 @@ export const payoutShape = z.object({
   amount: z.string().min(1, {
     message: "Amount is required",
   }),
-  phone_number: z.string().optional(),
-  network_provider: z.string().optional(),
-  account_number: z.string().optional(),
-  bank_name: z.string().optional(),
+  provider: z.string().min(1),
+  account_number: z.string().min(1),
+  account_name: z.string().min(1),
 });

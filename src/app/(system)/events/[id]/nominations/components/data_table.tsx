@@ -9,7 +9,7 @@ import {
   getFilteredRowModel,
   ColumnFiltersState,
 } from "@tanstack/react-table";
-
+import Image from "next/image";
 import { useState } from "react";
 
 import {
@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id} className=" border-y ">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="font-bold">
+                    <TableHead key={header.id} className="">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -96,12 +96,22 @@ export function DataTable<TData, TValue>({
                 </TableRow>
               ))
             ) : (
-              <TableRow>
+              <TableRow className=" hover:bg-none">
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  <section className="flex min-h-[55dvh] flex-col items-center justify-center">
+                    <Image
+                      src={"/images/no-docs.svg"}
+                      width={200}
+                      height={200}
+                      alt={"Empty notification inbox"}
+                    />
+                    <p className="mt-5 text-center text-gray-600">
+                      Sorry, there are no nominations available!
+                    </p>
+                  </section>
                 </TableCell>
               </TableRow>
             )}

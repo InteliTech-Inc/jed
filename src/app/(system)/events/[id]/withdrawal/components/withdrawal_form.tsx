@@ -40,32 +40,22 @@ export default function WithdrawalForm({}: Props) {
     defaultValues: {
       channel: "",
       amount: "",
-      phone_number: "",
-      network_provider: "",
+      provider: "",
       account_number: "",
-      bank_name: "",
+      account_name: "",
     },
   });
 
   async function handlePayout(data: z.infer<typeof payoutShape>) {
-    const {
-      channel,
-      amount,
-      phone_number,
-      network_provider,
-      account_number,
-      bank_name,
-    } = data;
+    const { channel, amount, provider, account_number, account_name } = data;
 
     const payloads = {
-      event_id: eventId as string,
       channel,
       amount,
-      phone_number: phone_number?.length !== 0 ? phone_number : null,
-      network_provider:
-        network_provider?.length !== 0 ? network_provider : null,
-      account_number: account_number?.length !== 0 ? account_number : null,
-      bank_name: bank_name?.length !== 0 ? bank_name : null,
+      provider,
+      account_number,
+      account_name,
+      event_id: eventId as string,
     };
 
     try {
@@ -98,21 +88,20 @@ export default function WithdrawalForm({}: Props) {
       form.reset({
         ...currentValues, //Keeps the current values of all other fields
         channel: paymentChannel,
-        bank_name: "",
+        account_name: "",
         account_number: "",
       });
     } else if (paymentChannel === "bank_transfer") {
       form.reset({
         ...currentValues,
         channel: paymentChannel,
-        phone_number: "",
-        network_provider: "",
+        provider: "",
       });
     }
   }, [paymentChannel]);
 
   return (
-    <div className="my-8 w-full lg:w-4/5 mx-auto px-4">
+    <div className="my-8 w-fullmx-auto px -4">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handlePayout)}>
           <div className=" flex flex-col-reverse md:flex-row gap-8">
@@ -133,41 +122,60 @@ export default function WithdrawalForm({}: Props) {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="channel"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel> Select your payment Channel</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+              <div className="flex flex-col md:flex-row gap-2">
+                <FormField
+                  control={form.control}
+                  name="channel"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel> Select your payment Channel</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={"Select your payment Channel"}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value={"mobile_money"}>
+                            Mobile Money Transfer
+                          </SelectItem>
+                          <SelectItem value={"bank_transfer"}>
+                            Bank Transfer Transfer
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage {...field} />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="account_name"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel> Account Name</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={"Select your payment Channel"}
-                          />
-                        </SelectTrigger>
+                        <Input
+                          type="text"
+                          placeholder="Enter the name of the account"
+                          {...field}
+                        />
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value={"mobile_money"}>
-                          Mobile Money Transfer
-                        </SelectItem>
-                        <SelectItem value={"bank_transfer"}>
-                          Bank Transfer Transfer
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {/* <FormMessage {...field} /> */}
-                  </FormItem>
-                )}
-              />
+                      <FormMessage {...field} />
+                    </FormItem>
+                  )}
+                />
+              </div>
               {paymentChannel === "mobile_money" ? (
                 <div className=" flex flex-col md:flex-row gap-2">
                   <FormField
                     control={form.control}
-                    name="phone_number"
+                    name="account_number"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel> Mobile Money Number</FormLabel>
@@ -178,13 +186,13 @@ export default function WithdrawalForm({}: Props) {
                             {...field}
                           />
                         </FormControl>
-                        {/* <FormMessage {...field} /> */}
+                        <FormMessage {...field} />
                       </FormItem>
                     )}
                   />
                   <FormField
                     control={form.control}
-                    name="network_provider"
+                    name="provider"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel> Network</FormLabel>
@@ -209,7 +217,7 @@ export default function WithdrawalForm({}: Props) {
                             </SelectItem>
                           </SelectContent>
                         </Select>
-                        {/* <FormMessage {...field} /> */}
+                        <FormMessage {...field} />
                       </FormItem>
                     )}
                   />
@@ -218,7 +226,7 @@ export default function WithdrawalForm({}: Props) {
                 <div className=" flex flex-col md:flex-row gap-2">
                   <FormField
                     control={form.control}
-                    name="bank_name"
+                    name="provider"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel> Bank Name</FormLabel>
@@ -255,7 +263,7 @@ export default function WithdrawalForm({}: Props) {
 
               <Button
                 type="submit"
-                className="tracking-wide uppercase w-full my-4"
+                className="tracking-wide w-full my-4"
                 disabled={isPending}
               >
                 {isPending ? <Spinner /> : "Request Payout"}
