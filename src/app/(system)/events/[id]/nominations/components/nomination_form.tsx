@@ -1,7 +1,7 @@
 "use client";
 import { db } from "@/lib/supabase";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,7 +55,6 @@ export default function NominationForm({ id }: { id: string }) {
   const router = useRouter();
 
   useEffect(() => {
-    setIsPending(true);
     db.from("events")
       .select("*, categories(category_name, id, event_id)")
       .eq("id", id)
@@ -66,7 +65,6 @@ export default function NominationForm({ id }: { id: string }) {
         } else {
           const eventData = data as unknown as Event;
           setEvent(eventData);
-          setIsPending(false);
         }
       });
   }, [id]);
