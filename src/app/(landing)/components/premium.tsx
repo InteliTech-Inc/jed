@@ -23,19 +23,8 @@ export default function Premium() {
           >
             <FlipWord />
           </motion.h3>
-          {/* <motion.p variants={TextItemsVariants} className=" py-4 lg:py-8">
-            JED is one of the fastest growing and most rapidly evolving
-            disciplines and one which stands at the forefront of modern
-            technology.
-          </motion.p> */}
         </motion.div>
         <div className=" rounded-lg max-h-96  overflow-hidden">
-          {/* <Image
-            src={PricingImage}
-            alt="Pricing dashboard"
-            width={1000}
-            height={1000}
-          /> */}
           <CardsStack />
         </div>
       </section>
