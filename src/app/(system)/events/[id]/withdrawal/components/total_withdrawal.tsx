@@ -26,9 +26,9 @@ export default function TotalWithdrawal() {
     GetTotal();
   }, []);
   return (
-    <div className="text-center text-neutral-600 font-bold text-2xl mt-10 text-2xl">
-      <h1>Total Withdrawals:</h1>
-      <h3>
+    <div className=" flex items-center justify-between lg:block border-secondary border bg-accent/20 rounded-lg p-4">
+      <p className=" text-sm text-neutral-600">Total Withdrawals:</p>
+      <h3 className=" font-semibold text-secondary text-xl">
         GHS{" "}
         {balance.toLocaleString("en-US", {
           minimumFractionDigits: 2,

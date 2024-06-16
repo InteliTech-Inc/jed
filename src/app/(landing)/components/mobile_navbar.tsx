@@ -44,6 +44,7 @@ export default function MobileNavbar({
             <li key={name} onClick={closeButtonHandler}>
               <Link
                 href={path}
+                onClick={closeButtonHandler}
                 className="hover:underline hover:underline-offset-4 ease-in duration-100"
               >
                 {name}

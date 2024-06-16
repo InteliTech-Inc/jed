@@ -3,6 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import NomineeCard from "./nominee_card";
 import { db } from "@/lib/supabase";
+import Image from "next/image";
 
 type Nominee = {
   id: string;
@@ -103,7 +104,19 @@ export default function GetNominees({ nominees, votes }: any) {
   if (
     nominees.filter((nominee: Nominee) => nominee?.event_id === id).length === 0
   ) {
-    return <p className="mt-2">No nominee has been added to this event</p>;
+    return (
+      <section className="flex min-h-[55dvh] flex-col items-center justify-center">
+        <Image
+          src={"/images/no-docs.svg"}
+          width={200}
+          height={200}
+          alt={"Empty notification inbox"}
+        />
+        <p className="mt-5 text-center text-gray-600">
+          Sorry, you have not added any nominee yet!
+        </p>
+      </section>
+    );
   }
 
   return (

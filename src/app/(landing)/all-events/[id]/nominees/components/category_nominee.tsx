@@ -76,6 +76,7 @@ export default async function CategoryNomineeCard({
         </div>
       </div>
       <section className="container mx-auto px-6">
+        <BackButton />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-10">
           {nominees?.length! > 0 &&
             nominees?.map((nominee) => (
@@ -85,7 +86,7 @@ export default async function CategoryNomineeCard({
               >
                 <div className="h-[25rem]">
                   <Image
-                    className="h-full w-full rounded-lg object-cover object-bottom"
+                    className="h-full w-full rounded-lg object-cover object-center"
                     src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${nominee?.img_url}`}
                     width={2000}
                     height={2000}
