@@ -62,28 +62,28 @@ export default function VotingResults() {
           <Vote />
         </Button>
       </DialogTrigger>
-      <DialogContent className="px-2">
+      <DialogContent className="px-2 overflow-y-auto max-h-[80%]">
         <DialogHeader className="px-4">
-          <DialogTitle>Voting Results</DialogTitle>
+          <DialogTitle className="font-bold">Voting Results</DialogTitle>
           <DialogDescription>
             View the voting results for each nominee in this category
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-2 items-center justify-between ">
-          {nominees?.map((nominee: any) => (
+          {nominees?.map((nominee) => (
             <div
               className="flex w-full items-center justify-between px-2 bg-accent/10 border py-2 text-neutral-600 rounded-full"
               key={nominee.id}
             >
               <Image
                 src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${nominee?.img_url}`}
-                alt={nominee?.full_name}
+                alt={nominee?.full_name!}
                 width={50}
                 height={50}
                 className="rounded-full object-cover object-bottom aspect-square"
               />
-              <p className="font-bold text-xl ">{nominee?.full_name}</p>
+              <p className="font-medium text-base ">{nominee?.full_name}</p>
               <p className="font-medium mr-2">
                 {votes?.find((vote: any) => vote.nominee_id === nominee.id)
                   ?.count || 0}
