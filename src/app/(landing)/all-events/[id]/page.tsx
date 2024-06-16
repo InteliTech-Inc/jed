@@ -8,8 +8,8 @@ type Props = {
   params: { id: string };
 };
 
-export async function generateStaticParams() {
-  const { data: events } = await db.from("events").select("id");
+export async function generateStaticParams({ params: { id } }: Props) {
+  const { data: events } = await db.from("events").select("id").eq("id", id);
 
   const idRoutes = events ? events.map((event) => event.id) : [];
 
@@ -24,7 +24,7 @@ export async function generateMetadata({
   const { data: event } = await db
     .from("events")
     .select(`*, categories(category_name, event_id, id)`)
-    .eq("id", id)
+    .eq("id", id!)
     .single();
   return {
     title: event?.name,
@@ -43,7 +43,7 @@ export async function generateMetadata({
 export default async function SingleEventPage({ params: { id } }: Props) {
   return (
     <Suspense fallback={<Loader />}>
-      <SingleEvent id={id} />
+      <SingleEvent id={id!} />
     </Suspense>
   );
 }
