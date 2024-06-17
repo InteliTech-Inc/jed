@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { EditIcon } from "lucide-react";
 import DeleteButton from "./delete_button";
+import EventSwitch from "./event_switch";
 
 type Data = {
   data: {
@@ -38,11 +39,27 @@ export default async function EventDetails({ id }: { id: string }) {
     .single()) as Data;
 
   if (!data) {
-    return <div>No event found</div>;
+    return (
+      <div className="grid place-content-center">
+        <div>
+          <Image
+            src={"/images/no-docs.svg"}
+            alt="No-docs"
+            width={200}
+            height={200}
+          />
+          <p className="text-center">
+            Sorry there was an error fetching your events, Kindly refresh the
+            page!
+          </p>
+        </div>
+      </div>
+    );
   }
+
   return (
     <div className="break-words">
-      <section className=" mb-8 flex ">
+      <section className=" mb-8 flex flex-col md:flex-row ">
         <div className="flex-1">
           <p className=" text-4xl text-neutral-700 mb-2 font-semibold">
             Event details
@@ -51,6 +68,9 @@ export default async function EventDetails({ id }: { id: string }) {
             View and edit the details of your event
           </p>
         </div>
+      </section>
+      <div className="flex items-center justify-between ">
+        <EventSwitch id={id} />
         <div className="flex items-center justify-end gap-x-4">
           <AddCategoryModal event_id={data} />
           <Button className=" gap-2">
@@ -58,8 +78,7 @@ export default async function EventDetails({ id }: { id: string }) {
             <Link href={`/events/${id}/edit`}>Edit Event</Link>
           </Button>
         </div>
-      </section>
-
+      </div>
       <section className=" grid lg:grid-cols-[30%_1fr] py-4 gap-4">
         <div className=" h-96 rounded-lg lg:sticky top-28 overflow-hidden">
           <Image

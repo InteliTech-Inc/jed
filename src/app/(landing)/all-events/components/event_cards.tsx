@@ -66,34 +66,61 @@ export default function EventCards({ events }: Props) {
             Search
           </Button>
         </form>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
-          {filteredEvents?.map((event) => (
-            <Link href={`/all-events/${event.id}`} key={event.id}>
-              <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border">
-                <div className="h-[20rem]">
-                  <Image
-                    className="h-full w-full rounded-lg object-cover object-center"
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
-                    width={2000}
-                    height={2000}
-                    alt={event!.name}
-                    priority
-                  />
-                </div>
-                <div className="px-6 py-4">
-                  <h1 className="font-bold text-md mb-1 text-center">
-                    {event.name}
-                  </h1>
-                </div>
+        <>
+          {filteredEvents.length === 0 && !query ? (
+            <div className="flex items-center justify-center flex-col my-6">
+              <div>
+                <Image
+                  src={"/images/no-docs.svg"}
+                  alt="No-docs"
+                  width={200}
+                  height={200}
+                />
+                <p className="text-center">There are no published events</p>
               </div>
-            </Link>
-          ))}
-        </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
+              {filteredEvents?.map((event) => (
+                <Link href={`/all-events/${event.id}`} key={event.id}>
+                  <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border">
+                    <div className="h-[20rem]">
+                      <Image
+                        className="h-full w-full rounded-lg object-cover object-center"
+                        src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
+                        width={2000}
+                        height={2000}
+                        alt={event!.name}
+                        priority
+                      />
+                    </div>
+                    <div className="px-6 py-4">
+                      <h1 className="font-bold text-md mb-1 text-center">
+                        {event.name}
+                      </h1>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </>
         {filteredEvents.length === 0 && query && (
-          <div className="text-center my-10 text-2xl font-bold text-neutral-600">
-            No results found for "{query}"
+          <div className="flex items-center justify-center flex-col my-6">
+            <div>
+              <Image
+                src={"/images/no-docs.svg"}
+                alt="No-docs"
+                width={200}
+                height={200}
+              />
+            </div>
+            <p className="text-center">No Search resuluts for "{query}"</p>
           </div>
         )}
+        {/* {filteredEvents.length === 0 && (
+         
+        )} */}
       </div>
     </section>
   );

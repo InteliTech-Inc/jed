@@ -6,7 +6,7 @@ export default async function AllEvents() {
   const db = dbServer(cookies);
   const { data: events } = await db.from("events").select("*");
 
-  const liveEvents = events?.filter((event) => !event.is_completed);
+  const liveEvents = events?.filter((event) => event.is_completed);
 
   return (
     <>
