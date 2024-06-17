@@ -118,42 +118,49 @@ export default async function EventDetails({ id }: { id: string }) {
                 <div className=" grid md:grid-cols-2 gap-4">
                   <p className=" text-base">Nominations Period</p>
                   <p>
-                    {new Date(
-                      data.nomination_period?.start_date
-                    ).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}{" "}
+                    {data.nomination_period
+                      ? new Date(
+                          data.nomination_period?.start_date
+                        ).toLocaleDateString("en-US", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "Not Set Yet"}{" "}
                     -{" "}
-                    {new Date(
-                      data.nomination_period?.end_date
-                    ).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
+                    {data.nomination_period
+                      ? new Date(
+                          data.nomination_period?.end_date
+                        ).toLocaleDateString("en-US", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "Not Set Yet"}
                   </p>
                 </div>
                 <div className=" grid md:grid-cols-2 gap-4">
                   <p className=" text-base">Voting Period</p>
                   <p>
-                    {new Date(
-                      data.voting_period?.start_date
-                    ).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}{" "}
+                    {data.voting_period
+                      ? new Date(
+                          data.voting_period?.start_date
+                        ).toLocaleDateString("en-US", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "Not Set Yet"}{" "}
                     -{" "}
-                    {new Date(data.voting_period?.end_date).toLocaleDateString(
-                      "en-US",
-                      {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      }
-                    )}
+                    {data.voting_period
+                      ? new Date(
+                          data.voting_period?.end_date
+                        ).toLocaleDateString("en-US", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "Not Set Yet"}
                   </p>
                 </div>
               </div>
