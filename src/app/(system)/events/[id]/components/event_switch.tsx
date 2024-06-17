@@ -1,8 +1,8 @@
 "use client";
+import React, { useEffect, useState } from "react";
 import Spinner from "@/components/spinner";
 import { Switch } from "@/components/ui/switch";
 import { db } from "@/lib/supabase";
-import React, { useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
@@ -11,6 +11,35 @@ type Props = {
 
 export default function EventSwitch({ id }: Props) {
   const [publishNomination, setPublishNomination] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Fetch the current state from the database when the component mounts
+  useEffect(() => {
+    const fetchEventStatus = async () => {
+      setIsLoading(true);
+      try {
+        const { data, error } = await db
+          .from("events")
+          .select("is_completed")
+          .eq("id", id)
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          setPublishNomination(data.is_completed);
+        }
+      } catch (error) {
+        toast.error(`Failed to fetch event status`);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEventStatus();
+  }, [id]);
 
   const handleToggle = () => {
     toast.warning(
@@ -47,6 +76,10 @@ export default function EventSwitch({ id }: Props) {
       }
     );
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="flex items-center gap-x-3">
