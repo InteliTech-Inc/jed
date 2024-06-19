@@ -37,11 +37,14 @@ import { isImageSizeValid } from "@/lib/utils";
 import { getFormData } from "@/lib/utils";
 
 const formSchema = z.object({
-  name: z.string().min(1, {
+  name: z.string().min(0.1, {
     message: "This is a required field.",
   }),
   description: z.string().min(100, {
     message: "This should not be less than 100 characters",
+  }),
+  amount: z.string().min(1, {
+    message: "This is a required field.",
   }),
   voting: z.object({
     start_date: z.date(),
@@ -94,6 +97,7 @@ function CreateEventForm({ user }: { user: User | null }) {
       const payload = {
         name: values.name,
         description: values.description,
+        amount_per_vote: values.amount,
         user_id: user?.id!,
         img_file: file,
         is_completed: false,
@@ -114,6 +118,8 @@ function CreateEventForm({ user }: { user: User | null }) {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      console.log(payload);
 
       form.reset();
       toast.success("Event Created Successfully");
@@ -157,22 +163,40 @@ function CreateEventForm({ user }: { user: User | null }) {
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <div className=" flex flex-col-reverse md:flex-row  gap-8">
             <section className=" w-full">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className=" mb-4">
-                    <FormLabel>Event Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        className="placeholder:text-neutral-500"
-                        autoFocus
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <div className="flex flex-col md:flex-row md:items-center gap-x-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem className=" mb-4 flex-1 w-full">
+                      <FormLabel>Event Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="placeholder:text-neutral-500"
+                          autoFocus
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="amount"
+                  render={({ field }) => (
+                    <FormItem className="mb-4">
+                      <FormLabel>Amount per vote</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="placeholder:text-neutral-500"
+                          autoFocus
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="description"

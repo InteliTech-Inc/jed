@@ -15,7 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import { toast } from "sonner";
 
 type referenceObj = {
   message: string;
@@ -44,6 +45,7 @@ export default function PaystackPayment({ id }: { id: string }) {
   const router = useRouter();
   const [ref, setRef] = useState("");
   const [_, setFormData] = useState<FORM_DATA>();
+  const [amountPerVote, setAmountPerVote] = useState(0);
 
   const [success, setSuccess] = useState(false);
 
@@ -57,6 +59,34 @@ export default function PaystackPayment({ id }: { id: string }) {
   });
 
   useEffect(() => {
+    (async function getEventAmount() {
+      const { data, error } = await db
+        .from(`nominees`)
+        .select(`*, event_id`)
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching event amount:", error);
+        return;
+      }
+
+      const { data: eventData, error: eventError } = await db
+        .from("events")
+        .select("amount_per_vote")
+        .eq("id", data?.event_id!)
+        .single();
+
+      if (eventError) {
+        console.error("Error fetching event amount:", eventError);
+        return;
+      }
+
+      setAmountPerVote(Number(eventData?.amount_per_vote!));
+    })();
+  }, []);
+
+  useEffect(() => {
     setSuccess(false);
     setRef("" + Math.floor(Math.random() * 1000000000 + 1));
   }, [success]);
@@ -65,7 +95,7 @@ export default function PaystackPayment({ id }: { id: string }) {
     reference: ref,
     email: form.watch("email") || "info.jedvotes@gmail.com",
     firstname: form.watch("full_name"),
-    amount: Number(form.watch("votes")) * 100,
+    amount: Number(form.watch("votes")) * amountPerVote * 100,
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
     currency: "GHS",
   };
@@ -116,7 +146,8 @@ export default function PaystackPayment({ id }: { id: string }) {
   };
 
   const onClose = () => {
-    alert("Payment cancelled.");
+    toast.error("Payment cancelled.");
+    router.refresh();
   };
 
   const componentProps = {
@@ -176,7 +207,9 @@ export default function PaystackPayment({ id }: { id: string }) {
             <FormItem>
               <FormLabel htmlFor="votes">
                 Number of Votes{" "}
-                <span className="font-bold">(GHS 1.00 per Vote)</span>
+                <span className="font-bold">
+                  (GHS {amountPerVote} per Vote)
+                </span>
               </FormLabel>
               <FormControl>
                 <Input

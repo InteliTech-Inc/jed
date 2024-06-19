@@ -23,6 +23,7 @@ export interface Schedule {
 export interface Payload {
   name: string;
   description: string;
+  amount_per_vote: string;
   user_id: string;
   img_file: File;
   is_completed: boolean;
