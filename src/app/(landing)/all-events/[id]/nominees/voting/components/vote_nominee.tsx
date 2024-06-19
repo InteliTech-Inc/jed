@@ -15,7 +15,7 @@ type Props = {
   votingNominee: Nominee;
 };
 
-export default function VoteNomineePage({ votingNominee }: Props) {
+export default async function VoteNomineePage({ votingNominee }: Props) {
   return (
     <section className="container mx-auto mb-8 p-6">
       <BackButton />
