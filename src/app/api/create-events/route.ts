@@ -8,6 +8,7 @@ export async function POST(req: NextRequest) {
   const {
     name,
     description,
+    amount_per_vote,
     voting_period,
     nomination_period,
     img_file,
@@ -20,6 +21,7 @@ export async function POST(req: NextRequest) {
   const updatedPayload = {
     name,
     description,
+    amount_per_vote,
     voting_period: JSON.parse(voting_period),
     nomination_period: JSON.parse(nomination_period || "{}"),
     img_url: filePath,
