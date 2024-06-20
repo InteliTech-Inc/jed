@@ -40,7 +40,7 @@ export default async function EventDetails({ id }: { id: string }) {
 
   if (!data) {
     return (
-      <div className="grid place-content-center">
+      <div className="grid place-items-center">
         <div>
           <Image
             src={"/images/no-docs.svg"}

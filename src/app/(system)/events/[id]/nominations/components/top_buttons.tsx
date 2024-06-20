@@ -27,6 +27,9 @@ export default function TopButtons({
   };
 
   const handleDownloadData = () => {
+    if (!results.length) {
+      return toast.error("No data to download");
+    }
     const data = results!.map((r) => {
       return {
         "Full Name": r.full_name!,

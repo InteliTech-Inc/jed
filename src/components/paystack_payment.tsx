@@ -45,7 +45,7 @@ export default function PaystackPayment({ id }: { id: string }) {
   const router = useRouter();
   const [ref, setRef] = useState("");
   const [_, setFormData] = useState<FORM_DATA>();
-  const [amountPerVote, setAmountPerVote] = useState(0);
+  const [amountPerVote, setAmountPerVote] = useState(1);
 
   const [success, setSuccess] = useState(false);
 
@@ -82,7 +82,7 @@ export default function PaystackPayment({ id }: { id: string }) {
         return;
       }
 
-      setAmountPerVote(Number(eventData?.amount_per_vote!));
+      setAmountPerVote(Number(eventData?.amount_per_vote!) || 1); // let's set the default amount per vote as 1 cedi
     })();
   }, []);
 

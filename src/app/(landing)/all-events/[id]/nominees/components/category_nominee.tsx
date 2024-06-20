@@ -40,10 +40,16 @@ export default async function CategoryNomineeCard({
     return (
       <div className="p-10">
         <BackButton />
-        <div className="flex items-center justify-center py-24">
-          <h1 className="text-xl font-bold text-center">
-            Sorry, there are no nominees for this category yet!
-          </h1>
+        <div className="grid place-items-center">
+          <Image
+            src={"/images/no-docs.svg"}
+            alt="No-docs"
+            width={200}
+            height={200}
+          />
+          <p className="text-center">
+            Sorry, there are no nominees for this category.
+          </p>
         </div>
       </div>
     );

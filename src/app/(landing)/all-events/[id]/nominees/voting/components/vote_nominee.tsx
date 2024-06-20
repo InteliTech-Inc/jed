@@ -33,9 +33,9 @@ export default function VoteNomineePage({ votingNominee }: Props) {
           </div>
         </div>
         <div className="my-8 w-full md:w-[40rem] px-4">
-          <h1 className="text-4xl font-bold mb-3">
+          <p className=" text-3xl lg:text-4xl font-bold mb-3">
             Vote for {votingNominee?.full_name}
-          </h1>
+          </p>
           <p className="text-gray-700">
             Nominee's Code:{" "}
             <span className="font-bold text-lg">{votingNominee?.code}</span>{" "}
