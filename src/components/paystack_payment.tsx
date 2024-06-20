@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/supabase";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "sonner";
+import Spinner from "./spinner";
 
 type referenceObj = {
   message: string;
@@ -46,6 +47,7 @@ export default function PaystackPayment({ id }: { id: string }) {
   const [ref, setRef] = useState("");
   const [_, setFormData] = useState<FORM_DATA>();
   const [amountPerVote, setAmountPerVote] = useState(0);
+  const [isFetching, setIsFetching] = useState(false);
 
   const [success, setSuccess] = useState(false);
 
@@ -60,29 +62,38 @@ export default function PaystackPayment({ id }: { id: string }) {
 
   useEffect(() => {
     (async function getEventAmount() {
-      const { data, error } = await db
-        .from(`nominees`)
-        .select(`*, event_id`)
-        .eq("id", id)
-        .single();
+      setIsFetching(true);
+      try {
+        const { data, error } = await db
+          .from(`nominees`)
+          .select(`*, event_id`)
+          .eq("id", id)
+          .single();
 
-      if (error) {
-        console.error("Error fetching event amount:", error);
-        return;
+        if (error) {
+          console.error("Error fetching event amount:", error);
+          return;
+        }
+
+        const { data: eventData, error: eventError } = await db
+          .from("events")
+          .select("amount_per_vote")
+          .eq("id", data?.event_id!)
+          .single();
+
+        if (eventError) {
+          console.error("Error fetching event amount:", eventError);
+          return;
+        }
+        setAmountPerVote(Number(eventData?.amount_per_vote!));
+        setIsFetching(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
+      } finally {
+        setIsFetching(false);
       }
-
-      const { data: eventData, error: eventError } = await db
-        .from("events")
-        .select("amount_per_vote")
-        .eq("id", data?.event_id!)
-        .single();
-
-      if (eventError) {
-        console.error("Error fetching event amount:", eventError);
-        return;
-      }
-
-      setAmountPerVote(Number(eventData?.amount_per_vote!));
     })();
   }, []);
 
@@ -205,11 +216,17 @@ export default function PaystackPayment({ id }: { id: string }) {
           name="votes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="votes">
+              <FormLabel htmlFor="votes" className="flex">
                 Number of Votes{" "}
-                <span className="font-bold">
-                  (GHS {amountPerVote} per Vote)
-                </span>
+                {isFetching ? (
+                  <span className="ml-2">
+                    <Spinner />
+                  </span>
+                ) : (
+                  <span className="font-bold">
+                    (GHS {amountPerVote} per Vote)
+                  </span>
+                )}
               </FormLabel>
               <FormControl>
                 <Input
