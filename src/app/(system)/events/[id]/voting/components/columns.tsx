@@ -13,10 +13,8 @@ const multiColumnFilterFn: FilterFn<VotingDataResponse> = (
   columnId,
   filterValue
 ) => {
-  // Concatenate the values from multiple columns into a single string
   const searchableRowContent = `${row.original.full_name} ${row.original.category}`;
 
-  // Perform a case-insensitive comparison
   return searchableRowContent.toLowerCase().includes(filterValue.toLowerCase());
 };
 

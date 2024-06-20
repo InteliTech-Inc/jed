@@ -3,7 +3,7 @@ import { Clipboard, DownloadIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { NominationsResponse } from "@/types/types";
-import { format } from "date-fns";
+import { format, formatDate } from "date-fns";
 import { exportToCSV } from "@/lib/utils";
 
 export default function TopButtons({
@@ -40,7 +40,10 @@ export default function TopButtons({
         "SUBMITTED ON": format(new Date(r.created_at!), "dd/MM/yyyy"),
       };
     });
-    exportToCSV(data, "Nominations Results");
+    exportToCSV(
+      data,
+      `Nominations_Results_${formatDate(new Date().toString(), "dd/MM/yyyy")}`
+    );
     toast.success("Nominations results exported successfully");
   };
   return (
