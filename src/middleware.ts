@@ -5,10 +5,10 @@ export default async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
   const publicUrl = [
-    "/login",
-    "/signup",
-    "/forgot-password",
-    "/reset-password",
+    // "/login",
+    // "/signup",
+    // "/forgot-password",
+    // "/reset-password",
     "/waitlist",
     "/about",
     "/",
@@ -32,7 +32,7 @@ export default async function middleware(req: NextRequest) {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    return NextResponse.rewrite(new URL("/login", req.url));
+    return NextResponse.rewrite(new URL("/", req.url));
   }
 
   return res;
