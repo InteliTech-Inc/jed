@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Home, LineChart, Package, Users, Sidebar } from "lucide-react";
+import {
+  Home,
+  LineChart,
+  Package,
+  Users,
+  Sidebar,
+  TableProperties,
+  BadgeCent,
+} from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useParams, usePathname } from "next/navigation";
@@ -11,23 +19,23 @@ import { useState } from "react";
 const SidebarLinks = [
   {
     name: "Details",
-    icon: <Home size={20} />,
+    icon: <Home size={16} />,
   },
   {
     name: "Nominees",
-    icon: <Users size={20} />,
+    icon: <Users size={16} />,
   },
   {
     name: "Voting",
-    icon: <LineChart size={20} />,
+    icon: <LineChart size={16} />,
   },
   {
     name: "Nominations",
-    icon: <Package size={20} />,
+    icon: <TableProperties size={16} />,
   },
   {
     name: "Withdrawal",
-    icon: <Package size={20} />,
+    icon: <BadgeCent size={16} />,
   },
 ];
 export default function EventsSidebar() {
@@ -42,7 +50,7 @@ export default function EventsSidebar() {
   return (
     <div className="h-fit z-50 sticky top-16 p-2 border-b md:border-b-0 md:h-[calc(100vh_-_5rem)] border-r bg-white">
       <div className="hidden md:block md:flex-1">
-        <nav className="hidden md:grid items-start gap-2 text-neutral-800 px-2 lg:px-4 mb-[18rem]">
+        <nav className="hidden md:grid items-start gap-2 text-neutral-700 px-2 lg:px-4 mb-[18rem]">
           {SidebarLinks.map((item) => {
             const ac =
               activeLink === item.name.toLowerCase()

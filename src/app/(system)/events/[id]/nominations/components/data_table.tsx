@@ -2,16 +2,18 @@
 
 import {
   ColumnDef,
+  SortingState,
   flexRender,
   getCoreRowModel,
   useReactTable,
   getPaginationRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   ColumnFiltersState,
 } from "@tanstack/react-table";
 import Image from "next/image";
 import { useState } from "react";
-
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -22,17 +24,22 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
+import { NominationsResponse } from "@/types/types";
+import TopButtons from "./top_buttons";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps<TValue> {
+  columns: ColumnDef<NominationsResponse, TValue>[];
+  data: NominationsResponse[];
+  url: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  url,
+}: DataTableProps<TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     data,
     columns,
@@ -40,23 +47,32 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
+      sorting,
       columnFilters,
     },
   });
 
+  const filterValue =
+    (table.getColumn("full_name")?.getFilterValue() as string) ?? "";
+
   return (
     <div>
-      {/* <div className="flex items-center py-4">
+      <div className="flex items-center gap-4 justify-between py-4">
         <Input
-          placeholder="Filter name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter by name or category..."
+          value={filterValue}
           onChange={(event) => {
-            return table.getColumn("name")?.setFilterValue(event.target.value);
+            return table
+              .getColumn("full_name")
+              ?.setFilterValue(event.target.value);
           }}
           className="max-w-sm"
         />
-      </div> */}
+        <TopButtons results={data} url={url} />
+      </div>
       <div className="rounded-md border mt-6 bg-white ">
         <Table className="">
           <TableHeader>
@@ -108,9 +124,17 @@ export function DataTable<TData, TValue>({
                       height={200}
                       alt={"Empty notification inbox"}
                     />
-                    <p className="mt-5 text-center text-gray-600">
-                      Sorry, there are no nominations available!
-                    </p>
+                    {filterValue ? (
+                      <p>
+                        {" "}
+                        Sorry, there are no results available for your search "
+                        {filterValue}"
+                      </p>
+                    ) : (
+                      <p className="mt-5 text-center text-gray-600">
+                        Sorry, there are no nominations available.
+                      </p>
+                    )}
                   </section>
                 </TableCell>
               </TableRow>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import ProductImage from "@/app/assets/hero-image.webp";
+import ProductImage from "@/app/assets/hero-image.png";
 import Image from "next/image";
 import { useInView } from "framer-motion";
 
@@ -19,14 +19,14 @@ export default function HeroImage() {
   return (
     <section
       ref={imageRef}
-      className="rotate-hero-image w-full lg:w-[80%] mx-auto px-3 py-6 lg:py-12 shadow-2xl"
+      className="rotate-hero-image w-full lg:w-[80%] mx-auto px-3 py-6 lg:py-12 "
     >
       <Image
         src={ProductImage}
         width={2000}
         height={2000}
         alt="Product Dashboard"
-        className=" "
+        className=" w-full h-full"
       />
     </section>
   );

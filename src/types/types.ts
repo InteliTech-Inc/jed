@@ -146,6 +146,17 @@ type NominationsResponse = {
   category_id: string | null;
 };
 
+type VotingDataResponse = {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  code: string;
+  number_of_votes: number;
+  category: string;
+  img_url?: string;
+};
+
 type onSuccessReference = {
   message: string;
   redirecturl: string;
@@ -163,4 +174,5 @@ export type {
   EditNominee,
   NominationsResponse,
   onSuccessReference,
+  VotingDataResponse,
 };

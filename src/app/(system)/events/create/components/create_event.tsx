@@ -155,9 +155,9 @@ function CreateEventForm({ user }: { user: User | null }) {
     <div className="my-8 w-full lg:w-4/5 mx-auto h-full">
       <BackButton />
       <div>
-        <h3 className="text-3xl text-center mt-2 mb-8 font-bold text-neutral-700">
+        <p className="text-3xl text-center mt-2 mb-8 font-bold text-neutral-700">
           Create a new event
-        </h3>
+        </p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
@@ -246,6 +246,7 @@ function CreateEventForm({ user }: { user: User | null }) {
                             align="start"
                           >
                             <Calendar
+                              disabled={{ before: new Date() }}
                               mode="single"
                               selected={field.value}
                               onSelect={field.onChange}
@@ -297,6 +298,9 @@ function CreateEventForm({ user }: { user: User | null }) {
                           >
                             <Calendar
                               mode="single"
+                              disabled={{
+                                before: form.getValues("voting.start_date"),
+                              }}
                               selected={field.value}
                               onSelect={field.onChange}
                               initialFocus
@@ -305,12 +309,6 @@ function CreateEventForm({ user }: { user: User | null }) {
                         </Popover>
                       </FormItem>
                       <div className=" hidden">
-                        {field.value &&
-                          differenceInCalendarDays(field.value, new Date()) <
-                            0 &&
-                          toast.error(
-                            "The start date should be later than today's date."
-                          )}
                         {field.value &&
                           differenceInCalendarDays(
                             form.getValues("voting.start_date"),

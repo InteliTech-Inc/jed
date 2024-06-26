@@ -14,15 +14,17 @@ export default function Globe() {
         >
           Create an event at one place,{" "}
           <mark className="text-primary/80">
-            receive payment from anywhere around the world!
+            manage responses from anywhere around the world!
           </mark>
         </motion.h3>
         <motion.p
           {...headingAnimationsProp}
           className=" py-4 leading-[1.6] lg:py-8"
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad sunt porro
-          eius atque, officiis saepe. Amet deleniti aut quod, velit nam sit
+          With JED's user-friendly interface, you can easily manage responses
+          and interact with participants from all around the world after your
+          event goes live. No matter where you are, you can always stay
+          connected and in control.
         </motion.p>
       </section>
       <section className="w-full h-full overflow-hidden relative">

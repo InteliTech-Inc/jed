@@ -2,6 +2,21 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { NominationsResponse } from "@/types/types";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown } from "lucide-react";
+import { FilterFn } from "@tanstack/react-table";
+const multiColumnFilterFn: FilterFn<NominationsResponse> = (
+  row,
+  columnId,
+  filterValue
+) => {
+  // Concatenate the values from multiple columns into a single string
+  const searchableRowContent = `${row.original.full_name} ${row.original.categories?.category_name}`;
+
+  // Perform a case-insensitive comparison
+  return searchableRowContent.toLowerCase().includes(filterValue.toLowerCase());
+};
+
 // import { MoreHorizontal } from "lucide-react";
 // import {
 //   DropdownMenu,
@@ -25,14 +40,22 @@ export const columns: ColumnDef<NominationsResponse>[] = [
   {
     accessorKey: "full_name",
     header: "Full Name",
+    filterFn: multiColumnFilterFn,
   },
 
   {
     accessorKey: "email",
-    header: "Email",
-    cell: ({ row }) => {
-      const data = row.original;
-      return <div>{data.email}</div>;
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className=" pl-2"
+        >
+          Email
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
     },
   },
   {
@@ -45,7 +68,18 @@ export const columns: ColumnDef<NominationsResponse>[] = [
   },
   {
     accessorKey: "category",
-    header: "Category",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className=" pl-2"
+        >
+          Category
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const data = row.original;
       return <div>{data.categories?.category_name}</div>;

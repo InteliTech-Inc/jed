@@ -46,10 +46,6 @@ export default function BlogList({ posts }: Props) {
         </h1>
         <blockquote className="border-l-4 border-secondary pl-2 italic text-gray-500">
           <p>Read about the latest updates, and stories from our team.</p>
-          <p>
-            We share our thoughts on the latest trends in technology, and
-            business.{" "}
-          </p>
         </blockquote>
       </div>
       <hr className="dark:border-white/55 border-primary my-4 px" />

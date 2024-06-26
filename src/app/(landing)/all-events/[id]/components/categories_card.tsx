@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Search } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
-
+import Image from "next/image";
 interface ICategory {
   category_name: string | null;
   event_id: string | null;
@@ -22,7 +22,7 @@ export default function CategoriesCard({ categories }: Props) {
   );
 
   return (
-    <div className="my-10 w-[25rem] md:w-full px-6">
+    <div className=" mt-6 mb-10 w-[25rem] md:w-full px-6">
       <div className="relative  md:w-[30rem] mx-auto">
         <Input
           type="text"
@@ -51,9 +51,17 @@ export default function CategoriesCard({ categories }: Props) {
             </Link>
           ))
         ) : (
-          <div className="col-span-full text-center text-xl font-medium">
-            Sorry, there is no category for your search
-          </div>
+          <section className="flex min-h-[55dvh] flex-col items-center justify-center">
+            <Image
+              src={"/images/no-docs.svg"}
+              width={200}
+              height={200}
+              alt={"Empty notification inbox"}
+            />
+            <p className="mt-5 text-center text-gray-600">
+              Sorry, there are no categories available!
+            </p>
+          </section>
         )}
       </div>
     </div>

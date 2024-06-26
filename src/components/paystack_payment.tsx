@@ -46,8 +46,7 @@ export default function PaystackPayment({ id }: { id: string }) {
   const router = useRouter();
   const [ref, setRef] = useState("");
   const [_, setFormData] = useState<FORM_DATA>();
-  const [amountPerVote, setAmountPerVote] = useState(0);
-  const [isFetching, setIsFetching] = useState(false);
+  const [amountPerVote, setAmountPerVote] = useState(1);
 
   const [success, setSuccess] = useState(false);
 
@@ -81,19 +80,12 @@ export default function PaystackPayment({ id }: { id: string }) {
           .eq("id", data?.event_id!)
           .single();
 
-        if (eventError) {
-          console.error("Error fetching event amount:", eventError);
-          return;
-        }
-        setAmountPerVote(Number(eventData?.amount_per_vote!));
-        setIsFetching(false);
-      } catch (error) {
-        if (error instanceof Error) {
-          console.log(error.message);
-        }
-      } finally {
-        setIsFetching(false);
+      if (eventError) {
+        console.error("Error fetching event amount:", eventError);
+        return;
       }
+
+      setAmountPerVote(Number(eventData?.amount_per_vote!) || 1); // let's set the default amount per vote as 1 cedi
     })();
   }, []);
 

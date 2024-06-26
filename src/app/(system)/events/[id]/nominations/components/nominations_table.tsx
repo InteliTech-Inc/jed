@@ -24,8 +24,7 @@ export default async function NominationsTable({ id }: NominationsTableProps) {
 
   return (
     <div>
-      <TopButtons url={url} results={data_nominations} />
-      <DataTable data={data_nominations} columns={columns} />
+      <DataTable data={data_nominations} columns={columns} url={url} />
     </div>
   );
 }
