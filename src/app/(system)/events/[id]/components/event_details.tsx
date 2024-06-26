@@ -7,6 +7,8 @@ import Link from "next/link";
 import { EditIcon } from "lucide-react";
 import DeleteButton from "./delete_button";
 import EventSwitch from "./event_switch";
+import { format } from "date-fns";
+import BackButton from "@/components/back";
 
 type Data = {
   data: {
@@ -41,6 +43,7 @@ export default async function EventDetails({ id }: { id: string }) {
   if (!data) {
     return (
       <div className="grid place-items-center">
+        <BackButton />
         <div>
           <Image
             src={"/images/no-docs.svg"}
@@ -57,8 +60,19 @@ export default async function EventDetails({ id }: { id: string }) {
     );
   }
 
+  const voting_period =
+    data.voting_period && Object.keys(data.voting_period).length > 0
+      ? data.voting_period
+      : null;
+
+  const nomination_period =
+    data.nomination_period && Object.keys(data.nomination_period).length > 0
+      ? data.nomination_period
+      : null;
+
   return (
     <div className="break-words">
+      <BackButton />
       <section className=" mb-8 flex flex-col md:flex-row ">
         <div className="flex-1">
           <p className=" text-4xl text-neutral-700 mb-2 font-semibold">
@@ -96,7 +110,7 @@ export default async function EventDetails({ id }: { id: string }) {
           <div className="w-full">
             <p className=" break-words">{data.description}</p>
             <section className=" py-4">
-              <p className="text-2xl my-2 font-semibold">
+              <p className="text-2xl text-neutral-700 my-2 font-semibold">
                 Categories ({data.categories.length})
               </p>
               <div className=" grid md:grid-cols-2 gap-4">
@@ -113,53 +127,37 @@ export default async function EventDetails({ id }: { id: string }) {
                   );
                 })}
               </div>
-              <p className="text-2xl my-2 font-semibold mt-6">Schedules</p>
+              <p className="text-2xl my-2 font-semibold mt-6 text-neutral-700">
+                Schedules
+              </p>
               <div className="space-y-3">
                 <div className=" grid md:grid-cols-2 gap-4">
                   <p className=" text-base">Nominations Period</p>
                   <p>
-                    {data.nomination_period
-                      ? new Date(
-                          data.nomination_period?.start_date
-                        ).toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
+                    {nomination_period
+                      ? format(
+                          new Date(nomination_period.start_date),
+                          "dd/MM/yyyy"
+                        )
                       : "Not Set Yet"}{" "}
                     -{" "}
-                    {data.nomination_period
-                      ? new Date(
-                          data.nomination_period?.end_date
-                        ).toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
+                    {nomination_period
+                      ? format(
+                          new Date(nomination_period.end_date),
+                          "dd/MM/yyyy"
+                        )
                       : "Not Set Yet"}
                   </p>
                 </div>
                 <div className=" grid md:grid-cols-2 gap-4">
                   <p className=" text-base">Voting Period</p>
                   <p>
-                    {data.voting_period
-                      ? new Date(
-                          data.voting_period?.start_date
-                        ).toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
+                    {voting_period
+                      ? format(new Date(voting_period.start_date), "dd/MM/yyyy")
                       : "Not Set Yet"}{" "}
                     -{" "}
-                    {data.voting_period
-                      ? new Date(
-                          data.voting_period?.end_date
-                        ).toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
+                    {voting_period
+                      ? format(new Date(voting_period.end_date), "dd/MM/yyyy")
                       : "Not Set Yet"}
                   </p>
                 </div>

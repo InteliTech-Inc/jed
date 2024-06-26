@@ -36,7 +36,7 @@ h6 {
 }
 
 .main-heading {
-  @apply text-4xl lg:text-[4.5rem] leading-[1.1] font-semibold text-gray-900/90;
+  @apply text-4xl lg:text-[4.5rem] leading-[1.5] lg:leading-[1.3] font-semibold text-gray-900/90;
 }
 
 .animate-dropdown {

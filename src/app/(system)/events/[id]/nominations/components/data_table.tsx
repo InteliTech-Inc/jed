@@ -132,7 +132,7 @@ export function DataTable<TData, TValue>({
                       </p>
                     ) : (
                       <p className="mt-5 text-center text-gray-600">
-                        Sorry, there are no results available.
+                        Sorry, there are no nominations available.
                       </p>
                     )}
                   </section>

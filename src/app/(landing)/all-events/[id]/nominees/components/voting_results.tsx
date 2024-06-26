@@ -57,9 +57,9 @@ export default function VotingResults() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary">
+        <Button className=" gap-2">
           <span className="mr-1">View Voting Results</span>
-          <Vote />
+          <Vote size={16} />
         </Button>
       </DialogTrigger>
       <DialogContent className="px-2 overflow-y-auto max-h-[80%]">
@@ -79,12 +79,12 @@ export default function VotingResults() {
               <Image
                 src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${nominee?.img_url}`}
                 alt={nominee?.full_name!}
-                width={50}
-                height={50}
+                width={30}
+                height={30}
                 className="rounded-full object-cover object-bottom aspect-square"
               />
-              <p className="font-medium text-base ">{nominee?.full_name}</p>
-              <p className="font-medium mr-2">
+              <p className=" text-sm ">{nominee?.full_name}</p>
+              <p className="font-medium text-sm mr-2">
                 {votes?.find((vote: any) => vote.nominee_id === nominee.id)
                   ?.count || 0}
               </p>

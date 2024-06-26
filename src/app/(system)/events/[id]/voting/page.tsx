@@ -3,6 +3,7 @@ import { columns } from "./components/columns";
 import { VotingDataResponse } from "@/types/types";
 import { Suspense } from "react";
 import Spinner from "@/components/spinner";
+
 const data: VotingDataResponse[] = [
   {
     id: "heljejle",

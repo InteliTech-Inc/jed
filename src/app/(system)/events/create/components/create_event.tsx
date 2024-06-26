@@ -246,6 +246,7 @@ function CreateEventForm({ user }: { user: User | null }) {
                             align="start"
                           >
                             <Calendar
+                              disabled={{ before: new Date() }}
                               mode="single"
                               selected={field.value}
                               onSelect={field.onChange}
@@ -297,6 +298,9 @@ function CreateEventForm({ user }: { user: User | null }) {
                           >
                             <Calendar
                               mode="single"
+                              disabled={{
+                                before: form.getValues("voting.start_date"),
+                              }}
                               selected={field.value}
                               onSelect={field.onChange}
                               initialFocus

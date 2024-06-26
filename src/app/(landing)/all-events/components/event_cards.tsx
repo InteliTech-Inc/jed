@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { formatDistance } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -48,6 +49,8 @@ export default function EventCards({ events }: Props) {
     event.preventDefault();
   };
 
+  console.log(events);
+
   return (
     <section>
       <div className="container mx-auto px-6 py-8">
@@ -81,27 +84,48 @@ export default function EventCards({ events }: Props) {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
-              {filteredEvents?.map((event) => (
-                <Link href={`/all-events/${event.id}`} key={event.id}>
-                  <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border">
-                    <div className="h-[20rem]">
-                      <Image
-                        className="h-full w-full rounded-lg object-cover object-center"
-                        src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
-                        width={2000}
-                        height={2000}
-                        alt={event!.name}
-                        priority
-                      />
+              {filteredEvents?.map((event) => {
+                const voting_period =
+                  event.voting_period &&
+                  Object.keys(event.voting_period).length > 0
+                    ? event.voting_period
+                    : null;
+
+                // const nomination_period =
+                //   event.nomination_period &&
+                //   Object.keys(event.nomination_period).length > 0
+                //     ? event.nomination_period
+                //     : null;
+                return (
+                  <Link href={`/all-events/${event.id}`} key={event.id}>
+                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border">
+                      <div className="h-[20rem]">
+                        <Image
+                          className="h-full w-full rounded-lg rounded-b-none object-cover object-center"
+                          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
+                          width={2000}
+                          height={2000}
+                          alt={event!.name}
+                          priority
+                        />
+                      </div>
+                      <div className="px-6 py-4">
+                        <p className="font-bold text-md mb-1">{event.name}</p>
+                        {event.voting_period && (
+                          <small className=" py-1 px-2 text-[0.75rem] bg-green-200 rounded-lg">
+                            Voting started{" "}
+                            {formatDistance(
+                              voting_period.start_date,
+                              new Date()
+                            )}{" "}
+                            ago
+                          </small>
+                        )}
+                      </div>
                     </div>
-                    <div className="px-6 py-4">
-                      <h1 className="font-bold text-md mb-1 text-center">
-                        {event.name}
-                      </h1>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           )}
         </>

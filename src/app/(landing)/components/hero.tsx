@@ -23,7 +23,7 @@ export default function Hero() {
             Your <mark className=" text-secondary">all-in-one</mark> events
             organization platform.
           </h1>
-          <p className=" lg:px-12 mx-auto text-lg  md:text-xl">
+          <p className=" px-2 text-neutral-700 lg:px-12 mx-auto text-lg  md:text-xl">
             Discover all the essential tools for creating memorable events,
             including ticketing, nomination filing, and voting for nominees,
             designed to be user-friendly for both organizers and attendees.

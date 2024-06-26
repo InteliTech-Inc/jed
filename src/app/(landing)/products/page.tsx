@@ -30,13 +30,16 @@ export default function ProductsPage() {
             Nominations
           </h1>
           <p>
-            Improve the prestige of your event by using our simplified Nominee
-            Voting system. Handle the nomination process for the event with
-            dedication, making sure that everything is transparent and fair.
-            Encourage participation in a dynamic and open voting process by
-            providing participants with customisable vote criteria and real-time
-            result tracking. Encourage a sense of excitement and anticipation as
-            voters select deserving candidates.
+            Jed's nominations feature allows users to effortlessly send out
+            nomination forms through generated links. This platform guarantees
+            that participants can nominate their choices at any time, from any
+            location, for awards, positions, or recognitions.
+            <br />
+            <br />
+            In addition to saving time, the shortened procedure guarantees a
+            fair and systematic way of gathering nominations. Jed simplifies the
+            process of organising nominations, giving users a productive
+            approach to manage the initial stages of their events.
           </p>
         </section>
         <section>
@@ -46,8 +49,38 @@ export default function ProductsPage() {
         </section>
       </section>
       <section
+        id="voting"
+        className="grid lg:h-screen lg:grid-cols-2 bg-green-50 gap-4 place-content-center p-6"
+      >
+        <section className="lg:p-4">
+          <h1 className=" text-2xl lg:text-5xl text-secondary font-semibold py-4">
+            Voting
+          </h1>
+          <p>
+            Admins may easily oversee and monitor the voting period's progress
+            thanks to Jed's voting tool. Because users can cast their votes
+            directly through the app or by using a USSD code, this solution
+            enables flexibility and accessibility while also allowing a wider
+            range of preferences and participation.
+          </p>
+          <br />
+          <p>
+            Administrators can keep an eye on voting patterns and participation
+            thanks to the real-time tracking feature, which offers transparency
+            and insights into the voting process. Jed makes managing and
+            conducting voting a hassle-free process, improving the event's speed
+            and integrity.
+          </p>
+        </section>
+        <section>
+          <div className=" border rounded-3xl p-4 bg-neutral-50">
+            <Image src={VotingImage} alt="Product" className="" />
+          </div>
+        </section>
+      </section>
+      <section
         id="ticketing"
-        className="grid lg:h-screen lg:grid-cols-2  gap-4 place-content-center bg-green-50 p-6"
+        className="grid lg:h-screen lg:grid-cols-2  gap-4 place-content-center  p-6"
       >
         <section>
           <div className=" border rounded-3xl p-4 bg-neutral-50">
@@ -59,62 +92,20 @@ export default function ProductsPage() {
             Ticketing
           </h1>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur consectetur deserunt quaerat illum tempora magni ut
-            molestiae magnam. Doloremque, ipsum. Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Est corrupti quidem nemo! Labore
-            sequi quae optio dolorem officia odit distinctio!
+            The goal of Jed's ticketing system is to make it easier for the
+            general public to purchase event tickets. Admins have the ability to
+            set prices, generate and manage different ticket kinds, and track
+            sales in real-time. This tool makes sure that the entire ticketing
+            process—from advertising to purchase and entry management—runs
+            smoothly and efficiently.
           </p>
           <br />
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur consectetur deserunt quaerat illum tempora magni ut
-            molestiae magnam. Doloremque, ipsum. Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Est corrupti quidem nemo! Labore
-            sequi quae optio dolorem officia odit distinctio!
+            Event planners may concentrate on other important elements of their
+            planning when they use Jed to make ticket sales simple and
+            effective. Ensuring a flawless experience for both organisers and
+            guests, the strong ticketing tool helps maximise attendance.
           </p>
-          <br />
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur consectetur deserunt quaerat illum tempora magni ut
-            molestia
-          </p>
-        </section>
-      </section>
-      <section
-        id="voting"
-        className="grid lg:h-screen lg:grid-cols-2 gap-4 place-content-center p-6"
-      >
-        <section className="lg:p-4">
-          <h1 className=" text-2xl lg:text-5xl text-secondary font-semibold py-4">
-            Voting
-          </h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur consectetur deserunt quaerat illum tempora magni ut
-            molestiae magnam. Doloremque, ipsum. Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Est corrupti quidem nemo! Labore
-            sequi quae optio dolorem officia odit distinctio!
-          </p>
-          <br />
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur consectetur deserunt quaerat illum tempora magni ut
-            molestiae magnam. Doloremque, ipsum. Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Est corrupti quidem nemo! Labore
-            sequi quae optio dolorem officia odit distinctio!
-          </p>
-          <br />
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequuntur consectetur deserunt quaerat illum tempora magni ut
-            molestia
-          </p>
-        </section>
-        <section>
-          <div className=" border rounded-3xl p-4 bg-neutral-50">
-            <Image src={VotingImage} alt="Product" className="" />
-          </div>
         </section>
       </section>
     </div>

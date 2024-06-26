@@ -16,8 +16,8 @@ export default function NavbarProductsDropdown() {
               <span>
                 <p className="font-semibold text-blue-700">Nominations</p>
                 <p className=" text-sm text-neutral-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Minima fugit iure esse.
+                  Simplifies the process of submitting nomination forms for
+                  awards.
                 </p>
               </span>
             </Link>
@@ -33,8 +33,8 @@ export default function NavbarProductsDropdown() {
               <span>
                 <p className="font-semibold text-red-400">Ticketing</p>
                 <p className=" text-sm text-neutral-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Minima fugit iure esse.
+                  Allows creators to manage ticket types, pricing, and real-time
+                  sales monitoring.
                 </p>
               </span>
             </Link>
@@ -50,8 +50,8 @@ export default function NavbarProductsDropdown() {
               <span>
                 <p className="font-semibold text-secondary">Voting</p>
                 <p className=" text-sm text-neutral-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Minima fugit iure esse.
+                  Allows flexibility and transparency, and real-time tracking of
+                  votes.
                 </p>
               </span>
             </Link>
