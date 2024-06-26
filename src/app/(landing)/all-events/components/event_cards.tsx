@@ -85,11 +85,11 @@ export default function EventCards({ events }: Props) {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
               {filteredEvents?.map((event) => {
-                const voting_period =
-                  event.voting_period &&
-                  Object.keys(event.voting_period).length > 0
-                    ? event.voting_period
-                    : null;
+                // const voting_period =
+                //   event.voting_period &&
+                //   Object.keys(event.voting_period).length > 0
+                //     ? event.voting_period
+                //     : null;
 
                 // const nomination_period =
                 //   event.nomination_period &&
@@ -111,7 +111,7 @@ export default function EventCards({ events }: Props) {
                       </div>
                       <div className="px-6 py-4">
                         <p className="font-bold text-md mb-1">{event.name}</p>
-                        {event.voting_period && (
+                        {/* {event.voting_period && (
                           <small className=" py-1 px-2 text-[0.75rem] bg-green-200 rounded-lg">
                             Voting started{" "}
                             {formatDistance(
@@ -120,7 +120,7 @@ export default function EventCards({ events }: Props) {
                             )}{" "}
                             ago
                           </small>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </Link>
