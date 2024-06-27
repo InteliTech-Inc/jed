@@ -7,8 +7,23 @@ import { cn } from "@/lib/utils";
 import Providers from "./providers";
 import type { Metadata } from "next";
 
+let ROOT_URL = "http://localhost:3000";
+
+const openGraphImagesAbsolute = [
+  {
+    url: `${ROOT_URL}/src/app/opengraph-image.png`,
+    width: 1200,
+    height: 630,
+  },
+  {
+    url: `${ROOT_URL}/src/app/opengraph-image-square.png`,
+    width: 400,
+    height: 400,
+  },
+];
+
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000/"),
+  metadataBase: new URL(ROOT_URL),
   title: {
     default: "JED",
     template: "JED - %s",
@@ -24,13 +39,9 @@ export const metadata: Metadata = {
       "en-US": "/en-US",
     },
   },
-  // openGraph: {
-  //   images: [
-  //     {
-  //       url: "../app/opengraph-image.png",
-  //     },
-  //   ],
-  // },
+  openGraph: {
+    images: openGraphImagesAbsolute,
+  },
 };
 
 const plusJakartaSans = Plus_Jakarta_Sans({

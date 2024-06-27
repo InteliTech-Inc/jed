@@ -4,9 +4,28 @@ import Footer from "./components/footer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("http://localhost:3000/"),
   title: {
     default: "JED",
     template: "JED - %s",
+  },
+  description:
+    "Discover all the essential tools for creating memorable events, including ticketing, nomination filing, and voting for nominees, designed to be user-friendly for both organizers and attendees.",
+  twitter: {
+    card: "summary_large_image",
+  },
+  alternates: {
+    canonical: "/",
+    languages: {
+      "en-US": "/en-US",
+    },
+  },
+  openGraph: {
+    images: [
+      {
+        url: "../opengraph-image.png",
+      },
+    ],
   },
 };
 
