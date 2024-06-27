@@ -18,11 +18,10 @@ import Spinner from "@/components/spinner";
 import { formSchema } from "@/lib/validations";
 import Confetti from "react-confetti";
 import { toast } from "sonner";
-import { AxiosError } from "axios";
-import useAuthAxios from "@/hooks/use_auth_axios";
+import axios, { AxiosError } from "axios";
+
 export default function WaitListForm(): JSX.Element {
   const [loading, setLoading] = useState(false);
-  const authAxios = useAuthAxios();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,7 +35,7 @@ export default function WaitListForm(): JSX.Element {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setLoading(true);
-      const res = await authAxios.post("/api/waitlist", {
+      const res = await axios.post("/api/waitlist", {
         email: values.email,
       });
       toast.success(res.data.message);
