@@ -26,6 +26,7 @@ type Props = {
 
 export default function AddCategoryModal({ event_id: { id } }: Props) {
   const [categories, setCategories] = useState<Array<string>>([""]);
+  const [open, setOpen] = useState(false);
 
   const { mutateAsync: CreateCategory } = useCreateMutation({
     dbName: "categories",
@@ -111,7 +112,7 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
 
   return (
     <div className="space-x-4">
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="secondary" className=" gap-2">
             <PlusIcon size={14} />
