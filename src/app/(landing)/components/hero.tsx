@@ -20,7 +20,7 @@ export default function Hero() {
             </p>
           </Badge>
           <h1 className=" main-heading">
-            Your <mark className=" text-secondary">all-in-one</mark> events
+            Your <mark className=" text-secondary">all-in-one</mark> event
             organization platform.
           </h1>
           <p className=" px-2 text-neutral-700 lg:px-12 mx-auto text-lg  md:text-xl">

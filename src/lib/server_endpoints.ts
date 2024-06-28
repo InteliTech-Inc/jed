@@ -1,5 +1,6 @@
 import { dbServer } from "./supabase";
 import { cookies } from "next/headers";
+import { db } from "./supabase";
 
 export const getServerUser = async () => {
   const db = dbServer(cookies);
@@ -36,7 +37,6 @@ export const createEvent = async (eventPayload: any) => {
 };
 
 export const addEmailToWaitlist = async (email: string) => {
-  const db = dbServer(cookies);
   const { data, error } = await db.from("waitlist").insert({ email }).select();
   if (error) {
     throw new Error(error.details);
