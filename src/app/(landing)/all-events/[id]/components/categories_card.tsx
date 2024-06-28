@@ -51,7 +51,7 @@ export default function CategoriesCard({ categories }: Props) {
             </Link>
           ))
         ) : (
-          <section className="flex min-h-[55dvh] flex-col items-center justify-center">
+          <section className="flex min-h-[55dvh] flex-col items-center justify-center col-span-3">
             <Image
               src={"/images/no-docs.svg"}
               width={200}

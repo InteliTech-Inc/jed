@@ -98,7 +98,7 @@ export default function EventCards({ events }: Props) {
                 //     : null;
                 return (
                   <Link href={`/all-events/${event.id}`} key={event.id}>
-                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border">
+                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[400px]">
                       <div className="h-[20rem]">
                         <Image
                           className="h-full w-full rounded-lg rounded-b-none object-cover object-center"
