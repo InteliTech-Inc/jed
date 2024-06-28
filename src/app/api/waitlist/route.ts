@@ -11,6 +11,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Bad request" }, { status: 400 });
   }
 
+  if (!email) {
+    return NextResponse.json({ message: "Bad request" }, { status: 400 });
+  }
+
   const transporter = nodemailer.createTransport({
     host: process.env.NEXT_PUBLIC_SMTP_HOST,
     port: 465,

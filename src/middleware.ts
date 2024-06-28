@@ -11,7 +11,7 @@ export default async function middleware(req: NextRequest) {
     // "/reset-password",
     "/waitlist",
     "/about",
-    "/",
+    "/api/waitlist",
   ];
 
   if (
