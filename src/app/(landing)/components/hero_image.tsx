@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import ProductImage from "@/app/assets/hero-image.png";
+import ProductImage from "@/app/assets/hero.png";
 import Image from "next/image";
 import { useInView } from "framer-motion";
 
