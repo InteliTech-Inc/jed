@@ -185,7 +185,10 @@ function CreateEventForm({ user }: { user: User | null }) {
                   name="amount"
                   render={({ field }) => (
                     <FormItem className="mb-4">
-                      <FormLabel>Amount per vote</FormLabel>
+                      <FormLabel>
+                        Amount per vote{" "}
+                        <span className="font-bold text-md">(GHS)</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           {...field}
