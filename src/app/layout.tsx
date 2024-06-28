@@ -7,29 +7,21 @@ import { cn } from "@/lib/utils";
 import Providers from "./providers";
 import type { Metadata } from "next";
 
-let ROOT_URL;
-
-if (process.env.NODE_ENV === "production") {
-  ROOT_URL = "https://jedevents.vercel.app/";
-} else {
-  ROOT_URL = "http://localhost:3000";
-}
-
 const openGraphImagesAbsolute = [
   {
-    url: `${ROOT_URL}/src/app/opengraph-image.png`,
+    url: `https://jedevents.vercel.app/src/app/opengraph-image.png`,
     width: 1200,
     height: 630,
   },
   {
-    url: `${ROOT_URL}/src/app/opengraph-image-square.png`,
+    url: `https://jedevents.vercel.app/src/app/opengraph-image-square.png`,
     width: 400,
     height: 400,
   },
 ];
 
 export const metadata: Metadata = {
-  metadataBase: new URL(ROOT_URL),
+  metadataBase: new URL("https://jedevents.vercel.app"),
   title: {
     default: "JED",
     template: "JED - %s",
