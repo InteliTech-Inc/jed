@@ -3,8 +3,16 @@ import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import { Metadata } from "next";
 
+let rootUrl;
+
+if (process.env.NODE_ENV !== "production") {
+  rootUrl = "https://jedevents.vercel.app";
+} else {
+  rootUrl = "http://localhost:3000";
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000/"),
+  metadataBase: new URL(rootUrl),
   title: {
     default: "JED",
     template: "JED - %s",
