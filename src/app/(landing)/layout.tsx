@@ -3,16 +3,8 @@ import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import { Metadata } from "next";
 
-let rootUrl;
-
-if (process.env.NODE_ENV !== "production") {
-  rootUrl = "https://jedevents.vercel.app";
-} else {
-  rootUrl = "http://localhost:3000";
-}
-
 export const metadata: Metadata = {
-  metadataBase: new URL(rootUrl),
+  metadataBase: new URL("https://jedevents.vercel.app"),
   title: {
     default: "JED",
     template: "JED - %s",
@@ -31,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: `${rootUrl}/opengraph-image.png`,
+        url: `https://jedevents.vercel.app/opengraph-image.png`,
       },
     ],
   },
