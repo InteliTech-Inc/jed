@@ -7,7 +7,13 @@ import { cn } from "@/lib/utils";
 import Providers from "./providers";
 import type { Metadata } from "next";
 
-let ROOT_URL = "http://localhost:3000";
+let ROOT_URL;
+
+if (process.env.NODE_ENV === "production") {
+  ROOT_URL = "https://jedevents.vercel.app/";
+} else {
+  ROOT_URL = "http://localhost:3000";
+}
 
 const openGraphImagesAbsolute = [
   {
