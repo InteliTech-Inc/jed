@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Find all ongoing events and vote for preferred nominee",
 };
 
+export const revalidate = 10;
+
 export default async function AllEventsPage() {
   const db = dbServer(cookies);
   const { data: events } = await db.from("events").select("*");

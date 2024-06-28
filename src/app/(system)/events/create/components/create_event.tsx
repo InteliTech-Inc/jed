@@ -40,9 +40,14 @@ const formSchema = z.object({
   name: z.string().min(0.1, {
     message: "This is a required field.",
   }),
-  description: z.string().min(100, {
-    message: "This should not be less than 100 characters",
-  }),
+  description: z
+    .string()
+    .min(50, {
+      message: "This should not be less than 50 characters",
+    })
+    .max(100, {
+      message: "This should not be more than 100 characters",
+    }),
   amount: z.string().min(1, {
     message: "This is a required field.",
   }),
@@ -118,8 +123,6 @@ function CreateEventForm({ user }: { user: User | null }) {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log(payload);
 
       form.reset();
       toast.success("Event Created Successfully");

@@ -18,6 +18,8 @@ export async function generateStaticParams({ params: { id } }: Props) {
   }));
 }
 
+export const revalidate = 10;
+
 export async function generateMetadata({
   params: { id },
 }: Props): Promise<Metadata> {

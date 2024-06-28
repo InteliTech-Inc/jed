@@ -52,6 +52,7 @@ export default function AddNominees({ data, user_id }: any) {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
+  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof nomineeFormShape>>({
@@ -120,7 +121,6 @@ export default function AddNominees({ data, user_id }: any) {
       toast.error("Please upload an image");
       return;
     }
-
     try {
       setIsPending(true);
 
@@ -153,6 +153,7 @@ export default function AddNominees({ data, user_id }: any) {
       }
     } finally {
       setIsPending(false);
+      setOpen(false);
     }
   }
 
@@ -181,7 +182,7 @@ export default function AddNominees({ data, user_id }: any) {
   }, []);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="secondary">
           {" "}
