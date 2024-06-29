@@ -121,9 +121,9 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="text-left text-xl">
+            <p className="text-left text-xl font-semibold">
               Add Event Category{" "}
-            </DialogTitle>
+            </p>
             <DialogDescription className="text-left">
               Add a category to your event to help organize your nominations.
             </DialogDescription>
