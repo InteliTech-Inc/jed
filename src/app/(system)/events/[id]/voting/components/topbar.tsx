@@ -16,10 +16,10 @@ export default function TopButtons({
     }
     const data = results!.map((r) => {
       return {
-        "Full Name": r.full_name,
-        EMAIL: r.email,
+        "Full Name": r.full_name!,
+        EMAIL: r.email || "N/A",
         CATEGORY: r.category,
-        "PHONE NUMBER": r.phone,
+        "PHONE NUMBER": r.phone || "N/A",
         "NUMBER OF VOTES": r.number_of_votes,
         "NOMINEE CODE": r.code,
       };
