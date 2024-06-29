@@ -41,19 +41,24 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
     e.preventDefault();
     checkConnection();
 
-    for (const category of categories) {
-      const payload = {
-        category_name: category,
-        event_id: id,
-      };
-      CreateCategory(payload)
-        .then((_) => {
-          toast.success("Category created successfully");
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-    }
+    // Use Promise.all to create all categories at once
+
+
+   Promise.all(
+     categories.map((category) => {
+       const payload = {
+         category_name: category,
+         event_id: id,
+       };
+       return CreateCategory(payload);
+     })
+   )
+     .then(() => {
+       toast.success("All categories created successfully");
+     })
+     .catch((error) => {
+       toast.error(error.message);
+     }); 
     setCategories([""]);
   }
   // Add category additional field
