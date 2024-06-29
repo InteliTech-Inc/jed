@@ -16,17 +16,18 @@ import { checkConnection, cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ImageDown, CalendarIcon } from "lucide-react";
+import { ImageDown, CalendarIcon, InfoIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { User } from "@supabase/supabase-js";
-import { differenceInCalendarDays, format } from "date-fns";
+import { differenceInCalendarDays, format, addDays } from "date-fns";
 import { z } from "zod";
 import { Calendar } from "@/components/ui/calendar";
 import { Switch } from "@/components/ui/switch";
+import { useEffect } from "react";
 import axios from "axios";
 import {
   Popover,
@@ -34,7 +35,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { isImageSizeValid } from "@/lib/utils";
-import { getFormData } from "@/lib/utils";
+import { isEventPeriodsValid, getFormData } from "@/lib/utils";
 
 const formSchema = z.object({
   name: z.string().min(0.1, {
@@ -42,11 +43,11 @@ const formSchema = z.object({
   }),
   description: z
     .string()
-    .min(50, {
-      message: "This should not be less than 50 characters",
+    .min(100, {
+      message: "This should not be less than 100 characters",
     })
-    .max(100, {
-      message: "This should not be more than 100 characters",
+    .max(150, {
+      message: "This should not be more than 150 characters",
     }),
   amount: z.string().min(1, {
     message: "This is a required field.",
@@ -66,6 +67,7 @@ const formSchema = z.object({
 const defaultValues = {
   name: "",
   description: "",
+  amount: "",
 };
 
 function CreateEventForm({ user }: { user: User | null }) {
@@ -82,6 +84,15 @@ function CreateEventForm({ user }: { user: User | null }) {
     },
   });
 
+  useEffect(() => {
+    if (!addNomination) {
+      form.setValue("nominations", {
+        start_date: undefined,
+        end_date: undefined,
+      });
+    }
+  }, [addNomination]);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const file = selectedFile;
 
@@ -95,8 +106,9 @@ function CreateEventForm({ user }: { user: User | null }) {
       return;
     }
 
+    checkConnection();
+
     try {
-      checkConnection();
       setLoading(true);
 
       const payload = {
@@ -116,9 +128,17 @@ function CreateEventForm({ user }: { user: User | null }) {
         },
       };
 
+      const periodIsValid = isEventPeriodsValid({
+        nomination: payload.nomination_period,
+        voting: payload.voting_period,
+        isSwitchOn: addNomination,
+      });
+
+      if (!periodIsValid) return;
+
       const formData = getFormData(payload);
 
-      const data = await axios.post("/api/create-events", formData, {
+      await axios.post("/api/create-events", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -220,6 +240,139 @@ function CreateEventForm({ user }: { user: User | null }) {
                   </FormItem>
                 )}
               />
+              <div className="flex flex-row items-center gap-6 mb-4 justify-between rounded-lg border p-4">
+                <div className=" space-y-0.5">
+                  <FormLabel className="text-base">
+                    Set nomination period?
+                  </FormLabel>
+                  <FormDescription>
+                    Set the period for nomination if you'll be using our
+                    nominations forms.
+                  </FormDescription>
+                </div>
+                <Switch
+                  aria-readonly
+                  onCheckedChange={() => {
+                    return setAddNomination((isOpen) => !isOpen);
+                  }}
+                  checked={addNomination}
+                />
+              </div>
+              {addNomination && (
+                <>
+                  <small className=" flex gap-1 items-center text-neutral-500">
+                    <InfoIcon size={11} />
+                    The nomination period should be before the voting period
+                  </small>
+                  <div className=" flex flex-col md:flex-row gap-2">
+                    <FormField
+                      control={form.control}
+                      name={`nominations.start_date`}
+                      render={({ field }) => (
+                        <div className=" w-full">
+                          <FormItem className="w-full">
+                            <FormLabel>Nominations start date</FormLabel>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <FormControl className=" relative z-10">
+                                  <Button
+                                    variant={"outline"}
+                                    className={cn(
+                                      "w-full justify-start relative z-10 text-left font-normal",
+                                      !field.value && "text-muted-foreground"
+                                    )}
+                                  >
+                                    {field.value ? (
+                                      format(field.value, "PPP")
+                                    ) : (
+                                      <span>Pick a date</span>
+                                    )}
+                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent
+                                className="w-auto p-0 relative z-10"
+                                align="start"
+                              >
+                                <Calendar
+                                  mode="single"
+                                  selected={field.value}
+                                  disabled={{
+                                    before: new Date(),
+                                  }}
+                                  onSelect={field.onChange}
+                                  initialFocus
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          </FormItem>
+                          <div className=" hidden">
+                            {field.value &&
+                              differenceInCalendarDays(
+                                field.value,
+                                new Date()
+                              ) < 0 &&
+                              toast.error(
+                                "The start date should be later than today's date."
+                              )}
+                          </div>
+                        </div>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`nominations.end_date`}
+                      render={({ field }) => (
+                        <div className=" w-full mb-4">
+                          <FormItem className="w-full">
+                            <FormLabel>Nominations end date</FormLabel>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <FormControl className=" relative z-10">
+                                  <Button
+                                    variant={"outline"}
+                                    className={cn(
+                                      "w-full justify-start relative z-10 text-left font-normal",
+                                      !field.value && "text-muted-foreground"
+                                    )}
+                                  >
+                                    {field.value ? (
+                                      format(field.value, "PPP")
+                                    ) : (
+                                      <span>Pick a date</span>
+                                    )}
+                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent
+                                className="w-auto p-0 relative z-10"
+                                align="start"
+                              >
+                                <Calendar
+                                  mode="single"
+                                  selected={field.value}
+                                  disabled={{
+                                    before: addDays(
+                                      form.getValues(
+                                        "nominations.start_date"
+                                      ) as Date,
+                                      1
+                                    ),
+                                  }}
+                                  onSelect={field.onChange}
+                                  initialFocus
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          </FormItem>
+                        </div>
+                      )}
+                    />
+                  </div>
+                </>
+              )}
               <div className=" flex flex-col md:flex-row gap-2">
                 <FormField
                   control={form.control}
@@ -252,7 +405,11 @@ function CreateEventForm({ user }: { user: User | null }) {
                             align="start"
                           >
                             <Calendar
-                              disabled={{ before: new Date() }}
+                              disabled={{
+                                before:
+                                  form.getValues("nominations.end_date") ??
+                                  new Date(),
+                              }}
                               mode="single"
                               selected={field.value}
                               onSelect={field.onChange}
@@ -266,7 +423,7 @@ function CreateEventForm({ user }: { user: User | null }) {
                           differenceInCalendarDays(field.value, new Date()) <
                             0 &&
                           toast.error(
-                            "The start date should be later than today's date."
+                            "The voting start date should be later than today's date."
                           )}
                       </div>
                     </div>
@@ -275,134 +432,11 @@ function CreateEventForm({ user }: { user: User | null }) {
                 <FormField
                   control={form.control}
                   name={`voting.end_date`}
-                  render={({ field }) => (
-                    <div className=" w-full mb-4">
-                      <FormItem className="w-full">
-                        <FormLabel>Voting end date</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl className=" relative z-10">
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full justify-start relative z-10 text-left font-normal",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            className="w-auto p-0 relative z-10"
-                            align="start"
-                          >
-                            <Calendar
-                              mode="single"
-                              disabled={{
-                                before: form.getValues("voting.start_date"),
-                              }}
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                      </FormItem>
-                      <div className=" hidden">
-                        {field.value &&
-                          differenceInCalendarDays(
-                            form.getValues("voting.start_date"),
-                            field.value
-                          ) >= 0 &&
-                          toast.error(
-                            "The start date should be earlier than the end date."
-                          )}
-                      </div>
-                    </div>
-                  )}
-                />
-              </div>
-              <div className="flex flex-row items-center gap-6 mb-4 justify-between rounded-lg border p-4">
-                <div className=" space-y-0.5">
-                  <FormLabel className="text-base">
-                    Set nomination period?
-                  </FormLabel>
-                  <FormDescription>
-                    Set the period for nomination if you'll be using our
-                    nominations forms.
-                  </FormDescription>
-                </div>
-                <Switch
-                  aria-readonly
-                  onCheckedChange={() => setAddNomination((prev) => !prev)}
-                  checked={addNomination}
-                />
-              </div>
-              {addNomination && (
-                <div className=" flex flex-col md:flex-row gap-2">
-                  <FormField
-                    control={form.control}
-                    name={`nominations.start_date`}
-                    render={({ field }) => (
-                      <div className=" w-full">
-                        <FormItem className="w-full">
-                          <FormLabel>Nominations start date</FormLabel>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl className=" relative z-10">
-                                <Button
-                                  variant={"outline"}
-                                  className={cn(
-                                    "w-full justify-start relative z-10 text-left font-normal",
-                                    !field.value && "text-muted-foreground"
-                                  )}
-                                >
-                                  {field.value ? (
-                                    format(field.value, "PPP")
-                                  ) : (
-                                    <span>Pick a date</span>
-                                  )}
-                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent
-                              className="w-auto p-0 relative z-10"
-                              align="start"
-                            >
-                              <Calendar
-                                mode="single"
-                                selected={field.value}
-                                onSelect={field.onChange}
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </FormItem>
-                        <div className=" hidden">
-                          {field.value &&
-                            differenceInCalendarDays(field.value, new Date()) <
-                              0 &&
-                            toast.error(
-                              "The start date should be later than today's date."
-                            )}
-                        </div>
-                      </div>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`nominations.end_date`}
-                    render={({ field }) => (
+                  render={({ field }) => {
+                    return (
                       <div className=" w-full mb-4">
                         <FormItem className="w-full">
-                          <FormLabel>Nominations end date</FormLabel>
+                          <FormLabel>Voting end date</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl className=" relative z-10">
@@ -428,6 +462,12 @@ function CreateEventForm({ user }: { user: User | null }) {
                             >
                               <Calendar
                                 mode="single"
+                                disabled={{
+                                  before: addDays(
+                                    form.getValues("voting.start_date"),
+                                    1
+                                  ),
+                                }}
                                 selected={field.value}
                                 onSelect={field.onChange}
                                 initialFocus
@@ -437,25 +477,20 @@ function CreateEventForm({ user }: { user: User | null }) {
                         </FormItem>
                         <div className=" hidden">
                           {field.value &&
-                            differenceInCalendarDays(field.value, new Date()) <
-                              0 &&
-                            toast.error(
-                              "The start date should be later than today's date."
-                            )}
-                          {field.value &&
                             differenceInCalendarDays(
-                              form.getValues("nominations.start_date") as Date,
+                              form.getValues("voting.start_date"),
                               field.value
                             ) >= 0 &&
                             toast.error(
-                              "The start date should be earlier than the end date."
+                              "The voting end date should be later than the start date."
                             )}
                         </div>
                       </div>
-                    )}
-                  />
-                </div>
-              )}
+                    );
+                  }}
+                />
+              </div>
+
               <Button
                 type="submit"
                 className="tracking-wide gap-2 uppercase w-full my-4"

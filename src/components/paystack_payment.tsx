@@ -222,7 +222,7 @@ export default function PaystackPayment({ id }: { id: string }) {
           name="votes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="votes" className="flex">
+              <FormLabel htmlFor="votes" className="flex gap-1">
                 Number of Votes{" "}
                 {isFetching ? (
                   <span className="ml-2">

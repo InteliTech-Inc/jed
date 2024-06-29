@@ -30,12 +30,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Rotating_Lines from "@/components/spinner";
-import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { nomineeFormShape } from "@/lib/validations";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ImageDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { checkConnection } from "@/lib/utils";
+import { checkConnection, isImageSizeValid } from "@/lib/utils";
 import { addNominee, uploadImage } from "../../../create/functions";
 import { db } from "@/lib/supabase";
 import { useParams } from "next/navigation";
@@ -49,9 +47,8 @@ type Category = {
 
 export default function AddNominees({ data, user_id }: any) {
   const { id } = useParams();
-  const [isPending, setIsPending] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string>("");
+  const [, setPreview] = useState<string>("");
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -121,8 +118,16 @@ export default function AddNominees({ data, user_id }: any) {
       toast.error("Please upload an image");
       return;
     }
+
+    if (!isImageSizeValid(file)) {
+      toast.error("Please upload an image smaller than 2MB");
+      return;
+    }
+    let toastId;
     try {
-      setIsPending(true);
+      setOpen(false);
+
+      toastId = toast.loading(`Uploading nominee's data...`);
 
       const filePath = `nominees/jed-${randomString}${slicedName}`;
 
@@ -140,20 +145,15 @@ export default function AddNominees({ data, user_id }: any) {
       ]);
 
       if (nomineeData instanceof Error || imageData instanceof Error) {
-        toast.error("There's an error adding nominee");
+        toast.error("There's an error adding nominee", { id: toastId });
         return;
       }
-      toast.success("Nominee added successfully");
+      toast.success("Nominee added successfully", { id: toastId });
       form.reset();
       setSelectedFile(null);
-      setIsPending(false);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
-      }
-    } finally {
-      setIsPending(false);
-      setOpen(false);
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error("Something went wrong", { id: toastId });
     }
   }
 
@@ -190,7 +190,7 @@ export default function AddNominees({ data, user_id }: any) {
           Add Nominee
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="">
         <DialogHeader>
           <DialogTitle className=" text-left text-xl">Add Nominee</DialogTitle>
           <DialogDescription className=" text-left">
@@ -324,11 +324,9 @@ export default function AddNominees({ data, user_id }: any) {
               disabled={
                 inputValues.full_name.length === 0 ||
                 inputValues.code.length === 0 ||
-                inputValues.category.length === 0 ||
-                isPending
+                inputValues.category.length === 0
               }
             >
-              {isPending && <Rotating_Lines color="#fff" />}
               Create Nominee
             </Button>
           </form>
