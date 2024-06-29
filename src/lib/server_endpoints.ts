@@ -1,6 +1,7 @@
 import { dbServer } from "./supabase";
 import { cookies } from "next/headers";
 import { db } from "./supabase";
+import { VotingDataResponse } from "@/types/types";
 
 export const getServerUser = async () => {
   const db = dbServer(cookies);
@@ -41,5 +42,47 @@ export const addEmailToWaitlist = async (email: string) => {
   if (error) {
     throw new Error(error.details);
   }
+  return data;
+};
+
+export const getVotingDataResponse = async (id: string) => {
+  const db = dbServer(cookies);
+  const [votingData, nomineesResult, categoriesResult, nominationsResult] =
+    await Promise.all([
+      db.from("voting").select("id, nominee_id, count").eq("event_id", id),
+      db
+        .from("nominees")
+        .select("id,code, full_name, category_id")
+        .eq("event_id", id),
+      db.from("categories").select("id, category_name").eq("event_id", id),
+      db.from("nominations").select("*").eq("event_id", id),
+    ]);
+
+  const { data: voting } = votingData;
+  const { data: nominees } = nomineesResult;
+  const { data: categories } = categoriesResult;
+  const { data: nominations } = nominationsResult;
+
+  //Getting the nominees data
+  const data = voting?.map((vote) => {
+    const nominee = nominees?.find((nominee) => nominee.id === vote.nominee_id);
+    const category = categories?.find(
+      (category) => category.id === nominee?.category_id
+    );
+    const nomination = nominations?.find(
+      (record) => record.full_name === nominee?.full_name
+    );
+
+    return {
+      id: vote.id,
+      full_name: nominee?.full_name,
+      email: nomination?.email || "N/A",
+      phone: nomination?.phone || "N/A",
+      code: nominee?.code,
+      number_of_votes: vote.count,
+      category: category?.category_name,
+    };
+  }) as VotingDataResponse[];
+
   return data;
 };
