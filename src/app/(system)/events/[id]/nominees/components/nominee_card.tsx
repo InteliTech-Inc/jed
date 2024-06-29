@@ -73,7 +73,7 @@ export default function NomineeCard({ nominee, votes }: Props) {
                 router.refresh();
                 return;
               }
-              toast.error("Couldn not delete the nominee!");
+              toast.error("Could not delete the nominee!");
             },
             {
               loading: <Spinner />,
