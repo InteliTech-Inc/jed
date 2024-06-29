@@ -11,7 +11,7 @@ import {
 import { db } from "@/lib/supabase";
 import { Vote } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 type Votes = {
@@ -31,6 +31,8 @@ export default function VotingResults() {
   const { id } = useParams();
   const [votes, setVotes] = useState<Votes[]>();
   const [nominees, setNominees] = useState<Nominees>();
+
+  const router = useRouter();
   useEffect(() => {
     async function fetchVotes() {
       const { data: nominees } = await db
@@ -54,6 +56,52 @@ export default function VotingResults() {
 
     fetchVotes();
   }, []);
+
+  // Realtime for nominees fetch
+  useEffect(() => {
+    const nominee_channel = db
+      .channel("realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "nominees",
+        },
+        () => {
+          router.refresh();
+          console.log("Nominee channel updated");
+        }
+      )
+      .subscribe();
+
+    return () => {
+      db.removeChannel(nominee_channel);
+    };
+  }, [db, router]);
+
+  useEffect(() => {
+    const voting_channel = db
+      .channel("realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "voting",
+        },
+        () => {
+          router.refresh();
+          console.log("Voting channel updated");
+        }
+      )
+      .subscribe();
+
+    return () => {
+      db.removeChannel(voting_channel);
+    };
+  }, [db, router]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
