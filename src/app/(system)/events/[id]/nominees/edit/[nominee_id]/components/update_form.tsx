@@ -109,21 +109,19 @@ export default function UpdateNomineeForm({ data, categories }: any) {
         event_id: data.event_id,
       };
 
-      console.log("Payload", payload);
-
       const [_, updateRecords] = await Promise.all([
         uploadImage({ file, path: filePath }),
         UpdateNomineeDetails(payload, data.id),
       ]);
 
       if (updateRecords instanceof Error) {
-        toast.error("There's an error updating the records");
+        toast.error("There's an error updating nominee");
         return;
       }
-      toast.success("Nominee records updated successfully");
       form.reset();
       setSelectedFile(null);
       setIsPending(false);
+      toast.success("Nominee updated successfully");
     } catch (error) {
       toast.error("Something went wrong!");
     } finally {
@@ -143,7 +141,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
             console.log("Changes received");
             setTimeout(() => {
               router.back();
-            }, 1000);
+            }, 3000);
           }
         }
       )
@@ -212,6 +210,7 @@ export default function UpdateNomineeForm({ data, categories }: any) {
                 <div className="absolute top-[3.2rem] right-0">
                   <Button
                     variant={"outline"}
+                    disabled
                     type="button"
                     onClick={() => toast.error("Code generated already")}
                     className="absolute top-[50%] right-0 transform translate-y-[-50%]"

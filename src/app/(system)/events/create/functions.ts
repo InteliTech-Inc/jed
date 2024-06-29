@@ -1,4 +1,5 @@
 "use client";
+import { toast } from "sonner";
 
 import { db } from "@/lib/supabase";
 
@@ -7,7 +8,9 @@ const uploadImage = async ({ file, path }: { file: File; path: string }) => {
     contentType: "image/*",
   });
 
-  if (error) return new Error(error.message);
+  if (error) {
+    return new Error(error.message);
+  }
   return data;
 };
 
@@ -46,7 +49,10 @@ const UpdateNomineeDetails = async (
     .eq("id", user_id)
     .single();
 
-  if (error) return new Error(error.message);
+  if (error) {
+    return new Error(error.message);
+  }
+
   return data;
 };
 

@@ -41,6 +41,11 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
     e.preventDefault();
     checkConnection();
 
+    setOpen(false);
+
+    let toastId: string | number | undefined;
+    toastId = toast.loading("Adding categories", { id: toastId });
+
     Promise.all(
       categories.map((category) => {
         const payload = {
@@ -51,10 +56,10 @@ export default function AddCategoryModal({ event_id: { id } }: Props) {
       })
     )
       .then(() => {
-        toast.success("All categories created successfully");
+        toast.success("All categories created successfully", { id: toastId });
       })
       .catch((error) => {
-        toast.error(error.message);
+        toast.error(error.message, { id: toastId });
       });
     setCategories([""]);
   }
