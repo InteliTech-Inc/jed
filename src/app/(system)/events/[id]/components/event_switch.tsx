@@ -52,6 +52,19 @@ export default function EventSwitch({ id }: Props) {
           onClick: async () => {
             toast.promise(
               async () => {
+                // Check if the user events has its fields filled
+                // must have categories filled
+                const { data: categories } = await db
+                  .from("categories")
+                  .select("*")
+                  .eq("event_id", id);
+
+                if (categories?.length === 0) {
+                  toast.error(
+                    "Please add at least one category to publish this event"
+                  );
+                  return;
+                }
                 const { error } = await db
                   .from("events")
                   .update({ is_completed: !publishNomination })

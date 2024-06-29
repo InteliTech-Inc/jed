@@ -48,6 +48,7 @@ export default function PaystackPayment({ id }: { id: string }) {
   const [_, setFormData] = useState<FORM_DATA>();
   const [amountPerVote, setAmountPerVote] = useState(1);
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [eventId, setEventId] = useState<string | null>(null);
 
   const [success, setSuccess] = useState(false);
 
@@ -69,6 +70,10 @@ export default function PaystackPayment({ id }: { id: string }) {
           .select(`*, event_id`)
           .eq("id", id)
           .single();
+
+        if (data) {
+          setEventId(data.event_id);
+        }
 
         if (error) {
           console.error("Error fetching event amount:", error);
@@ -136,9 +141,11 @@ export default function PaystackPayment({ id }: { id: string }) {
             console.error("Error updating vote count:", updateError);
           }
         } else {
-          const { error: insertError } = await db
-            .from("voting")
-            .insert({ nominee_id: id, count: Number(voting) });
+          const { error: insertError } = await db.from("voting").insert({
+            nominee_id: id,
+            count: Number(voting),
+            event_id: eventId,
+          });
 
           if (insertError) {
             console.error("Error inserting new vote:", insertError);
