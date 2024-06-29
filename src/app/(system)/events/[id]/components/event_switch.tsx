@@ -7,9 +7,10 @@ import { toast } from "sonner";
 
 type Props = {
   id: string;
+  className: string;
 };
 
-export default function EventSwitch({ id }: Props) {
+export default function EventSwitch({ id, className }: Props) {
   const [publishNomination, setPublishNomination] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -90,20 +91,22 @@ export default function EventSwitch({ id }: Props) {
     );
   };
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-
   return (
-    <div className="flex items-center gap-x-3">
-      <p className="hidden md:block">
-        {!publishNomination ? "Publish Event" : "Unpublish Event"}
-      </p>
-      <Switch
-        aria-readonly
-        onCheckedChange={handleToggle}
-        checked={publishNomination}
-      />
+    <div className={`${className} flex items-center justify-center gap-1`}>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <p className="text-md">
+            {!publishNomination ? "Publish" : "Unpublish"}
+          </p>
+          <Switch
+            aria-readonly
+            onCheckedChange={handleToggle}
+            checked={publishNomination}
+          />
+        </>
+      )}
     </div>
   );
 }
