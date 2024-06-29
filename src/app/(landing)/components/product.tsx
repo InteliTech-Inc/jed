@@ -1,8 +1,9 @@
 "use client";
 
-import Nomination from "@/app/assets/nominations.webp";
-import Voting from "@/app/assets/voting.webp";
-import Ticketing from "@/app/assets/ticketing.webp";
+import Nomination from "@/app/assets/nomination.svg";
+import Voting from "@/app/assets/voting.svg";
+import Ticketing from "@/app/assets/ticketing.svg";
+
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { headingAnimationsProp } from "@/constants/framer_animations";
@@ -52,7 +53,13 @@ export default function Product() {
               key={name}
               className=" border rounded-3xl p-4 overflow-hidden bg-neutral-50"
             >
-              <Image src={img_url} alt="Product" className="card-image" />
+              <Image
+                src={img_url}
+                width={1000}
+                height={1000}
+                alt="Product"
+                className="card-image"
+              />
               <h3 className=" text-2xl font-semibold text-secondary py-2">
                 {name}
               </h3>

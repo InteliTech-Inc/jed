@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
-
+import { isBefore, addDays, differenceInCalendarDays, isAfter } from "date-fns";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -110,4 +110,55 @@ export function formDataToObject(formData: FormData): Record<string, any> {
   }
 
   return obj;
+}
+
+export function isEventPeriodsValid({
+  nomination,
+  voting,
+  isSwitchOn,
+}: {
+  nomination: {
+    start_date?: string;
+    end_date?: string;
+  };
+  voting: {
+    start_date: string;
+    end_date: string;
+  };
+  isSwitchOn: boolean;
+}) {
+  const nominationPeriodIsSet = Object.keys(nomination).every(
+    (key) => nomination[key as keyof typeof nomination]
+  );
+
+  if (nominationPeriodIsSet) {
+    const isValidNomination =
+      isBefore(
+        nomination.start_date as string,
+        nomination.end_date as string
+      ) && isBefore(nomination.end_date as string, voting.start_date);
+    if (!isValidNomination) {
+      toast.error(
+        "There is a problem with the periods you've specified. Make sure the nomination period is before the voting period. If you don't want to set the nomination period, just uncheck the button."
+      );
+      return false;
+    }
+    return true;
+  }
+
+  const isValidVoting = isBefore(voting.start_date, voting.end_date);
+  if (!isValidVoting) {
+    toast.error("Voting period must be before the end date.");
+    return false;
+  }
+
+  if (isSwitchOn) {
+    // this is when the user checks the nomination button but with no dates
+    toast.warning(
+      "If you do not want to set the nomination period, uncheck the nomination period button."
+    );
+    return false;
+  }
+
+  return true;
 }

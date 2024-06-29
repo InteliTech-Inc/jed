@@ -12,13 +12,13 @@ export default function Hero() {
         <div className=" hidden lg:block absolute w-60 aspect-square bg-green-400/40 blur-[120px]  right-[4%] bottom-[15%]  animate-pulse duration-1000" />
         <div className="absolute w-60 aspect-square bg-green-200/60 blur-[120px]  left-[4%] top-[15%]" />
         <section className="flex flex-col gap-8 p-2 lg:p-6 text-center w-full md::w-4/5 mx-auto">
-          <Badge>
+          {/* <Badge>
             <p className="flex">
               {" "}
               <Dot className=" text-inherit" /> 2 weeks to product launch 🎊{" "}
               <Dot className=" text-inherit" />
             </p>
-          </Badge>
+          </Badge> */}
           <h1 className=" main-heading">
             Your <mark className=" text-secondary">all-in-one</mark> event
             organization platform.
