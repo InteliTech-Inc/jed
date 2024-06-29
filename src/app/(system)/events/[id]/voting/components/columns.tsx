@@ -13,7 +13,7 @@ const multiColumnFilterFn: FilterFn<VotingDataResponse> = (
   columnId,
   filterValue
 ) => {
-  const searchableRowContent = `${row.original.full_name} ${row.original.category}`;
+  const searchableRowContent = `${row.original?.full_name} ${row.original?.category}`;
 
   return searchableRowContent.toLowerCase().includes(filterValue.toLowerCase());
 };
@@ -60,13 +60,17 @@ export const columns: ColumnDef<VotingDataResponse>[] = [
     header: "Email",
   },
   {
+    accessorKey: "phone",
+    header: "Phone",
+  },
+  {
     accessorKey: "category",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className=" pl-2"
+          className=" pl-0"
         >
           Category
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -89,7 +93,7 @@ export const columns: ColumnDef<VotingDataResponse>[] = [
       );
     },
     cell: ({ row }) => {
-      const { number_of_votes } = row.original;
+      const { number_of_votes } = row?.original;
       return (
         <p className=" font-semibold text-secondary text-center">
           {number_of_votes}
