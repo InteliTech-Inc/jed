@@ -29,6 +29,8 @@ type Event = {
   voting_period: Json;
 } | null;
 
+export const revalidate = 20;
+
 export default async function CategoryNomineeCard({
   nominees,
   event,
