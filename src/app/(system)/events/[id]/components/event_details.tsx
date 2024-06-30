@@ -10,7 +10,7 @@ import EventSwitch from "./event_switch";
 import { format } from "date-fns";
 import BackButton from "@/components/back";
 
-type Data = {
+export type Data = {
   data: {
     id: string;
     name: string;
@@ -20,6 +20,7 @@ type Data = {
       start_date: string;
       end_date: string;
     };
+    amount_per_vote: string;
     voting_period: {
       start_date: string;
       end_date: string;
