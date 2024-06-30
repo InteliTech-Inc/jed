@@ -42,19 +42,21 @@ export default async function EventDetails({ id }: { id: string }) {
 
   if (!data) {
     return (
-      <div className="grid place-items-center">
+      <div>
         <BackButton />
-        <div>
-          <Image
-            src={"/images/no-docs.svg"}
-            alt="No-docs"
-            width={200}
-            height={200}
-          />
-          <p className="text-center">
-            Sorry there was an error fetching your events, Kindly refresh the
-            page!
-          </p>
+        <div className="grid place-items-center">
+          <div className="flex flex-col items-center justify-center  gap-4">
+            <Image
+              src={"/images/no-docs.svg"}
+              alt="No-docs"
+              width={200}
+              height={200}
+            />
+            <p className="text-center">
+              Sorry, there was an error fetching your events. Check your
+              internet connection and refresh the page.
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -103,7 +105,7 @@ export default async function EventDetails({ id }: { id: string }) {
             className="w-full h-full object-cover object-center"
           />
         </div>
-        <div className="px-6 break-words">
+        <div className=" p-2 lg:px-6 break-words">
           <p className=" mb-5 text-3xl font-semibold text-neutral-700">
             {data.name}
           </p>
