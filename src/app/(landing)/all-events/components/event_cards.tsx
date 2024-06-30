@@ -1,10 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { formatDistance } from "date-fns";
+import SearchBar from "@/components/ui/search-bar";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type Event = {
   created_at: string;
@@ -23,10 +22,13 @@ type Props = {
 export default function EventCards({ events }: Props) {
   const [query, setQuery] = useState("");
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const searchParams = useSearchParams()
+
+  const eventQuery = searchParams.get("event")
 
   useEffect(() => {
-    Search(query);
-  }, [query, events]);
+    Search(eventQuery as string);
+  }, [eventQuery, events]);
 
   const Search = (query: string) => {
     if (query) {
@@ -40,21 +42,21 @@ export default function EventCards({ events }: Props) {
   };
 
   // Handle Query by Key Search
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
+  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setQuery(event.target.value);
+  // };
 
   // Handle Search by button click
-  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
+  // const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  // };
 
   console.log(events);
 
   return (
     <section>
       <div className="container mx-auto px-6 py-8">
-        <form
+        {/* <form
           onSubmit={handleSearch}
           className="flex items-start justify-center md:w-[35rem] mx-auto relative"
         >
@@ -68,7 +70,8 @@ export default function EventCards({ events }: Props) {
           <Button type="submit" className="absolute top-1 right-3 rounded-full">
             Search
           </Button>
-        </form>
+        </form> */}
+        <SearchBar queryKey="event" placeholder="Search for events" />
         <>
           {filteredEvents.length === 0 && !query ? (
             <div className="flex items-center justify-center flex-col my-6">
