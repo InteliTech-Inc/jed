@@ -1,39 +1,3 @@
-import {
-  Copy,
-  CreditCard,
-  MoreVertical,
-  Truck,
-  BadgeDollarSignIcon,
-  CircleDollarSignIcon,
-  BadgeDollarSign,
-  BanknoteIcon,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
 import { dbServer } from "@/lib/supabase";
 import { cookies } from "next/headers";
 import { isEqual } from "date-fns";
@@ -60,15 +24,12 @@ export default async function Dashboard() {
           Here's what's happening with your account today.
         </p>
       </section>
-      <section className=" mt-8">
+      <section className=" my-8 ">
         <AnalyticsCards />
         <div className=" mt-8">
-          <p className=" uppercase">Number of Votes per category</p>
-          <section className=" grid lg:grid-cols-[70%_auto] gap-4 mt-6 h-[50vh]">
-            <div className=" bg-gray-50 rounded-lg">
-              <AnalyticsGraph />
-            </div>
-            <div className=" bg-accent rounded-lg "></div>
+          <p className=" uppercase">Recent Activity</p>
+          <section className=" ">
+            <AnalyticsGraph />
           </section>
         </div>
       </section>

@@ -10,7 +10,7 @@ import EventSwitch from "./event_switch";
 import { format } from "date-fns";
 import BackButton from "@/components/back";
 
-type Data = {
+export type Data = {
   data: {
     id: string;
     name: string;
@@ -73,7 +73,7 @@ export default async function EventDetails({ id }: { id: string }) {
       : null;
 
   return (
-    <div className="break-words">
+    <div className="break-words ">
       <BackButton />
       <section className=" mb-8 flex flex-col md:flex-row ">
         <div className="flex-1">

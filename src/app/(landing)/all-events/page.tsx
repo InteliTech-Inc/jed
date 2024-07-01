@@ -21,15 +21,15 @@ export default async function AllEventsPage() {
   return (
     <section>
       <div className="mt-8 space-y-3">
-        <h2 className="text-4xl md:text-6xl text-neutral-600 text-center font-bold">
+        <p className="text-2xl md:text-5xl text-neutral-600 text-center font-bold">
           All Events
-        </h2>
+        </p>
         <p className="text-center text-lg text-gray-600">
           Find all ongoing events and vote for preferred nominee
         </p>
       </div>
       {liveEvents?.length === 0 ? (
-        <div className="text-center my-10 text-2xl font-bold text-neutral-600">
+        <div className="text-center my-10 font-bold text-neutral-600">
           There are no Live Events
         </div>
       ) : (
