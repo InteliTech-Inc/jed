@@ -60,7 +60,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center gap-4 justify-between py-4">
+      <div className="flex flex-col-reverse md:flex-row items-end gap-4 justify-between py-4">
         <Input
           placeholder="Filter by name or category..."
           value={filterValue}
@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
               .getColumn("full_name")
               ?.setFilterValue(event.target.value);
           }}
-          className="max-w-sm"
+          className="max-w-sm w-full"
         />
         <TopButtons results={data} url={url} />
       </div>

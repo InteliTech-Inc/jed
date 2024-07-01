@@ -11,7 +11,9 @@ export default function AboutUsPage() {
     <div className="">
       <div className=" p-6 lg:w-[90%] mx-auto  grid lg:grid-cols-2 gap-6 place-items-center">
         <section>
-          <h3 className="text-3xl py-4 font-semibold main-heading">Why JED</h3>
+          <h3 className="text-5xl text-neutral-800 py-4 font-semibold ">
+            Why JED
+          </h3>
           <article className="">
             <p className="leading-[1.6]">
               JED's event creation procedure is simple to use; users can input

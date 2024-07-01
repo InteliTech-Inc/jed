@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { CircleUser } from "lucide-react";
+import { CircleUser, SettingsIcon, LogOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/supabase";
 export default function UserDropdown() {
@@ -30,10 +30,15 @@ export default function UserDropdown() {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Settings</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
+        <DropdownMenuItem className="gap-2">
+          <SettingsIcon size={14} />
+          Settings
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={signOut}>Logout</DropdownMenuItem>
+        <DropdownMenuItem className=" gap-2" onClick={signOut}>
+          <LogOutIcon size={14} />
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

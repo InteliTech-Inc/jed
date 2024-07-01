@@ -3,7 +3,7 @@
 import { RotatingLines } from "react-loader-spinner";
 
 export default function Spinner({
-  color = "rgb(115, 115,115)",
+  color = "rgb(200, 200,200)",
 }: {
   color?: string;
 }) {

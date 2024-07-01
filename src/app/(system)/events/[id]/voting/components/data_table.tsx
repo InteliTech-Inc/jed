@@ -57,7 +57,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className=" justify-end flex items-center gap-4 py-4">
+      <div className=" flex-col-reverse items-end md:flex-row justify-end md:justify-between flex  gap-4 py-4">
         <Input
           placeholder="Filter by nominee name or category..."
           value={filterValue}
