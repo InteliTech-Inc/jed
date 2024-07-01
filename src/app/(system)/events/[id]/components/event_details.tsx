@@ -73,8 +73,11 @@ export default async function EventDetails({ id }: { id: string }) {
       : null;
 
   return (
-    <div className="break-words ">
-      <BackButton />
+    <div className="break-words">
+      <div className="flex items-center justify-between">
+        <BackButton />
+        <EventSwitch id={id} className="md:hidden" />
+      </div>
       <section className=" mb-8 flex flex-col md:flex-row ">
         <div className="flex-1">
           <p className=" text-4xl text-neutral-700 mb-2 font-semibold">
@@ -85,9 +88,9 @@ export default async function EventDetails({ id }: { id: string }) {
           </p>
         </div>
       </section>
-      <div className="flex items-center justify-between ">
-        <EventSwitch id={id} />
-        <div className="flex items-center justify-end gap-x-4">
+      <div className="flex items-center justify-between">
+        <EventSwitch id={id} className="hidden md:inline-flex" />
+        <div className="flex items-center justify-end gap-x-4 w-full">
           <AddCategoryModal event_id={data} />
           <Button className=" gap-2">
             <EditIcon size={14} />
