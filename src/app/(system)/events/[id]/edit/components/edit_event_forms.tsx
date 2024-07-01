@@ -144,20 +144,15 @@ function EditEventForm({ defaultValues }: EditEventProps) {
 
       toastId = toast.loading("Updating event details...");
 
-      // await axios.post("/api/create-events", formData, {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // });
-      console.log(payload);
-      // this is just to mock a network request
-      await new Promise((resolve, reject) => {
-        setTimeout(resolve, 3000);
+      await axios.post(`/api/update-event/${values.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      // form.reset();
-      toast.success("Event Created Successfully", { id: toastId });
-      // router.push(`/events`);
+      form.reset();
+      toast.success("Event Updated Successfully", { id: toastId });
+      router.push(`/events`);
       setSelectedFile(null);
     } catch (err) {
       toast.error("Something went wrong", { id: toastId });
