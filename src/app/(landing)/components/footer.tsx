@@ -94,7 +94,7 @@ export default function Footer() {
               />
             </a>
             <Link
-              href="https://www.linkedin.com/"
+              href="https://www.linkedin.com/company/ican-code/"
               target="_blank"
               rel="noopener noreferrer"
             >
