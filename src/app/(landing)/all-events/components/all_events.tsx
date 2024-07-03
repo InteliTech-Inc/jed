@@ -23,6 +23,8 @@ export type Data = {
   error: any;
 };
 
+export const revalidate = 30;
+
 export default async function AllEvents() {
   const db = dbServer(cookies);
   const { data } = (await db.from("events").select("*")) as Data;
