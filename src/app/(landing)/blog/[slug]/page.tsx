@@ -73,12 +73,12 @@ export default async function SinglePost({ params: { slug } }: Props) {
   }
 
   return (
-    <section className="flex flex-col items-center justify-center w-[85dvw] md:w-[75dvw] mx-auto">
+    <section className="flex p-4  flex-col items-center justify-center w-full md:w-[55dvw] mx-auto">
       <div className="my-8">
         <BackButton />
-        <h1 className="text-4xl leading-[1.4] py-4 md:text-5xl font-extrabold lg:text-center">
+        <p className="text-3xl leading-[1.4] py-4 md:text-5xl font-bold text-neutral-700 lg:text-center">
           {posts.title}
-        </h1>
+        </p>
         <div className="flex flex-row items-center lg:justify-center gap-2 md:gap-x-4 my-5">
           <Image
             src={urlFor(posts.author.image).url()}
@@ -105,13 +105,13 @@ export default async function SinglePost({ params: { slug } }: Props) {
             </span>
           </section>
         </div>
-        <div className="w-full md:h-[35rem]  my-14">
+        <div className="w-full md:h-[20rem]  my-14">
           <Image
             src={urlFor(posts.mainImage).url()}
             alt={posts.title}
             width={2000}
             height={2000}
-            className="object-cover w-full h-full rounded-lg shadow-md"
+            className="object-cover object-bottom w-full h-full rounded-lg shadow-md"
           />
         </div>
         <PortableText value={posts.body} components={RichText} />
