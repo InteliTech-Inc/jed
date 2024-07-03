@@ -24,6 +24,7 @@ export default function MobileTopbar() {
         </Button>
       </SheetTrigger>
       <SheetContent className="bg-gray-50" side="left">
+        <p>Main Menu</p>
         <nav className="grid mt-10  gap-4 font-medium">
           {NAV_LINKS.map((link) => {
             return (

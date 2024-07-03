@@ -37,6 +37,18 @@ export const createEvent = async (eventPayload: any) => {
   return data;
 };
 
+export const updateEvent = async (id: string, eventPayload: any) => {
+  const db = dbServer(cookies);
+  const { data, error } = await db
+    .from("events")
+    .update(eventPayload)
+    .eq("id", id)
+    .select();
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
 export const addEmailToWaitlist = async (email: string) => {
   const { data, error } = await db.from("waitlist").insert({ email }).select();
   if (error) {

@@ -84,6 +84,7 @@ export default function EventsSidebar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
+              <p>Event Menu</p>
               <nav className="grid mt-6 gap-2 text-lg font-medium">
                 {SidebarLinks.map((item) => {
                   const ac =
