@@ -1,31 +1,34 @@
 import { CreditCard, Truck, BadgeDollarSign, BanknoteIcon } from "lucide-react";
 
-const cardsdetails = [
-  {
-    id: 1,
-    title: "Earnings Today",
-    icon: <BadgeDollarSign size={20} className="text-secondary" />,
-    value: 1500,
-    bottomtext: "Updated after every successful voting.",
-  },
+type AnalyticsCardsProps = {
+  liveEvents: any;
+};
 
-  {
-    id: 3,
-    title: "Revenue Generated",
-    icon: <CreditCard size={20} className="text-secondary" />,
-    value: 500,
-    bottomtext: "Earnings from all events.",
-  },
-  {
-    id: 4,
-    title: "Total Earnings",
-    icon: <BanknoteIcon size={20} className="text-secondary" />,
-    value: 1,
-    bottomtext: "Withdrawable earnings",
-  },
-];
+export default function AnalyticsCards({ liveEvents }: AnalyticsCardsProps) {
+  const cardsdetails = [
+    {
+      id: 1,
+      title: "Earnings Today",
+      icon: <BadgeDollarSign size={20} className="text-secondary" />,
+      value: 1500,
+      bottomtext: "Updated after every successful voting.",
+    },
 
-export default function AnalyticsCards() {
+    {
+      id: 3,
+      title: "Revenue Generated",
+      icon: <CreditCard size={20} className="text-secondary" />,
+      value: 500,
+      bottomtext: "Earnings from all events.",
+    },
+    {
+      id: 4,
+      title: "Total Earnings",
+      icon: <BanknoteIcon size={20} className="text-secondary" />,
+      value: 1,
+      bottomtext: "Withdrawable earnings",
+    },
+  ];
   return (
     <section className=" flex flex-col flex-wrap md:flex-row gap-4">
       <div className="rounded-lg flex-grow min-w-[18rem] p-4 bg-primary text-white border">
@@ -35,7 +38,7 @@ export default function AnalyticsCards() {
             <Truck size={20} className="text-primary" />
           </p>
         </span>
-        <p className=" text-2xl my-2">1</p>
+        <p className=" text-2xl my-2">{liveEvents.length}</p>
         <small className=" text-white/80">
           Updated after every event publish.
         </small>
