@@ -9,19 +9,19 @@ import type { Metadata } from "next";
 
 const openGraphImagesAbsolute = [
   {
-    url: `https://jedevents.vercel.app/src/app/opengraph-image.png`,
+    url: `https://jed-event.com/src/app/opengraph-image.png`,
     width: 1200,
     height: 630,
   },
   {
-    url: `https://jedevents.vercel.app/src/app/opengraph-image-square.png`,
+    url: `https://jed-event.com/src/app/opengraph-image-square.png`,
     width: 400,
     height: 400,
   },
 ];
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://jedevents.vercel.app"),
+  metadataBase: new URL("https://jed-event.com"),
   title: {
     default: "JED",
     template: "JED - %s",
