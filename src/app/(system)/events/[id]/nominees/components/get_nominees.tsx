@@ -142,7 +142,9 @@ export default function GetNominees({ nominees, votes }: any) {
               height={200}
               alt={"No nominees"}
             />
-            <p className="text-center text-gray-600">There is no nominees.</p>
+            <p className="text-center text-gray-600">
+              There are no nominees yet
+            </p>
           </section>
         ) : (
           filteredNominees.length > 0 &&
