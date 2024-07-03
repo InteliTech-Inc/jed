@@ -16,6 +16,7 @@ export type Data = {
     name: string;
     description: string;
     img_url: string;
+    user_id: string;
     nomination_period: {
       start_date: string;
       end_date: string;

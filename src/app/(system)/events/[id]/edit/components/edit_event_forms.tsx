@@ -15,10 +15,7 @@ import { Input } from "@/components/ui/input";
 import { cn, isEventPeriodsValid } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateMutation } from "@/hooks/use_create_mutation";
-import { db } from "@/lib/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ImageDown, CalendarIcon, InfoIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -36,9 +33,9 @@ import {
 } from "@/components/ui/popover";
 import { isImageSizeValid } from "@/lib/utils";
 import { checkConnection } from "@/lib/utils";
-import axios from "@/lib/axios";
 import { getFormData } from "@/lib/utils";
 import Spinner from "@/components/spinner";
+import axios from "axios";
 
 const formSchema = z.object({
   id: z.string(),
@@ -67,6 +64,8 @@ const formSchema = z.object({
     })
     .optional(),
   img_url: z.string().optional(),
+  user_id: z.string().optional(),
+  is_completed: z.boolean().optional(),
 });
 
 type EditEventProps = {
@@ -87,7 +86,6 @@ function EditEventForm({ defaultValues }: EditEventProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       ...defaultValues,
-      amount: "",
     },
   });
 
@@ -111,15 +109,14 @@ function EditEventForm({ defaultValues }: EditEventProps) {
 
     checkConnection();
 
-    setLoading(true);
-
     const payload = {
       id: defaultValues?.id,
+      user_id: defaultValues.user_id,
       name: values.name,
       description: values.description,
       amount_per_vote: values.amount,
       img_file: file,
-      is_completed: false,
+      is_completed: defaultValues.is_completed,
       nomination_period: {
         start_date: values.nominations_period?.start_date?.toString(),
         end_date: values.nominations_period?.end_date?.toString(),
@@ -128,6 +125,7 @@ function EditEventForm({ defaultValues }: EditEventProps) {
         start_date: values.voting_period?.start_date.toString(),
         end_date: values.voting_period?.end_date.toString(),
       },
+      img_url: defaultValues.img_url,
     };
 
     const periodIsValid = isEventPeriodsValid({
@@ -139,12 +137,14 @@ function EditEventForm({ defaultValues }: EditEventProps) {
     if (!periodIsValid) return;
     let toastId;
 
+    setLoading(true);
     try {
       const formData = getFormData(payload);
 
       toastId = toast.loading("Updating event details...");
 
-      await axios.post(`/api/update-event/${values.id}`, formData, {
+      console.log(payload);
+      await axios.post(`/api/update-event/${payload.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -155,7 +155,7 @@ function EditEventForm({ defaultValues }: EditEventProps) {
       router.push(`/events`);
       setSelectedFile(null);
     } catch (err) {
-      toast.error("Something went wrong", { id: toastId });
+      toast.error("Couldn't update event details, try again.", { id: toastId });
     } finally {
       setLoading(false);
     }
@@ -187,7 +187,7 @@ function EditEventForm({ defaultValues }: EditEventProps) {
       <BackButton />
       <div>
         <p className="text-3xl text-center mt-2 mb-8 font-bold text-neutral-700">
-          Create a new event
+          Edit an existing event.
         </p>
       </div>
       <Form {...form}>
@@ -517,7 +517,7 @@ function EditEventForm({ defaultValues }: EditEventProps) {
                     alt="preview_image"
                     width={2000}
                     height={2000}
-                    className="object-center h-full object-cover rounded-t-md"
+                    className="object-center h-full w-full object-cover rounded-t-md"
                   />
                 ) : (
                   <div className=" ">

@@ -45,7 +45,7 @@ export const updateEvent = async (id: string, eventPayload: any) => {
     .eq("id", id)
     .select();
 
-  if (error) throw new Error(error.details);
+  if (error) throw new Error(error.message);
   return data;
 };
 
