@@ -73,10 +73,10 @@ export default async function SinglePost({ params: { slug } }: Props) {
   }
 
   return (
-    <section className="flex flex-col items-center justify-center w-[85dvw] md:w-[55dvw] mx-auto">
+    <section className="flex p-4  flex-col items-center justify-center w-full md:w-[55dvw] mx-auto">
       <div className="my-8">
         <BackButton />
-        <p className="text-4xl leading-[1.4] py-4 md:text-5xl font-bold text-neutral-700 lg:text-center">
+        <p className="text-3xl leading-[1.4] py-4 md:text-5xl font-bold text-neutral-700 lg:text-center">
           {posts.title}
         </p>
         <div className="flex flex-row items-center lg:justify-center gap-2 md:gap-x-4 my-5">
