@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Blog",
 };
 
+export const revalidate = 30;
 export default async function BlogPage() {
   const posts = await client.fetch(postQuery, {}, { next: { revalidate: 1 } });
 

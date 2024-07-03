@@ -239,7 +239,7 @@ export default function NominationForm({ id }: { id: string }) {
               name="reasons"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <Label htmlFor="reasons">Reasons</Label>
+                  <Label htmlFor="reasons">Reasons (Optional)</Label>
                   <FormControl>
                     <Textarea
                       id="reasons"
@@ -260,7 +260,6 @@ export default function NominationForm({ id }: { id: string }) {
               inputValues.full_name.length === 0 ||
               inputValues.telephone.length === 0 ||
               inputValues.email.length === 0 ||
-              inputValues.reasons.length === 0 ||
               inputValues.category.length === 0 ||
               isPending
             }
