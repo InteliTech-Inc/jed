@@ -44,11 +44,10 @@ export const updateEvent = async (id: string, eventPayload: any) => {
     .update(eventPayload)
     .eq("id", id)
     .select();
-  
+
   if (error) throw new Error(error.details);
   return data;
 };
-
 
 export const addEmailToWaitlist = async (email: string) => {
   const { data, error } = await db.from("waitlist").insert({ email }).select();

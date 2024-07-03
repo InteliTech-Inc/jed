@@ -31,7 +31,7 @@ const Products = [
 
 export default function Product() {
   return (
-    <div className=" py-16 grid place-content-center">
+    <div className=" py-16 grid place-content-center !overflow-x-hidden">
       <section className="p-4 w-full text-center">
         <motion.h1 {...headingAnimationsProp} className=" main-heading py-8">
           What we <mark className=" text-secondary">offer</mark>
