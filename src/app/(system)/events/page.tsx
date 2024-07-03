@@ -21,7 +21,7 @@ async function EventsPage() {
     .eq("user_id", user?.id!);
 
   return (
-    <div className="p-6">
+    <div className="p-6 ">
       <div className="flex justify-between items-center gap-5">
         <div>
           <h3 className="text-2xl font-semibold leading-none tracking-tight">

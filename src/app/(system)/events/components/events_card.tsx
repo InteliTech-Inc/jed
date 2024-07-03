@@ -27,13 +27,13 @@ export default async function EventsCard({ id }: { id: string }) {
           </p>
         </section>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3  gap-3">
           {events?.map((event) => {
             return (
               <Link
                 href={`/events/${event.id}`}
                 key={event.id}
-                className="border p-3 h-fit rounded-xl"
+                className="border bg-gray-50 p-3 h-fit rounded-xl"
               >
                 <section className=" h-64">
                   <Image
@@ -45,11 +45,17 @@ export default async function EventsCard({ id }: { id: string }) {
                     priority
                   />
                 </section>
-                <h5 className="font-semibold py-2">{event.name}</h5>
+                <p className=" font-semibold py-2">{event.name}</p>
                 <section className="py-4 w-full">
                   <span className=" ">
-                    <p className="border w-fit text-sm bg-green-100 border-secondary rounded-full px-4 py-1">
-                      {event.is_completed ? "Completed" : "In Progress"}
+                    <p
+                      className={` ${
+                        event.is_completed
+                          ? "bg-green-100 border-secondary "
+                          : "bg-yellow-50 border-yellow-500"
+                      } border w-fit text-sm rounded-full px-4 py-1`}
+                    >
+                      {event.is_completed ? "Published" : "Not published"}
                     </p>
                   </span>
                 </section>

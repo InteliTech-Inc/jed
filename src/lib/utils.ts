@@ -139,7 +139,7 @@ export function isEventPeriodsValid({
       ) && isBefore(nomination.end_date as string, voting.start_date);
     if (!isValidNomination) {
       toast.error(
-        "There is a problem with the periods you've specified. Make sure the nomination period is before the voting period. If you don't want to set the nomination period, just uncheck the button."
+        "There is a problem with the periods you've specified. Make sure the nomination period ends before the voting period starts."
       );
       return false;
     }

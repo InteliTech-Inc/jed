@@ -1,4 +1,13 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  formatDistance,
+  isPast,
+  isFuture,
+  differenceInCalendarDays,
+  formatDate,
+} from "date-fns";
 import SearchBar from "@/components/ui/search-bar";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +22,14 @@ type Event = {
   is_completed: boolean;
   user_id: string;
   id: string;
+  voting_period?: {
+    start_date?: string;
+    end_date?: string;
+  };
+  nomination_period?: {
+    start_date?: string;
+    end_date?: string;
+  };
 };
 
 type Props = {
@@ -22,9 +39,9 @@ type Props = {
 export default function EventCards({ events }: Props) {
   const [query, setQuery] = useState("");
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
-  const eventQuery = searchParams.get("event")
+  const eventQuery = searchParams.get("event");
 
   useEffect(() => {
     Search(eventQuery as string);
@@ -88,21 +105,31 @@ export default function EventCards({ events }: Props) {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
               {filteredEvents?.map((event) => {
-                // const voting_period =
-                //   event.voting_period &&
-                //   Object.keys(event.voting_period).length > 0
-                //     ? event.voting_period
-                //     : null;
+                const voting_period =
+                  event.voting_period &&
+                  Object.keys(event.voting_period).length > 0
+                    ? event.voting_period
+                    : null;
+                const start_date =
+                  voting_period !== null &&
+                  new Date(voting_period?.start_date!);
 
-                // const nomination_period =
-                //   event.nomination_period &&
-                //   Object.keys(event.nomination_period).length > 0
-                //     ? event.nomination_period
-                //     : null;
+                const isSmth = start_date ? start_date : null;
+                const notice = isSmth
+                  ? `${
+                      isPast(isSmth)
+                        ? `Voting started ${formatDistance(isSmth, new Date(), {
+                            addSuffix: true,
+                          })}`
+                        : `Voting starts ${formatDistance(isSmth, new Date(), {
+                            addSuffix: true,
+                          })}`
+                    }`
+                  : null;
                 return (
                   <Link href={`/all-events/${event.id}`} key={event.id}>
-                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[400px]">
-                      <div className="h-[20rem]">
+                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[350px]">
+                      <div className="h-[15rem]">
                         <Image
                           className="h-full w-full rounded-lg rounded-b-none object-cover object-center"
                           src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
@@ -114,16 +141,11 @@ export default function EventCards({ events }: Props) {
                       </div>
                       <div className="px-6 py-4">
                         <p className="font-bold text-md mb-1">{event.name}</p>
-                        {/* {event.voting_period && (
+                        {voting_period && (
                           <small className=" py-1 px-2 text-[0.75rem] bg-green-200 rounded-lg">
-                            Voting started{" "}
-                            {formatDistance(
-                              voting_period.start_date,
-                              new Date()
-                            )}{" "}
-                            ago
+                            {notice}
                           </small>
-                        )} */}
+                        )}
                       </div>
                     </div>
                   </Link>

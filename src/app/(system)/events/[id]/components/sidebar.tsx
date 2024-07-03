@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   Home,
   LineChart,
-  Package,
   Users,
   Sidebar,
   TableProperties,
