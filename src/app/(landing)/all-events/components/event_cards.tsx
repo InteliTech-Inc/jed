@@ -68,8 +68,6 @@ export default function EventCards({ events }: Props) {
   //   event.preventDefault();
   // };
 
-  console.log(events);
-
   return (
     <section>
       <div className="container mx-auto px-6 py-8">
