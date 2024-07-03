@@ -63,7 +63,7 @@ export default function ForgotPasswordForm() {
       }
 
       const { error, data } = await db.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${process.env.NEXT_PUBLIC_LIVE_URL}/reset-password`,
       });
 
       if (error) {
