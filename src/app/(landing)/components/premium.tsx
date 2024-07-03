@@ -8,7 +8,7 @@ import { CardsStack } from "./cards-stack";
 
 export default function Premium() {
   return (
-    <div className="lg:p-16 place-content-center">
+    <div className="lg:p-16 place-content-center !overflow-x-hidden">
       <section className="p-2 w-full h-3/5 mx-auto lg:rounded-xl bg-primary grid lg:grid-cols-2 gap-4">
         <motion.div
           className="text-white p-2 lg:p-6"

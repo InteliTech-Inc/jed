@@ -20,7 +20,7 @@ export default async function NominationsTable({ id }: NominationsTableProps) {
     process.env.NODE_ENV === "production"
       ? process.env.NEXT_PUBLIC_LIVE_URL
       : process.env.NEXT_PUBLIC_DEV_URL;
-  const url = `${linkURL}/nom?id=${id}`;
+  const url = `${linkURL}nom?id=${id}`;
 
   return (
     <div>

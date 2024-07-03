@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   return (
-    <div className=" ">
+    <div className="w-full !overflow-x-hidden">
       <Hero />
       <Product />
       <Premium />

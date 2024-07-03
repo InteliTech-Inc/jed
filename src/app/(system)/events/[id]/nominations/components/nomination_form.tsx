@@ -146,7 +146,7 @@ export default function NominationForm({ id }: { id: string }) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleNomination)}
-          className="mx-auto font-sans md:w-[45rem] pb-4 flex flex-col justify-center items-center px-10"
+          className="mx-auto font-sans md:w-[45rem] pb-4 flex flex-col justify-center items-center px-4 md:px-10"
         >
           <div className="flex flex-col w-full items-center justify-center gap-x-6 my-4 space-y-3">
             <FormField
@@ -239,7 +239,7 @@ export default function NominationForm({ id }: { id: string }) {
               name="reasons"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <Label htmlFor="reasons">Reasons</Label>
+                  <Label htmlFor="reasons">Reasons (Optional)</Label>
                   <FormControl>
                     <Textarea
                       id="reasons"
@@ -260,7 +260,6 @@ export default function NominationForm({ id }: { id: string }) {
               inputValues.full_name.length === 0 ||
               inputValues.telephone.length === 0 ||
               inputValues.email.length === 0 ||
-              inputValues.reasons.length === 0 ||
               inputValues.category.length === 0 ||
               isPending
             }
