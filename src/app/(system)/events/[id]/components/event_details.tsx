@@ -20,6 +20,7 @@ export type Data = {
       start_date: string;
       end_date: string;
     };
+    amount_per_vote: string;
     voting_period: {
       start_date: string;
       end_date: string;

@@ -4,6 +4,10 @@ import {
   LinkedinIcon,
   InstagramIcon,
   YoutubeIcon,
+  LucideMailCheck,
+  MapPinIcon,
+  PhoneCallIcon,
+  MailCheckIcon,
 } from "lucide-react";
 import Image from "next/image";
 export default function Footer() {
@@ -34,16 +38,23 @@ export default function Footer() {
           </h1>
           <div className="flex flex-col md:text-left my-6 space-y-3 text-md">
             <a
-              href="mailto:jed.info@gmail.com"
-              className="hover:text-secondary"
+              href="mailto:info.jedvotes@gmail.com"
+              className="hover:text-secondary flex items-center gap-2"
             >
-              jed.info@gmail.com
+              <MailCheckIcon size={16} />
+              info.jedvotes@gmail.com
             </a>
-            <a href="tel:+14049039843" className="hover:text-secondary">
-              +1 404 903 9843
+            <a
+              href="tel:0599774425"
+              className="hover:text-secondary flex items-center gap-2"
+            >
+              <PhoneCallIcon size={16} />
+              0599774425
             </a>
-            <p>College of Engineering, KNUST, Kumasi - Ghana</p>
-            <p>Digital Address: AO-K626-6511</p>
+            <p className="flex items-center gap-2">
+              <MapPinIcon size={16} />
+              Kumasi - Ghana
+            </p>
           </div>
         </div>
         <div className="flex flex-col items-center w-fit mx-auto md:items-start">
@@ -73,7 +84,7 @@ export default function Footer() {
         <section>
           <div className="flex justify-center py-6 gap-4">
             <a
-              href="https://www.instagram.com/"
+              href="https://www.instagram.com/jed.event?igsh=MTVxNmk3cnJlYWxuNA=="
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -93,7 +104,7 @@ export default function Footer() {
               />
             </Link>
             <a
-              href="https://twitter.com"
+              href="https://x.com/jed_event?t=rrgklc_dChJnFjdFtUAasA&s=09"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -102,7 +113,7 @@ export default function Footer() {
                 className="hover:text-secondary transition-all duration-300 cursor-pointer hover:-translate-y-1"
               />
             </a>
-            <a
+            {/* <a
               href="https://www.youtube.com/"
               target="_blank"
               rel="noopener noreferrer"
@@ -111,7 +122,7 @@ export default function Footer() {
                 size={16}
                 className="hover:text-secondary transition-all duration-300 cursor-pointer hover:-translate-y-1"
               />
-            </a>
+            </a> */}
           </div>
         </section>
       </section>

@@ -35,7 +35,7 @@ export default function LandingPageLayout({
   children: ReactNode;
 }) {
   return (
-    <main className="w-full  mx-auto max-w-screen-2xl">
+    <main className="w-screen overflow-x-hidden mx-auto max-w-screen-2xl">
       <Navbar />
       {children}
       <Footer />
