@@ -33,7 +33,7 @@ const CARDS = [
   {
     id: 0,
     name: "Evans Elabo",
-    designation: "Senior Software, InteliTech Inc",
+    designation: "Senior Software Engineer, InteliTech Inc",
     content: (
       <p>
         JED stands as a beacon of{" "}
