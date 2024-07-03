@@ -4,7 +4,7 @@ import Footer from "./components/footer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://jedevents.vercel.app"),
+  metadataBase: new URL("https://jed-event.com"),
   title: {
     default: "JED",
     template: "JED - %s",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: `https://jedevents.vercel.app/opengraph-image.png`,
+        url: `https://jed-event.com/opengraph-image.png`,
       },
     ],
   },
