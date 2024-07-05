@@ -246,14 +246,14 @@ export type Database = {
           nominee_id: string | null;
         };
         Insert: {
-          amount_payable: number | null;
+          amount_payable?: number | null;
           count?: number | null;
           created_at?: string;
           id?: string;
           nominee_id?: string | null;
         };
         Update: {
-          amount_payable: number | null;
+          amount_payable?: number | null;
           count?: number | null;
           created_at?: string;
           id?: string;

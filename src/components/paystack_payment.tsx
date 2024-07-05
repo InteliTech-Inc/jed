@@ -141,7 +141,7 @@ export default function PaystackPayment({ id }: { id: string }) {
             .from("voting")
             .update({
               count: votes[0].count! + Number(voting),
-              amount_payable: votes[0].amount_payable + Number(amountPayable),
+              amount_payable: votes[0]?.amount_payable! + Number(amountPayable),
             })
             .eq("nominee_id", id);
 
