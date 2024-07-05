@@ -22,7 +22,7 @@ export async function fetchEventsData(userId: string) {
     const { data: nominees, error: nomineesError } = await db
       .from("nominees")
       .select("id, full_name, code, category_id")
-      .eq("event_id", event.id);
+      .eq("event_id", event?.id);
 
     if (nomineesError) {
       console.error("Error fetching nominees:", nomineesError);
@@ -32,7 +32,7 @@ export async function fetchEventsData(userId: string) {
     const { data: categories, error: categoriesError } = await db
       .from("categories")
       .select("id, category_name")
-      .eq("event_id", event.id);
+      .eq("event_id", event?.id);
 
     if (categoriesError) {
       console.error("Error fetching categories:", categoriesError);
@@ -42,7 +42,7 @@ export async function fetchEventsData(userId: string) {
     const { data: voting, error: votingError } = await db
       .from("voting")
       .select("nominee_id,count")
-      .eq("event_id", event.id);
+      .eq("event_id", event?.id);
 
     if (votingError) {
       console.error("Error fetching voting:", votingError);
@@ -50,26 +50,26 @@ export async function fetchEventsData(userId: string) {
     }
     // Returning the structure you proposed @Diabeney
     return {
-      id: event.id,
-      name: event.name,
+      id: event?.id,
+      name: event?.name,
       voting_period: {
         start_date: event?.voting_period?.start_date as string,
         end_date: event?.voting_period?.end_date,
       },
       categories: categories.map((category) => ({
-        id: category.id,
-        category_name: category.category_name,
+        id: category?.id,
+        category_name: category?.category_name,
       })),
 
       nominees: nominees.map((nominee) => {
         const total_votes = voting.find(
-          (vote) => vote.nominee_id === nominee.id
+          (vote) => vote?.nominee_id === nominee?.id
         )?.count;
         return {
-          id: nominee.id,
-          nominee_name: nominee.full_name,
-          category_id: nominee.category_id,
-          nominee_code: nominee.code,
+          id: nominee?.id,
+          nominee_name: nominee?.full_name,
+          category_id: nominee?.category_id,
+          nominee_code: nominee?.code,
           total_votes,
         };
       }),
