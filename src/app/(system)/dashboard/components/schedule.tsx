@@ -10,8 +10,8 @@ type VotingSchedule = {
 
 export default function EventSchedules({ Period }: VotingSchedule) {
   const voting_period = {
-    from: new Date(Period.start_date),
-    to: new Date(Period.end_date),
+    from: new Date(Period?.start_date),
+    to: new Date(Period?.end_date),
   };
   return (
     <div className=" w-full h-full grid place-content-center">
