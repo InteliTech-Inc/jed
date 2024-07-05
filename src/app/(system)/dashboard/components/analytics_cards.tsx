@@ -1,10 +1,23 @@
+import { calculateCommission } from "@/constants/commission_rate";
 import { CreditCard, Truck, BadgeDollarSign, BanknoteIcon } from "lucide-react";
 
 type AnalyticsCardsProps = {
   liveEvents: any;
+  cardData: {
+    revenue_generated: any;
+  };
 };
 
-export default function AnalyticsCards({ liveEvents }: AnalyticsCardsProps) {
+export default function AnalyticsCards({
+  liveEvents,
+  cardData,
+}: AnalyticsCardsProps) {
+  const total_revenue = cardData.revenue_generated?.reduce(
+    (a: number, b: number) => a + b,
+    0
+  );
+  const afterDeduction = calculateCommission(total_revenue);
+
   const cardsdetails = [
     {
       id: 1,
@@ -18,14 +31,19 @@ export default function AnalyticsCards({ liveEvents }: AnalyticsCardsProps) {
       id: 3,
       title: "Revenue Generated",
       icon: <CreditCard size={20} className="text-secondary" />,
-      value: 500,
+      value: cardData.revenue_generated?.reduce(
+        (a: number, b: number) => a + b,
+        0
+      ),
       bottomtext: "Earnings from all events.",
     },
     {
       id: 4,
       title: "Total Earnings",
       icon: <BanknoteIcon size={20} className="text-secondary" />,
-      value: 1,
+      value:
+        cardData.revenue_generated?.reduce((a: number, b: number) => a + b, 0) -
+        afterDeduction,
       bottomtext: "Withdrawable earnings",
     },
   ];
