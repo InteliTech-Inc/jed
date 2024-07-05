@@ -41,13 +41,14 @@ export async function fetchEventsData(userId: string) {
 
     const { data: voting, error: votingError } = await db
       .from("voting")
-      .select("nominee_id,count")
+      .select("nominee_id,count, amount_payable")
       .eq("event_id", event?.id);
 
     if (votingError) {
       console.error("Error fetching voting:", votingError);
       return null;
     }
+
     // Returning the structure you proposed @Diabeney
     return {
       id: event?.id,
@@ -73,6 +74,10 @@ export async function fetchEventsData(userId: string) {
           total_votes,
         };
       }),
+      amount_payable: voting.reduce(
+        (acc, vote) => acc + Number(vote?.amount_payable),
+        0
+      ),
     };
   });
 

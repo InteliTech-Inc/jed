@@ -6,13 +6,14 @@ import AnalyticsGraph from "./components/graph";
 import { fetchEventsData } from "./helpers/fetch_event_data";
 import { EventType } from "./components/dummy_data";
 import type { Metadata } from "next";
-import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description:
     "This page provides an overview of key performance indicators and metrics for organizations",
 };
+
+export const revalidate = 0;
 
 export default async function Dashboard() {
   const db = dbServer(cookies);
@@ -34,6 +35,12 @@ export default async function Dashboard() {
 
   const formattedEvents = await fetchEventsData(userId as string);
 
+  const revenue_generated = formattedEvents?.map((data) => data.amount_payable);
+
+  const analyticsData = {
+    revenue_generated,
+  };
+
   return (
     <div className="min-h-screen w-full p-4 lg:px-6 bg-gray-50/30">
       <section className=" my-6">
@@ -46,7 +53,7 @@ export default async function Dashboard() {
         </p>
       </section>
       <section className=" my-8 ">
-        <AnalyticsCards liveEvents={events} />
+        <AnalyticsCards liveEvents={events} cardData={analyticsData} />
         <div className=" mt-8">
           <p className=" uppercase">Recent Activity</p>
           <section className=" ">
