@@ -8,7 +8,7 @@ type AnalyticsCardsProps = {
   };
 };
 
-export default function AnalyticsCards({
+export default async function AnalyticsCards({
   liveEvents,
   cardData,
 }: AnalyticsCardsProps) {
@@ -16,7 +16,7 @@ export default function AnalyticsCards({
     (a: number, b: number) => a + b,
     0
   );
-  const afterDeduction = calculateCommission(total_revenue);
+  const afterDeduction = await calculateCommission(total_revenue);
 
   const cardsdetails = [
     {
