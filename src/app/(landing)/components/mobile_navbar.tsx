@@ -6,7 +6,7 @@ import { XIcon } from "lucide-react";
 import { useRef } from "react";
 import useClickOutside from "@/hooks/use_click_outside";
 import { NavLinks } from "./navbar";
-
+import { usePathname } from "next/navigation";
 type MobileNavbarProps = {
   isOpen: boolean;
   closeButtonHandler: () => void;
@@ -17,8 +17,16 @@ export default function MobileNavbar({
   closeButtonHandler,
 }: MobileNavbarProps) {
   const menuRef = useRef(null);
+  const pathname = usePathname();
 
   useClickOutside([menuRef], closeButtonHandler);
+
+  const isActive = (href: string) => {
+    if (pathname !== "/" && href === "/") {
+      return false;
+    }
+    return pathname?.startsWith(href);
+  };
 
   return (
     <motion.section
@@ -35,18 +43,24 @@ export default function MobileNavbar({
           "border top-0 left-0 h-screen bg-white w-5/6 p-4 lg:h-fit relative lg:p-0 lg:w-full "
         }
       >
-        <div className=" absolute right-4 lg:hidden">
+        <div className=" flex justify-between items-center right-4 lg:hidden">
+          <p className="">Menu</p>
           <XIcon size={24} onClick={closeButtonHandler} />
         </div>
-        <ul className=" flex-col flex gap-4 pt-6 lg:flex-row lg:pt-0">
-          {NavLinks.map(({ name, path }) => (
+        <ul className=" flex-col mt-8 flex gap-4 pt-6 lg:flex-row lg:pt-0">
+          {NavLinks.map(({ icon, name, path }) => (
             // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
             <li key={name} onClick={closeButtonHandler}>
               <Link
                 href={path}
                 onClick={closeButtonHandler}
-                className="hover:underline hover:underline-offset-4 ease-in duration-100"
+                className={`${
+                  isActive(path)
+                    ? "bg-secondary text-white hover:text-white"
+                    : "hover:text-secondary"
+                } text-muted-foreground text-sm p-2 flex items-center gap-2 rounded-md transition-all  w-full`}
               >
+                {icon}
                 {name}
               </Link>
             </li>

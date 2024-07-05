@@ -31,12 +31,14 @@ interface DataTableProps<TValue> {
   columns: ColumnDef<NominationsResponse, TValue>[];
   data: NominationsResponse[];
   url: string;
+  event_name?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   url,
+  event_name,
 }: DataTableProps<TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -71,7 +73,7 @@ export function DataTable<TData, TValue>({
           }}
           className="max-w-sm w-full"
         />
-        <TopButtons results={data} url={url} />
+        <TopButtons results={data} url={url} event_name={event_name} />
       </div>
       <div className="rounded-md border mt-6 bg-white ">
         <Table className="">
