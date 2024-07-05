@@ -4,6 +4,7 @@ import { isEqual } from "date-fns";
 import AnalyticsCards from "./components/analytics_cards";
 import AnalyticsGraph from "./components/graph";
 import { fetchEventsData } from "./helpers/fetch_event_data";
+import { EventType } from "./components/dummy_data";
 
 export default async function Dashboard() {
   const db = dbServer(cookies);
@@ -23,9 +24,7 @@ export default async function Dashboard() {
     .eq("user_id", userId!)
     .eq("is_completed", true);
 
-  fetchEventsData(userId!).then((formattedEvent) => {
-    console.log(JSON.stringify(formattedEvent, null, 2));
-  });
+  const formattedEvents = await fetchEventsData(userId as string);
 
   return (
     <div className="min-h-screen w-full p-4 lg:px-6 bg-gray-50/30">
@@ -43,7 +42,7 @@ export default async function Dashboard() {
         <div className=" mt-8">
           <p className=" uppercase">Recent Activity</p>
           <section className=" ">
-            <AnalyticsGraph />
+            <AnalyticsGraph events={formattedEvents as EventType[]} />
           </section>
         </div>
       </section>

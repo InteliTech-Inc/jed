@@ -1,7 +1,7 @@
 "use client";
 
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { events } from "./dummy_data";
+import { events, EventType } from "./dummy_data";
 import Image from "next/image";
 
 import {
@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import EventSchedules from "./schedule";
 
-export default function AnalyticsGraph() {
+export default function AnalyticsGraph({ events }: { events: EventType[] }) {
   const [eventId, setEventId] = useState(events[0].id);
   const [category, setCategory] = useState(
     events.find((event) => event.id === eventId)?.categories[0].id ?? ""
@@ -56,7 +56,7 @@ export default function AnalyticsGraph() {
               <SelectContent>
                 {event?.categories?.map((item) => {
                   return (
-                    <SelectItem value={item.id}>
+                    <SelectItem key={item.id} value={item.id}>
                       {item.category_name}
                     </SelectItem>
                   );
