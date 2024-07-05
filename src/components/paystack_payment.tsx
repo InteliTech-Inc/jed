@@ -106,11 +106,16 @@ export default function PaystackPayment({ id }: { id: string }) {
     setRef("" + Math.floor(Math.random() * 1000000000 + 1));
   }, [success]);
 
+  const FACTOR = 100;
+  const amountPayable = Number(form.watch("votes")) * amountPerVote;
+
+  console.log("amountPayable", amountPayable);
+
   const config: PaystackProps = {
     reference: ref,
     email: form.watch("email") || "info.jedvotes@gmail.com",
     firstname: form.watch("full_name"),
-    amount: Number(form.watch("votes")) * amountPerVote * 100,
+    amount: amountPayable * FACTOR,
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
     currency: "GHS",
   };
@@ -134,7 +139,10 @@ export default function PaystackPayment({ id }: { id: string }) {
           // If the nominee has been voted for, increment the vote count
           const { error: updateError } = await db
             .from("voting")
-            .update({ count: votes[0].count! + Number(voting) })
+            .update({
+              count: votes[0].count! + Number(voting),
+              amount_payable: votes[0].amount_payable + Number(amountPayable),
+            })
             .eq("nominee_id", id);
 
           if (updateError) {
@@ -145,6 +153,7 @@ export default function PaystackPayment({ id }: { id: string }) {
             nominee_id: id,
             count: Number(voting),
             event_id: eventId,
+            amount_payable: amountPayable,
           });
 
           if (insertError) {
@@ -169,7 +178,7 @@ export default function PaystackPayment({ id }: { id: string }) {
 
   const componentProps = {
     ...config,
-    text: `Vote Now`,
+    text: `${amountPayable ? `Pay GHS ${amountPayable}` : "Vote Now"}`,
     onSuccess,
     onClose,
   };
