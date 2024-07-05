@@ -15,7 +15,7 @@ import { useState } from "react";
 import EventSchedules from "./schedule";
 
 export default function AnalyticsGraph({ events }: { events: EventType[] }) {
-  const [eventId, setEventId] = useState(events[0].id);
+  const [eventId, setEventId] = useState(events[0]?.id);
   const [category, setCategory] = useState(
     events.find((event) => event.id === eventId)?.categories[0].id ?? ""
   );

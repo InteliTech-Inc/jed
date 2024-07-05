@@ -46,28 +46,13 @@ export default async function Dashboard() {
         </p>
       </section>
       <section className=" my-8 ">
-        {formattedEvents?.length === 0 ? (
-          <div className=" flex items-center justify-center flex-col">
-            <Image
-              src={"/images/no-docs.svg"}
-              alt="No-docs"
-              width={200}
-              height={200}
-            />
-            <p className="text-center">No data available yet.</p>
-            <p> Data will display after activity begins</p>
-          </div>
-        ) : (
-          <>
-            <AnalyticsCards liveEvents={events} />
-            <div className=" mt-8">
-              <p className=" uppercase">Recent Activity</p>
-              <section className=" ">
-                <AnalyticsGraph events={formattedEvents as EventType[]} />
-              </section>
-            </div>
-          </>
-        )}
+        <AnalyticsCards liveEvents={events} />
+        <div className=" mt-8">
+          <p className=" uppercase">Recent Activity</p>
+          <section className=" ">
+            <AnalyticsGraph events={formattedEvents as EventType[]} />
+          </section>
+        </div>
       </section>
     </div>
   );
