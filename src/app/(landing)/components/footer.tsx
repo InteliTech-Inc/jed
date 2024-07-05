@@ -36,7 +36,7 @@ export default function Footer() {
           <h1 className="font-semibold md:text-left text-xl">
             Contact & Address
           </h1>
-          <div className="flex flex-col md:text-left my-6 space-y-3 text-md">
+          <div className="flex flex-col items-center md:items-start md:text-left my-6 space-y-3 text-md">
             <a
               href="mailto:info.jedvotes@gmail.com"
               className="hover:text-secondary flex items-center gap-2"
