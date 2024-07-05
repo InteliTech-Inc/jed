@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { isEqual } from "date-fns";
 import AnalyticsCards from "./components/analytics_cards";
 import AnalyticsGraph from "./components/graph";
+import { fetchEventsData } from "./helpers/fetch_event_data";
 
 export default async function Dashboard() {
   const db = dbServer(cookies);
@@ -21,6 +22,10 @@ export default async function Dashboard() {
     .select("*")
     .eq("user_id", userId!)
     .eq("is_completed", true);
+
+  fetchEventsData(userId!).then((formattedEvent) => {
+    console.log(JSON.stringify(formattedEvent, null, 2));
+  });
 
   return (
     <div className="min-h-screen w-full p-4 lg:px-6 bg-gray-50/30">
