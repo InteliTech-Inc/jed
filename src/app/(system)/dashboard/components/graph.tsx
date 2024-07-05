@@ -56,8 +56,8 @@ export default function AnalyticsGraph({ events }: { events: EventType[] }) {
               <SelectContent>
                 {event?.categories?.map((item) => {
                   return (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.category_name}
+                    <SelectItem key={item?.id} value={item?.id}>
+                      {item?.category_name}
                     </SelectItem>
                   );
                 })}
