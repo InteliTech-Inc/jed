@@ -5,6 +5,13 @@ import AnalyticsCards from "./components/analytics_cards";
 import AnalyticsGraph from "./components/graph";
 import { fetchEventsData } from "./helpers/fetch_event_data";
 import { EventType } from "./components/dummy_data";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description:
+    "This page provides an overview of key performance indicators and metrics for organizations",
+};
 
 export default async function Dashboard() {
   const db = dbServer(cookies);
