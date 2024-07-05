@@ -37,12 +37,15 @@ export default function AnalyticsGraph({ events }: { events: EventType[] }) {
                 <SelectValue placeholder="Select event's name" />
               </SelectTrigger>
               <SelectContent>
-                {events.length &&
+                {events.length === 0 ? (
+                  <SelectItem value="1">No event available</SelectItem>
+                ) : (
                   events.map((event) => (
-                    <SelectItem key={event.id} value={event.id}>
+                    <SelectItem key={event?.id} value={event.id}>
                       {event.name}
                     </SelectItem>
-                  ))}
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>
@@ -54,13 +57,15 @@ export default function AnalyticsGraph({ events }: { events: EventType[] }) {
                 <SelectValue placeholder="Filter by category or nominees" />
               </SelectTrigger>
               <SelectContent>
-                {event?.categories?.map((item) => {
-                  return (
+                {event?.categories === undefined ? (
+                  <SelectItem value="1">No categories available</SelectItem>
+                ) : (
+                  event.categories.map((item) => (
                     <SelectItem key={item?.id} value={item?.id}>
                       {item?.category_name}
                     </SelectItem>
-                  );
-                })}
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>
