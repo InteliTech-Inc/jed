@@ -4,6 +4,8 @@ import React, { useEffect } from "react";
 import NomineeCard from "./nominee_card";
 import { db } from "@/lib/supabase";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { SearchIcon } from "lucide-react";
 
 type Nominee = {
   id: string;
@@ -20,6 +22,8 @@ export default function GetNominees({ nominees, votes }: any) {
   const url = usePathname();
   const segments = url.split("/");
   const id = segments[segments.length - 2];
+
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const router = useRouter();
 
@@ -101,34 +105,57 @@ export default function GetNominees({ nominees, votes }: any) {
     };
   }, [votes]);
 
-  if (
-    nominees.filter((nominee: Nominee) => nominee?.event_id === id).length === 0
-  ) {
-    return (
-      <section className="flex min-h-[55dvh] flex-col items-center justify-center">
-        <Image
-          src={"/images/no-docs.svg"}
-          width={200}
-          height={200}
-          alt={"Empty notification inbox"}
-        />
-        <p className="mt-5 text-center text-gray-600">
-          Sorry, you have not added any nominee yet!
-        </p>
-      </section>
-    );
-  }
+  const filteredNominees = nominees.filter((nominee: Nominee) => {
+    return nominee.categories.category_name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+  });
 
   return (
-    <section className="">
-      <div className="flex px-2 flex-wrap gap-4 mt-4">
-        {nominees
-          .filter((nominee: Nominee) => nominee?.event_id === id)
-          .map((nominee: Nominee) => (
-            <NomineeCard key={nominee.id} nominee={nominee} votes={votes} />
-          ))}
+    <>
+      <div className="flex md:justify-end w-full">
+        <div className="relative my-2">
+          <SearchIcon
+            size={18}
+            className="absolute left-4 top-[0.6rem] text-gray-500"
+          />
+          <Input
+            placeholder="Search nominee by category"
+            className="md:w-[18rem] px-10"
+            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery}
+          />
+        </div>
       </div>
-    </section>
+      <div
+        className={`${
+          filteredNominees.length === 0
+            ? "justify-center items-center"
+            : "justify-start items-start"
+        } flex w-full h-screen gap-4 mt-6 flex-wrap`}
+      >
+        {filteredNominees.length === 0 ? (
+          <section className="flex flex-col items-center justify-center">
+            <Image
+              src={"/images/no-docs.svg"}
+              width={200}
+              height={200}
+              alt={"No nominees"}
+            />
+            <p className="text-center text-gray-600">
+              There are no nominees yet
+            </p>
+          </section>
+        ) : (
+          filteredNominees.length > 0 &&
+          filteredNominees
+            .filter((nominee: Nominee) => nominee?.event_id === id)
+            .map((nominee: Nominee) => (
+              <NomineeCard key={nominee.id} nominee={nominee} votes={votes} />
+            ))
+        )}
+      </div>
+    </>
   );
 }
 
