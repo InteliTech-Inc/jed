@@ -7,7 +7,7 @@ export default function BackButton() {
   const router = useRouter();
   return (
     <Button
-      variant={"outline"}
+      variant={"link"}
       type="button"
       className="flex py-4 items-center gap-2 mb-6"
       onClick={() => router.back()}

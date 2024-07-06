@@ -29,6 +29,7 @@ import Rotating_Lines from "@/components/spinner";
 import { nominationShape } from "@/lib/validations";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { checkConnection } from "@/lib/utils";
+import Spinner from "@/components/spinner";
 
 type Event = {
   id: string;
@@ -50,7 +51,11 @@ type Category = {
 
 export default function NominationForm({ id }: { id: string }) {
   const [event, setEvent] = useState<Event>({} as Event);
-  const [isPending, setIsPending] = useState<boolean>(false);
+  const { mutateAsync: CreateNomination, isPending } = useCreateMutation({
+    dbName: "nominations",
+    key: "nominations",
+    showSucessMsg: false,
+  });
 
   const router = useRouter();
 
@@ -82,17 +87,10 @@ export default function NominationForm({ id }: { id: string }) {
 
   const inputValues = form.watch();
 
-  const { mutateAsync: CreateNomination } = useCreateMutation({
-    dbName: "nominations",
-    key: "nominations",
-    showSucessMsg: false,
-  });
-
   async function handleNomination(values: z.infer<typeof nominationShape>) {
     checkConnection();
 
     try {
-      setIsPending(true);
       const payload = {
         full_name: values.full_name,
         email: values.email,
@@ -105,19 +103,15 @@ export default function NominationForm({ id }: { id: string }) {
         .then((_) => {
           toast.success("Nomination submitted successfully..");
           form.reset();
-          router.push("/");
-          setIsPending(false);
+          router.refresh();
         })
         .catch((error) => {
-          setIsPending(false);
           toast.error(error.message);
         });
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
       }
-    } finally {
-      setIsPending(false);
     }
   }
 
@@ -264,7 +258,7 @@ export default function NominationForm({ id }: { id: string }) {
               isPending
             }
           >
-            {isPending && <Rotating_Lines />}
+            {isPending && <Spinner />}
             Submit Nomination
           </Button>
         </form>
