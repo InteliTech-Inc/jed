@@ -7,6 +7,8 @@ import {
   isFuture,
   differenceInCalendarDays,
   formatDate,
+  formatDistanceToNow,
+  subDays,
 } from "date-fns";
 import SearchBar from "@/components/ui/search-bar";
 import Image from "next/image";
@@ -68,6 +70,8 @@ export default function EventCards({ events }: Props) {
   //   event.preventDefault();
   // };
 
+  console.log(events);
+
   return (
     <section>
       <div className="container mx-auto px-6 py-8">
@@ -116,12 +120,20 @@ export default function EventCards({ events }: Props) {
                 const notice = isSmth
                   ? `${
                       isPast(isSmth)
-                        ? `Voting started ${formatDistance(isSmth, new Date(), {
-                            addSuffix: true,
-                          })}`
-                        : `Voting starts ${formatDistance(isSmth, new Date(), {
-                            addSuffix: true,
-                          })}`
+                        ? `Voting started ${formatDistance(
+                            isSmth,
+                            subDays(Date.now(), 1),
+                            {
+                              addSuffix: true,
+                            }
+                          )}`
+                        : `Voting starts ${formatDistance(
+                            isSmth,
+                            subDays(new Date(), 1),
+                            {
+                              addSuffix: true,
+                            }
+                          )}`
                     }`
                   : null;
                 return (
