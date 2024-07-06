@@ -184,7 +184,7 @@ export default function AddNominees({ data, user_id }: any) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary">
+        <Button variant="secondary" className="w-[10rem]">
           {" "}
           <PlusIcon size={14} />
           Add Nominee

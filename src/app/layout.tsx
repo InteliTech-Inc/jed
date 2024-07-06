@@ -9,35 +9,43 @@ import type { Metadata } from "next";
 
 const openGraphImagesAbsolute = [
   {
-    url: `https://jedevents.vercel.app/src/app/opengraph-image.png`,
+    url: `https://jed-event.com/src/app/opengraph-image.png`,
     width: 1200,
     height: 630,
   },
   {
-    url: `https://jedevents.vercel.app/src/app/opengraph-image-square.png`,
+    url: `https://jed-event.com/src/app/opengraph-image-square.png`,
     width: 400,
     height: 400,
   },
 ];
 
+const description =
+  "Discover all the essential tools for creating memorable events, including ticketing, nomination filing, and voting for nominees, designed to be user-friendly for both organizers and attendees.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://jedevents.vercel.app"),
+  metadataBase: new URL("https://jed-event.com"),
   title: {
     default: "JED",
     template: "JED - %s",
   },
-  description:
-    "Discover all the essential tools for creating memorable events, including ticketing, nomination filing, and voting for nominees, designed to be user-friendly for both organizers and attendees.",
+  description,
   twitter: {
+    description,
     card: "summary_large_image",
   },
+
   alternates: {
-    canonical: "/",
+    canonical: "https://jed-event.com",
     languages: {
       "en-US": "/en-US",
     },
   },
   openGraph: {
+    siteName: "JED",
+    description,
+    authors: ["Evans Elabo", "Addo Yaw Diabene", "Joshua Richardson Owusu"],
+    url: "https://jed-event.com",
     images: openGraphImagesAbsolute,
   },
 };
