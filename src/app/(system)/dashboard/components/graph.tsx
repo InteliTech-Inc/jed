@@ -22,6 +22,8 @@ export default function AnalyticsGraph({ events }: { events: EventType[] }) {
 
   const event = events.find((event) => event.id === eventId);
 
+  console.log("Event", event);
+
   const nominees = event?.nominees.filter(
     (nominee) => nominee.category_id === category
   );
@@ -37,7 +39,7 @@ export default function AnalyticsGraph({ events }: { events: EventType[] }) {
                 <SelectValue placeholder="Select event's name" />
               </SelectTrigger>
               <SelectContent>
-                {events.length === 0 ? (
+                {event === undefined ? (
                   <SelectItem value="1">No event available</SelectItem>
                 ) : (
                   events.map((event) => (
@@ -61,8 +63,8 @@ export default function AnalyticsGraph({ events }: { events: EventType[] }) {
                   <SelectItem value="1">No categories available</SelectItem>
                 ) : (
                   event.categories.map((item) => (
-                    <SelectItem key={item?.id} value={item?.id}>
-                      {item?.category_name}
+                    <SelectItem key={item.id} value={item.id}>
+                      {item.category_name}
                     </SelectItem>
                   ))
                 )}

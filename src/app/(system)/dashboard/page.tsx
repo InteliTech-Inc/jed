@@ -35,7 +35,9 @@ export default async function Dashboard() {
 
   const formattedEvents = await fetchEventsData(userId as string);
 
-  const revenue_generated = formattedEvents?.map((data) => data.amount_payable);
+  const revenue_generated = formattedEvents?.map(
+    (data: any) => data.amount_payable
+  );
 
   const analyticsData = {
     revenue_generated,

@@ -57,14 +57,14 @@ export async function fetchEventsData(userId: string) {
         start_date: event?.voting_period?.start_date as string,
         end_date: event?.voting_period?.end_date,
       },
-      categories: categories.map((category) => ({
+      categories: categories.map((category: any) => ({
         id: category?.id,
         category_name: category?.category_name,
       })),
 
-      nominees: nominees.map((nominee) => {
+      nominees: nominees.map((nominee: any) => {
         const total_votes = voting.find(
-          (vote) => vote?.nominee_id === nominee?.id
+          (vote: any) => vote?.nominee_id === nominee?.id
         )?.count;
         return {
           id: nominee?.id,
@@ -75,12 +75,12 @@ export async function fetchEventsData(userId: string) {
         };
       }),
       amount_payable: voting.reduce(
-        (acc, vote) => acc + Number(vote?.amount_payable),
+        (acc: any, vote: any) => acc + Number(vote?.amount_payable),
         0
       ),
     };
   });
 
   const formattedEvents = await Promise.all(eventPromises);
-  return formattedEvents.filter((event) => event !== null);
+  return formattedEvents.filter((event: any) => event !== null);
 }
