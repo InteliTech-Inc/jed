@@ -3,6 +3,17 @@ import { cookies } from "next/headers";
 import { isEqual } from "date-fns";
 import AnalyticsCards from "./components/analytics_cards";
 import AnalyticsGraph from "./components/graph";
+import { fetchEventsData } from "./helpers/fetch_event_data";
+import { EventType } from "./components/dummy_data";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description:
+    "This page provides an overview of key performance indicators and metrics for organizations",
+};
+
+export const revalidate = 0;
 
 export default async function Dashboard() {
   const db = dbServer(cookies);
@@ -22,6 +33,16 @@ export default async function Dashboard() {
     .eq("user_id", userId!)
     .eq("is_completed", true);
 
+  const formattedEvents = await fetchEventsData(userId as string);
+
+  const revenue_generated = formattedEvents?.map(
+    (data: any) => data.amount_payable
+  );
+
+  const analyticsData = {
+    revenue_generated,
+  };
+
   return (
     <div className="min-h-screen w-full p-4 lg:px-6 bg-gray-50/30">
       <section className=" my-6">
@@ -34,11 +55,11 @@ export default async function Dashboard() {
         </p>
       </section>
       <section className=" my-8 ">
-        <AnalyticsCards liveEvents={events} />
+        <AnalyticsCards liveEvents={events} cardData={analyticsData} />
         <div className=" mt-8">
           <p className=" uppercase">Recent Activity</p>
           <section className=" ">
-            <AnalyticsGraph />
+            <AnalyticsGraph events={formattedEvents as EventType[]} />
           </section>
         </div>
       </section>

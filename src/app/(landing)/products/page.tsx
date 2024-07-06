@@ -1,7 +1,7 @@
 import Image from "next/image";
-import NominationsImage from "@/app/assets/nominations.webp";
-import VotingImage from "@/app/assets/voting.webp";
-import TicketingImage from "@/app/assets/ticketing.webp";
+import NominationsImage from "@/app/assets/nomination.svg";
+import VotingImage from "@/app/assets/voting.svg";
+import TicketingImage from "@/app/assets/ticketing.svg";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

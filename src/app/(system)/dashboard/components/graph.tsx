@@ -1,7 +1,7 @@
 "use client";
 
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { events } from "./dummy_data";
+import { events, EventType } from "./dummy_data";
 import Image from "next/image";
 
 import {
@@ -14,13 +14,15 @@ import {
 import { useState } from "react";
 import EventSchedules from "./schedule";
 
-export default function AnalyticsGraph() {
-  const [eventId, setEventId] = useState(events[0].id);
+export default function AnalyticsGraph({ events }: { events: EventType[] }) {
+  const [eventId, setEventId] = useState(events[0]?.id);
   const [category, setCategory] = useState(
     events.find((event) => event.id === eventId)?.categories[0].id ?? ""
   );
 
   const event = events.find((event) => event.id === eventId);
+
+  console.log("Event", event);
 
   const nominees = event?.nominees.filter(
     (nominee) => nominee.category_id === category
@@ -37,12 +39,15 @@ export default function AnalyticsGraph() {
                 <SelectValue placeholder="Select event's name" />
               </SelectTrigger>
               <SelectContent>
-                {events.length &&
+                {event === undefined ? (
+                  <SelectItem value="1">No event available</SelectItem>
+                ) : (
                   events.map((event) => (
-                    <SelectItem key={event.id} value={event.id}>
+                    <SelectItem key={event?.id} value={event.id}>
                       {event.name}
                     </SelectItem>
-                  ))}
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>
@@ -54,13 +59,15 @@ export default function AnalyticsGraph() {
                 <SelectValue placeholder="Filter by category or nominees" />
               </SelectTrigger>
               <SelectContent>
-                {event?.categories?.map((item) => {
-                  return (
-                    <SelectItem value={item.id}>
+                {event?.categories === undefined ? (
+                  <SelectItem value="1">No categories available</SelectItem>
+                ) : (
+                  event.categories.map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
                       {item.category_name}
                     </SelectItem>
-                  );
-                })}
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>

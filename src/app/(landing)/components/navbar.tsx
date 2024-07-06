@@ -9,28 +9,44 @@ import Logo from "@/components/logo";
 import NavbarProductsDropdown from "./products_dropdown";
 import NavbarResourcesDropdown from "./resources_dropdown";
 
-import { UserRoundPlusIcon } from "lucide-react";
+import {
+  UserRoundPlusIcon,
+  HomeIcon,
+  BlocksIcon,
+  CalendarDaysIcon,
+  BadgeHelpIcon,
+  NewspaperIcon,
+} from "lucide-react";
 
 export const NavLinks = [
+  {
+    name: "Home",
+    path: "/",
+    icon: <HomeIcon size={16} />,
+  },
   {
     name: "Products",
     path: "/products",
     dropdown: <NavbarProductsDropdown />,
+    icon: <BlocksIcon size={16} />,
   },
   {
     name: "Events",
     path: "/all-events",
     dropdwon: false,
+    icon: <CalendarDaysIcon size={16} />,
   },
   {
     name: "About",
     path: "/about",
     dropdown: false,
+    icon: <BadgeHelpIcon size={16} />,
   },
   {
     name: "Blog",
     path: "/blog",
     dropdown: false,
+    icon: <NewspaperIcon size={16} />,
   },
 ];
 
@@ -72,6 +88,7 @@ export default function Navbar() {
         <nav className={" h-fit p-0 w-full lg:bg-transparent"}>
           <ul className=" flex gap-4 pt-6 flex-row lg:pt-0">
             {NavLinks.map((link) => {
+              if (link.name === "Home") return;
               return (
                 <span key={link.name}>
                   <li className="relative group">
