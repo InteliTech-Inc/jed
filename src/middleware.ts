@@ -13,6 +13,8 @@ export default async function middleware(req: NextRequest) {
     "/waitlist",
     "/about",
     "/api/waitlist",
+    "/api/jed-ussd",
+    "/sitemap.xml",
   ];
 
   if (
