@@ -143,11 +143,11 @@ export default function EventCards({ events }: Props) {
                       </div>
                       <div className="px-6 py-4">
                         <p className="font-bold text-md mb-1">{event.name}</p>
-                        {voting_period && (
+                        {/* {voting_period && (
                           <small className=" py-1 px-2 text-[0.75rem] bg-green-200 rounded-lg">
                             {notice}
                           </small>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </Link>
