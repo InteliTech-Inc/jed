@@ -30,6 +30,7 @@ import { nominationShape } from "@/lib/validations";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { checkConnection } from "@/lib/utils";
 import Spinner from "@/components/spinner";
+import { isToday } from "date-fns";
 
 type Event = {
   id: string;
@@ -41,6 +42,14 @@ type Event = {
   description: string;
   user_id: string;
   is_completed: boolean;
+  voting_period?: {
+    start_date?: string;
+    end_date?: string;
+  };
+  nomination_period?: {
+    start_date?: string;
+    end_date?: string;
+  };
 };
 
 type Category = {
@@ -48,6 +57,22 @@ type Category = {
   category_name: string | null;
   event_id: string | null;
 };
+
+function isValidDateString(dateString: string | undefined): boolean {
+  if (!dateString) return false;
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
+}
+
+function hasValidNominationPeriod(event: Event): boolean {
+  const { nomination_period } = event;
+
+  if (!nomination_period) return false;
+
+  const { start_date, end_date } = nomination_period;
+
+  return isValidDateString(start_date) && isValidDateString(end_date);
+}
 
 export default function NominationForm({ id }: { id: string }) {
   const [event, setEvent] = useState<Event>({} as Event);
@@ -115,6 +140,23 @@ export default function NominationForm({ id }: { id: string }) {
     }
   }
 
+  if (!hasValidNominationPeriod(event)) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <p className="text-2xl text-gray-600">
+          There is no nomination for this event.
+        </p>
+      </div>
+    );
+  }
+
+  if (isToday(event.nomination_period?.end_date || "")) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <p className="text-2xl text-gray-600">Nomination period has ended.</p>
+      </div>
+    );
+  }
   return (
     <section className="">
       <div className="relative flex flex-col justify-center h-40 overflow-auto mb-6">
