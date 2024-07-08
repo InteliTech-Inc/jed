@@ -120,20 +120,12 @@ export default function EventCards({ events }: Props) {
                 const notice = isSmth
                   ? `${
                       isPast(isSmth)
-                        ? `Voting started ${formatDistance(
-                            isSmth,
-                            subDays(Date.now(), 1),
-                            {
-                              addSuffix: true,
-                            }
-                          )}`
-                        : `Voting starts ${formatDistance(
-                            isSmth,
-                            subDays(new Date(), 1),
-                            {
-                              addSuffix: true,
-                            }
-                          )}`
+                        ? `Voting started ${formatDistance(isSmth, Date.now(), {
+                            addSuffix: true,
+                          })}`
+                        : `Voting starts ${formatDistance(isSmth, new Date(), {
+                            addSuffix: true,
+                          })}`
                     }`
                   : null;
                 return (
