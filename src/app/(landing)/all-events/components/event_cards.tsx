@@ -120,25 +120,17 @@ export default function EventCards({ events }: Props) {
                 const notice = isSmth
                   ? `${
                       isPast(isSmth)
-                        ? `Voting started ${formatDistance(
-                            isSmth,
-                            subDays(Date.now(), 1),
-                            {
-                              addSuffix: true,
-                            }
-                          )}`
-                        : `Voting starts ${formatDistance(
-                            isSmth,
-                            subDays(new Date(), 1),
-                            {
-                              addSuffix: true,
-                            }
-                          )}`
+                        ? `Voting started ${formatDistance(isSmth, Date.now(), {
+                            addSuffix: true,
+                          })}`
+                        : `Voting starts ${formatDistance(isSmth, new Date(), {
+                            addSuffix: true,
+                          })}`
                     }`
                   : null;
                 return (
                   <Link href={`/all-events/${event.id}`} key={event.id}>
-                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[350px]">
+                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[320px]">
                       <div className="h-[15rem]">
                         <Image
                           className="h-full w-full rounded-lg rounded-b-none object-cover object-center"
@@ -151,11 +143,11 @@ export default function EventCards({ events }: Props) {
                       </div>
                       <div className="px-6 py-4">
                         <p className="font-bold text-md mb-1">{event.name}</p>
-                        {voting_period && (
+                        {/* {voting_period && (
                           <small className=" py-1 px-2 text-[0.75rem] bg-green-200 rounded-lg">
                             {notice}
                           </small>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </Link>
