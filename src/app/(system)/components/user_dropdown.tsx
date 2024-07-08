@@ -30,10 +30,7 @@ export default function UserDropdown() {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className=" border-red-500 border gap-2"
-          onClick={signOut}
-        >
+        <DropdownMenuItem className=" gap-2" onClick={signOut}>
           <LogOutIcon size={14} />
           Logout
         </DropdownMenuItem>
