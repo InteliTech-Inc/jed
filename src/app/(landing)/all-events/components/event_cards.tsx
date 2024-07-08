@@ -130,8 +130,8 @@ export default function EventCards({ events }: Props) {
                   : null;
                 return (
                   <Link href={`/all-events/${event.id}`} key={event.id}>
-                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[350px]">
-                      <div className="h-[14rem]">
+                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[320px]">
+                      <div className="h-[15rem]">
                         <Image
                           className="h-full w-full rounded-lg rounded-b-none object-cover object-center"
                           src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
