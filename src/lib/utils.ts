@@ -153,6 +153,12 @@ export function isEventPeriodsValid({
       );
       return false;
     }
+    const isValidVoting = isBefore(voting.start_date, voting.end_date);
+    if (!isValidVoting) {
+      toast.error("Voting period must be before the end date.");
+      return false;
+    }
+
     return true;
   }
 
@@ -163,7 +169,6 @@ export function isEventPeriodsValid({
   }
 
   if (isSwitchOn) {
-    // this is when the user checks the nomination button but with no dates
     toast.warning(
       "If you do not want to set the nomination period, uncheck the nomination period button."
     );
