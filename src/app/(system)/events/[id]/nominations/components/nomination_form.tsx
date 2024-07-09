@@ -282,7 +282,6 @@ export default function NominationForm({ id }: { id: string }) {
             disabled={
               inputValues.full_name.length === 0 ||
               inputValues.telephone.length === 0 ||
-              inputValues.email.length === 0 ||
               inputValues.category.length === 0 ||
               isPending
             }
