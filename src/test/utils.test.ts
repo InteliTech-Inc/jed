@@ -50,6 +50,6 @@ describe("voting period return messages", () => {
         start_date: "2024-07-13T00:00:00.000Z",
         end_date: "2024-07-23T00:00:00.000Z",
       })
-    ).toMatch("starts in");
+    ).toMatch("starts on");
   });
 });

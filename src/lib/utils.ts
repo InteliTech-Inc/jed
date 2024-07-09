@@ -8,6 +8,7 @@ import {
   differenceInCalendarDays,
   isAfter,
   isWithinInterval,
+  format,
 } from "date-fns";
 import { Event } from "@/app/(system)/events/[id]/nominations/components/nomination_form";
 import { isValid, parseISO, isFuture, isPast, formatDistance } from "date-fns";
@@ -220,7 +221,7 @@ export function getVotingPeriodMessage(votingPeriod: Event["voting_period"]) {
 
   if (isAfter(now, endDate)) return "Voting has ended";
   if (isFuture(startDate)) {
-    return `Voting starts in ${formatDistance(startDate, now)}.`;
+    return `Voting starts on ${format(startDate, "do MMMM")}.`;
   } else if (isPast(startDate)) {
     return `Voting started ${formatDistance(startDate, now)} ago.`;
   }
