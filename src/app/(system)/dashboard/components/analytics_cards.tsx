@@ -20,14 +20,6 @@ export default async function AnalyticsCards({
 
   const cardsdetails = [
     {
-      id: 1,
-      title: "Earnings Today",
-      icon: <BadgeDollarSign size={20} className="text-secondary" />,
-      value: 1500,
-      bottomtext: "Updated after every successful voting.",
-    },
-
-    {
       id: 3,
       title: "Revenue Generated",
       icon: <CreditCard size={20} className="text-secondary" />,

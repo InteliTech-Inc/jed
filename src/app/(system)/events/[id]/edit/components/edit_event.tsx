@@ -24,7 +24,7 @@ export default async function EditEvent({ id }: EditEventProps) {
       start_date: new Date(data.voting_period?.start_date || ""),
       end_date: new Date(data.voting_period?.end_date || ""),
     },
-    nomination_period: data.nomination_period && {
+    nominations_period: data.nomination_period && {
       start_date: new Date(data.nomination_period.start_date || ""),
       end_date: new Date(data.nomination_period.end_date || ""),
     },
