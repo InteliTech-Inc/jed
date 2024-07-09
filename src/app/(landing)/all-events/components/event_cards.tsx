@@ -1,15 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  formatDistance,
-  isPast,
-  isFuture,
-  differenceInCalendarDays,
-  formatDate,
-  formatDistanceToNow,
-  subDays,
-} from "date-fns";
+import { getVotingPeriodMessage } from "@/lib/utils";
 import SearchBar from "@/components/ui/search-bar";
 import Image from "next/image";
 import Link from "next/link";
@@ -60,36 +50,9 @@ export default function EventCards({ events }: Props) {
     }
   };
 
-  // Handle Query by Key Search
-  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setQuery(event.target.value);
-  // };
-
-  // Handle Search by button click
-  // const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  // };
-
-  console.log(events);
-
   return (
     <section>
       <div className="container mx-auto px-6 py-8">
-        {/* <form
-          onSubmit={handleSearch}
-          className="flex items-start justify-center md:w-[35rem] mx-auto relative"
-        >
-          <Input
-            type="text"
-            placeholder="Search for events"
-            value={query.trim()}
-            onChange={handleInputChange}
-            className="mr-2 py-6 px-4 rounded-full bg-gra-300 focus:outline-none border-none bg-accent "
-          />
-          <Button type="submit" className="absolute top-1 right-3 rounded-full">
-            Search
-          </Button>
-        </form> */}
         <SearchBar queryKey="event" placeholder="Search for events" />
         <>
           {filteredEvents.length === 0 && !query ? (
@@ -107,30 +70,11 @@ export default function EventCards({ events }: Props) {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
               {filteredEvents?.map((event) => {
-                const voting_period =
-                  event.voting_period &&
-                  Object.keys(event.voting_period).length > 0
-                    ? event.voting_period
-                    : null;
-                const start_date =
-                  voting_period !== null &&
-                  new Date(voting_period?.start_date!);
-
-                const isSmth = start_date ? start_date : null;
-                const notice = isSmth
-                  ? `${
-                      isPast(isSmth)
-                        ? `Voting started ${formatDistance(isSmth, Date.now(), {
-                            addSuffix: true,
-                          })}`
-                        : `Voting starts ${formatDistance(isSmth, new Date(), {
-                            addSuffix: true,
-                          })}`
-                    }`
-                  : null;
+                const notice = getVotingPeriodMessage(event.voting_period);
+                console.log(notice);
                 return (
                   <Link href={`/all-events/${event.id}`} key={event.id}>
-                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[320px]">
+                    <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[350px]">
                       <div className="h-[15rem]">
                         <Image
                           className="h-full w-full rounded-lg rounded-b-none object-cover object-center"
@@ -143,11 +87,11 @@ export default function EventCards({ events }: Props) {
                       </div>
                       <div className="px-6 py-4">
                         <p className="font-bold text-md mb-1">{event.name}</p>
-                        {/* {voting_period && (
+                        {notice && (
                           <small className=" py-1 px-2 text-[0.75rem] bg-green-200 rounded-lg">
                             {notice}
                           </small>
-                        )} */}
+                        )}
                       </div>
                     </div>
                   </Link>
