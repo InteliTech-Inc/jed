@@ -125,15 +125,15 @@ export default function NominationForm({ id }: { id: string }) {
     }
   }
 
-  if (!hasValidNominationPeriod(event.nomination_period)) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <p className="text-2xl text-gray-600 text-center">
-          There is no nomination for this event.
-        </p>
-      </div>
-    );
-  }
+  // if (!hasValidNominationPeriod(event.nomination_period)) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center h-screen">
+  //       <p className="text-2xl text-gray-600 text-center">
+  //         There is no nomination for this event.
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   if (isToday(event.nomination_period?.end_date || "")) {
     return (
