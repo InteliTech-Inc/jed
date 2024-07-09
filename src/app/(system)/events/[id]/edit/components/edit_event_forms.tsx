@@ -78,9 +78,6 @@ function EditEventForm({ defaultValues }: EditEventProps) {
     ? `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${defaultValues.img_url}`
     : "";
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [addNomination, setAddNomination] = useState(false);
-  const [preview, setPreview] = useState(imageLink);
-  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,9 +85,19 @@ function EditEventForm({ defaultValues }: EditEventProps) {
       ...defaultValues,
     },
   });
+  const hasNomination =
+    form.getValues("nominations_period") &&
+    Object.keys(form.getValues("nominations_period") || {}).length
+      ? true
+      : false;
+
+  const [addNomination, setAddNomination] = useState(hasNomination);
+  const [preview, setPreview] = useState(imageLink);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // reset the nominations period field to null if the user unchecks the button
+
     if (!addNomination) {
       form.setValue("nominations_period", {
         start_date: undefined,
@@ -109,6 +116,16 @@ function EditEventForm({ defaultValues }: EditEventProps) {
 
     checkConnection();
 
+    const finalNominationPeriod = addNomination
+      ? {
+          start_date: values.nominations_period?.start_date?.toString(),
+          end_date: values.nominations_period?.end_date?.toString(),
+        }
+      : {
+          start_date: undefined,
+          end_date: undefined,
+        };
+
     const payload = {
       id: defaultValues?.id,
       user_id: defaultValues.user_id,
@@ -117,10 +134,7 @@ function EditEventForm({ defaultValues }: EditEventProps) {
       amount_per_vote: values.amount,
       img_file: file,
       is_completed: defaultValues.is_completed,
-      nomination_period: {
-        start_date: values.nominations_period?.start_date?.toString(),
-        end_date: values.nominations_period?.end_date?.toString(),
-      },
+      nomination_period: finalNominationPeriod,
       voting_period: {
         start_date: values.voting_period?.start_date.toString(),
         end_date: values.voting_period?.end_date.toString(),
@@ -143,14 +157,13 @@ function EditEventForm({ defaultValues }: EditEventProps) {
 
       toastId = toast.loading("Updating event details...");
 
-      console.log(payload);
       await axios.post(`/api/update-event/${payload.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      form.reset();
+      // form.reset();
       toast.success("Event Updated Successfully", { id: toastId });
       router.push(`/events`);
       setSelectedFile(null);
@@ -255,7 +268,8 @@ function EditEventForm({ defaultValues }: EditEventProps) {
                   </FormLabel>
                   <FormDescription>
                     Set the period for nomination if you'll be using our
-                    nominations forms.
+                    nominations forms. If you don't want to set it, just uncheck
+                    the button.
                   </FormDescription>
                 </div>
                 <Switch
@@ -306,25 +320,12 @@ function EditEventForm({ defaultValues }: EditEventProps) {
                                 <Calendar
                                   mode="single"
                                   selected={field.value}
-                                  disabled={{
-                                    before: new Date(),
-                                  }}
                                   onSelect={field.onChange}
                                   initialFocus
                                 />
                               </PopoverContent>
                             </Popover>
                           </FormItem>
-                          <div className=" hidden">
-                            {field.value &&
-                              differenceInCalendarDays(
-                                field.value,
-                                new Date()
-                              ) < 0 &&
-                              toast.error(
-                                "The start date should be later than today's date."
-                              )}
-                          </div>
                         </div>
                       )}
                     />
@@ -427,14 +428,6 @@ function EditEventForm({ defaultValues }: EditEventProps) {
                           </PopoverContent>
                         </Popover>
                       </FormItem>
-                      <div className=" hidden">
-                        {field.value &&
-                          differenceInCalendarDays(field.value, new Date()) <
-                            0 &&
-                          toast.error(
-                            "The voting start date should be later than today's date."
-                          )}
-                      </div>
                     </div>
                   )}
                 />
@@ -484,16 +477,6 @@ function EditEventForm({ defaultValues }: EditEventProps) {
                             </PopoverContent>
                           </Popover>
                         </FormItem>
-                        <div className=" hidden">
-                          {field.value &&
-                            differenceInCalendarDays(
-                              form.getValues("voting_period.start_date"),
-                              field.value
-                            ) >= 0 &&
-                            toast.error(
-                              "The voting end date should be later than the start date."
-                            )}
-                        </div>
                       </div>
                     );
                   }}

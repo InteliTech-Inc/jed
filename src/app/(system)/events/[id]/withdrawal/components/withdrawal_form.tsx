@@ -25,6 +25,7 @@ import { z } from "zod";
 import Spinner from "@/components/spinner";
 import { payoutShape } from "@/lib/validations";
 import { toast } from "sonner";
+import axios from "axios";
 
 type Props = {};
 
@@ -58,9 +59,23 @@ export default function WithdrawalForm({}: Props) {
       event_id: eventId as string,
     };
 
+    const withdrawaldetails = {
+      amount,
+      channel,
+      provider,
+      accountNumber: account_number,
+      accountName: account_name,
+    };
+
+    setIsPending(true);
     try {
-      setIsPending(true);
+      const { data: userData } = await db.auth.getUser();
       const { error } = await db.from("withdrawals").insert(payloads).select();
+
+      const currentUser = {
+        fullName: `${userData.user?.user_metadata.firstName} ${userData.user?.user_metadata.lastName}`,
+        email: userData.user?.email,
+      };
 
       if (error) {
         console.log(error.message);
@@ -68,14 +83,21 @@ export default function WithdrawalForm({}: Props) {
         return;
       }
 
+      const res = await axios.post("/api/request-withdrawal", {
+        user: { ...currentUser },
+        withdrawaldetails,
+      });
+
       setIsPending(false);
       router.refresh();
       form.reset();
-      toast.success("Payouts submitted successfully!");
+      toast.success(res.data.message);
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
       }
+    } finally {
+      setIsPending(false);
     }
   }
 
@@ -266,7 +288,7 @@ export default function WithdrawalForm({}: Props) {
                 className="tracking-wide w-full my-4"
                 disabled={isPending}
               >
-                {isPending ? <Spinner /> : "Request Payout"}
+                {isPending ? <Spinner color="#fff" /> : "Request Payout"}
               </Button>
             </section>
           </div>

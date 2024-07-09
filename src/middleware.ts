@@ -13,6 +13,7 @@ export default async function middleware(req: NextRequest) {
     "/waitlist",
     "/about",
     "/api/waitlist",
+    "/api/request-withdrawal",
   ];
 
   if (

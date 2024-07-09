@@ -31,8 +31,9 @@ import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { checkConnection } from "@/lib/utils";
 import Spinner from "@/components/spinner";
 import { isToday } from "date-fns";
+import { hasValidNominationPeriod } from "@/lib/utils";
 
-type Event = {
+export type Event = {
   id: string;
   name: string;
   img_url: string;
@@ -57,22 +58,6 @@ type Category = {
   category_name: string | null;
   event_id: string | null;
 };
-
-function isValidDateString(dateString: string | undefined): boolean {
-  if (!dateString) return false;
-  const date = new Date(dateString);
-  return !isNaN(date.getTime());
-}
-
-function hasValidNominationPeriod(event: Event): boolean {
-  const { nomination_period } = event;
-
-  if (!nomination_period) return false;
-
-  const { start_date, end_date } = nomination_period;
-
-  return isValidDateString(start_date) && isValidDateString(end_date);
-}
 
 export default function NominationForm({ id }: { id: string }) {
   const [event, setEvent] = useState<Event>({} as Event);
@@ -140,7 +125,7 @@ export default function NominationForm({ id }: { id: string }) {
     }
   }
 
-  if (!hasValidNominationPeriod(event)) {
+  if (!hasValidNominationPeriod(event.nomination_period)) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
         <p className="text-2xl text-gray-600">
