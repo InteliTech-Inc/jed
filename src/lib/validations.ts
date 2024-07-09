@@ -26,7 +26,9 @@ export const shape = z
     return true;
   });
 
-const emailShape = z.string().optional();
+const emailShape = z.string().email({
+  message: "Please enter a valid email address",
+});
 
 export const authShape = z.object({
   email: emailShape,
@@ -77,7 +79,7 @@ export const nominationShape = z.object({
   full_name: z.string({
     message: "Nominee's full name is required",
   }),
-  email: emailShape,
+  email: z.string().optional(),
   telephone: z
     .string()
     .min(10, {
