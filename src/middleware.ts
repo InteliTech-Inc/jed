@@ -14,6 +14,7 @@ export default async function middleware(req: NextRequest) {
     "/about",
     "/api/waitlist",
     "/api/jed-ussd",
+    "/api/jed-webhook",
     "/sitemap.xml",
   ];
 
