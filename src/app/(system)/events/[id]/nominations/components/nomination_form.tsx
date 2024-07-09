@@ -138,7 +138,9 @@ export default function NominationForm({ id }: { id: string }) {
   if (isToday(event.nomination_period?.end_date || "")) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
-        <p className="text-2xl text-gray-600">Nomination period has ended.</p>
+        <p className="text-2xl text-gray-600 text-center">
+          Nomination period has ended.
+        </p>
       </div>
     );
   }
