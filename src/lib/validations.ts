@@ -26,9 +26,7 @@ export const shape = z
     return true;
   });
 
-const emailShape = z.string().email({
-  message: "Please enter a valid email address",
-});
+const emailShape = z.string().optional();
 
 export const authShape = z.object({
   email: emailShape,
