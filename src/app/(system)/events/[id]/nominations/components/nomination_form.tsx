@@ -197,7 +197,7 @@ export default function NominationForm({ id }: { id: string }) {
               name="email"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">Email (optional)</Label>
                   <FormControl>
                     <Input
                       id="email"
