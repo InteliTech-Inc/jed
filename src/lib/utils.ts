@@ -1,7 +1,17 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
-import { isBefore, addDays, differenceInCalendarDays, isAfter } from "date-fns";
+import {
+  isBefore,
+  addDays,
+  parse,
+  differenceInCalendarDays,
+  isAfter,
+  isWithinInterval,
+} from "date-fns";
+import { Event } from "@/app/(system)/events/[id]/nominations/components/nomination_form";
+import { isValid, parseISO, isFuture, isPast, formatDistance } from "date-fns";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -161,4 +171,53 @@ export function isEventPeriodsValid({
   }
 
   return true;
+}
+
+export function isValidDateString(dateString: string | undefined): boolean {
+  if (!dateString) return false;
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
+}
+
+export function hasValidNominationPeriod(
+  period: Event["nomination_period"]
+): boolean {
+  if (!period || !period.start_date || !period.end_date) {
+    return false;
+  }
+
+  return (
+    isValid(parseISO(period.start_date)) && isValid(parseISO(period.end_date))
+  );
+}
+
+export function getVotingPeriodMessage(votingPeriod: Event["voting_period"]) {
+  if (!votingPeriod || !votingPeriod.start_date || !votingPeriod.end_date) {
+    return null;
+  }
+
+  const startDate = parseISO(new Date(votingPeriod.start_date).toISOString());
+  const endDate = parseISO(new Date(votingPeriod.end_date).toISOString());
+
+  const now = new Date();
+
+  if (
+    isWithinInterval(now, {
+      start: startDate,
+      end: endDate,
+    })
+  )
+    return "Voting is ongoing";
+
+  if (differenceInCalendarDays(startDate, now) === 1) {
+    return "Voting starts tomorrow.";
+  }
+
+  if (isAfter(now, endDate)) return "Voting has ended";
+  if (isFuture(startDate)) {
+    return `Voting starts in ${formatDistance(startDate, now)}.`;
+  } else if (isPast(startDate)) {
+    return `Voting started ${formatDistance(startDate, now)} ago.`;
+  }
+  return null;
 }
