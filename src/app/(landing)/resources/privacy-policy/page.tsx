@@ -6,24 +6,18 @@ const TERMS_CONTENT = [
     title: "Personal Information",
     text: `  We may collect personal information, such as your
 name, contact details (address, email address, phone number), and payment
-information when you use our JED services.`,
+information such as amount paid when you use our JED services.`,
   },
+
   {
     id: 1,
-    title: "JED Details",
-    text: ` We collect information about your JED, including fabric
-types, special care instructions, stains, and damages, to ensure proper handling
-and processing.`,
-  },
-  {
-    id: 2,
     title: "Usage Information",
     text: `We may collect information about how you use our website
 or mobile application, including IP addresses, browser type, device information,
 and page views, to improve our services and enhance user experience.`,
   },
   {
-    id: 3,
+    id: 2,
     title: "Cookies and Tracking Technologies",
     text: ` We use cookies and similar tracking
 technologies to collect information about your interactions with our website or
@@ -39,12 +33,11 @@ function PrivacyPolicyPage() {
           Privacy Policy
         </h1>
         <p className=" ">
-          JED ("we," "us," or "our") is committed to protecting the
-          privacy of our customers ("you" or "your"). This Privacy policy shall
-          explain how we collect, use, disclose, and protect your personal
-          information in connection with our JED services. By using our
-          services, you consent to the practices described in this Privacy
-          Policy.
+          JED ("we," "us," or "our") is committed to protecting the privacy of
+          our customers ("you" or "your"). This Privacy policy shall explain how
+          we collect, use, disclose, and protect your personal information in
+          connection with our JED services. By using our services, you consent
+          to the practices described in this Privacy Policy.
         </p>
       </section>
       {TERMS_CONTENT.map((content, index) => {
@@ -77,7 +70,7 @@ function PrivacyPolicyPage() {
             payments securely.
           </li>
           <li className=" my-2">
-            &bull;Usage Information: Data related to your interactions with our
+            &bull; Usage Information: Data related to your interactions with our
             platform, such as voting activity and event participation.
           </li>
         </ul>
