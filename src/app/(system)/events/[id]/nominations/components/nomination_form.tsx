@@ -29,8 +29,11 @@ import Rotating_Lines from "@/components/spinner";
 import { nominationShape } from "@/lib/validations";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { checkConnection } from "@/lib/utils";
+import Spinner from "@/components/spinner";
+import { isToday } from "date-fns";
+import { hasValidNominationPeriod } from "@/lib/utils";
 
-type Event = {
+export type Event = {
   id: string;
   name: string;
   img_url: string;
@@ -40,6 +43,14 @@ type Event = {
   description: string;
   user_id: string;
   is_completed: boolean;
+  voting_period?: {
+    start_date?: string;
+    end_date?: string;
+  };
+  nomination_period?: {
+    start_date?: string;
+    end_date?: string;
+  };
 };
 
 type Category = {
@@ -50,7 +61,11 @@ type Category = {
 
 export default function NominationForm({ id }: { id: string }) {
   const [event, setEvent] = useState<Event>({} as Event);
-  const [isPending, setIsPending] = useState<boolean>(false);
+  const { mutateAsync: CreateNomination, isPending } = useCreateMutation({
+    dbName: "nominations",
+    key: "nominations",
+    showSucessMsg: false,
+  });
 
   const router = useRouter();
 
@@ -82,17 +97,10 @@ export default function NominationForm({ id }: { id: string }) {
 
   const inputValues = form.watch();
 
-  const { mutateAsync: CreateNomination } = useCreateMutation({
-    dbName: "nominations",
-    key: "nominations",
-    showSucessMsg: false,
-  });
-
   async function handleNomination(values: z.infer<typeof nominationShape>) {
     checkConnection();
 
     try {
-      setIsPending(true);
       const payload = {
         full_name: values.full_name,
         email: values.email,
@@ -105,22 +113,35 @@ export default function NominationForm({ id }: { id: string }) {
         .then((_) => {
           toast.success("Nomination submitted successfully..");
           form.reset();
-          router.push("/");
-          setIsPending(false);
+          router.refresh();
         })
         .catch((error) => {
-          setIsPending(false);
           toast.error(error.message);
         });
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
       }
-    } finally {
-      setIsPending(false);
     }
   }
 
+  if (!hasValidNominationPeriod(event.nomination_period)) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <p className="text-2xl text-gray-600">
+          There is no nomination for this event.
+        </p>
+      </div>
+    );
+  }
+
+  if (isToday(event.nomination_period?.end_date || "")) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <p className="text-2xl text-gray-600">Nomination period has ended.</p>
+      </div>
+    );
+  }
   return (
     <section className="">
       <div className="relative flex flex-col justify-center h-40 overflow-auto mb-6">
@@ -264,7 +285,7 @@ export default function NominationForm({ id }: { id: string }) {
               isPending
             }
           >
-            {isPending && <Rotating_Lines />}
+            {isPending && <Spinner />}
             Submit Nomination
           </Button>
         </form>
