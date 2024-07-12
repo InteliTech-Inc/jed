@@ -14,7 +14,7 @@ const TERMS_CONTENT = [
   {
     id: 3,
     title: "Payments, Cancellation, and Refund Policy",
-    text: `Payment processing services are facilitated by Hubtel, governed by their terms and conditions. Refunds are subject to review and applicable laws. Fraudulent transactions are promptly identified and canceled to protect both JED and its clients.
+    text: `Payment processing services are facilitated by Paystack, governed by their terms and conditions. Refunds are subject to review and applicable laws. Fraudulent transactions are promptly identified and canceled to protect both JED and its clients.
 `,
   },
   {
@@ -47,7 +47,7 @@ const TERMS_CONTENT = [
   {
     id: 9,
     title: "Cancellation and Termination",
-    text: `Accounts may be terminated for legal compliance, technical issues, fraudulent activities, or at JED's discretion.`,
+    text: `Accounts may be terminated for illegal compliance, technical issues, fraudulent activities, or at JED's discretion.`,
   },
   {
     id: 10,
