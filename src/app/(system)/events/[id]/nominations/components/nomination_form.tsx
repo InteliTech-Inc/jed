@@ -30,7 +30,7 @@ import { nominationShape } from "@/lib/validations";
 import { useCreateMutation } from "@/hooks/use_create_mutation";
 import { checkConnection } from "@/lib/utils";
 import Spinner from "@/components/spinner";
-import { isToday } from "date-fns";
+import { isToday, isAfter, formatDistanceToNow, formatDate } from "date-fns";
 import { hasValidNominationPeriod } from "@/lib/utils";
 
 export type Event = {
@@ -59,8 +59,7 @@ type Category = {
   event_id: string | null;
 };
 
-export default function NominationForm({ id }: { id: string }) {
-  const [event, setEvent] = useState<Event>({} as Event);
+export default function NominationForm({ event }: { event: Event }) {
   const { mutateAsync: CreateNomination, isPending } = useCreateMutation({
     dbName: "nominations",
     key: "nominations",
@@ -68,21 +67,6 @@ export default function NominationForm({ id }: { id: string }) {
   });
 
   const router = useRouter();
-
-  useEffect(() => {
-    db.from("events")
-      .select("*, categories(category_name, id, event_id)")
-      .eq("id", id)
-      .single()
-      .then(({ data, error }) => {
-        if (error) {
-          toast.error("Error fetching data...");
-        } else {
-          const eventData = data as unknown as Event;
-          setEvent(eventData);
-        }
-      });
-  }, [id]);
 
   const form = useForm<z.infer<typeof nominationShape>>({
     resolver: zodResolver(nominationShape),
@@ -107,7 +91,7 @@ export default function NominationForm({ id }: { id: string }) {
         phone: values.telephone,
         category_id: values.category,
         reasons: values.reasons,
-        event_id: id,
+        event_id: event.id,
       };
       CreateNomination(payload)
         .then((_) => {
@@ -125,21 +109,41 @@ export default function NominationForm({ id }: { id: string }) {
     }
   }
 
-  if (!hasValidNominationPeriod(event.nomination_period)) {
+  const date = new Date();
+
+  if (
+    !event ||
+    !event.nomination_period?.start_date ||
+    !event.nomination_period.end_date
+  ) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <p className="text-2xl text-gray-600">
-          There is no nomination for this event.
+      <section className="flex min-h-[55dvh] p-4 flex-col items-center justify-center col-span-3">
+        <Image
+          src={"/images/no-docs.svg"}
+          width={200}
+          height={200}
+          alt={"Empty notification inbox"}
+        />
+        <p className="text-xl text-gray-600 text-center">
+          The nomination period for {event.name} has not been set.
         </p>
-      </div>
+      </section>
     );
   }
 
-  if (isToday(event.nomination_period?.end_date || "")) {
+  if (isAfter(date, event.nomination_period?.end_date)) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <p className="text-2xl text-gray-600">Nomination period has ended.</p>
-      </div>
+      <section className="flex min-h-[55dvh] p-4 flex-col items-center justify-center col-span-3">
+        <Image
+          src={"/images/no-docs.svg"}
+          width={200}
+          height={200}
+          alt={"Empty notification inbox"}
+        />
+        <p className="text-xl text-gray-600 text-center">
+          Nominations for {event.name} has ended.
+        </p>
+      </section>
     );
   }
   return (
@@ -195,7 +199,7 @@ export default function NominationForm({ id }: { id: string }) {
               name="email"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">Email (optional)</Label>
                   <FormControl>
                     <Input
                       id="email"
@@ -280,7 +284,6 @@ export default function NominationForm({ id }: { id: string }) {
             disabled={
               inputValues.full_name.length === 0 ||
               inputValues.telephone.length === 0 ||
-              inputValues.email.length === 0 ||
               inputValues.category.length === 0 ||
               isPending
             }
