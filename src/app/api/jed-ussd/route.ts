@@ -141,13 +141,20 @@ export async function POST(req: NextRequest) {
             const totalAmount =
               Number(userSessionData[sessionID].voteCount) * Number(votePrice);
 
+            const final_amount = Number(totalAmount).toFixed(2);
+
             if (userSessionData[sessionID].service === "1") {
               const reference = `voting for ${userSessionData[sessionID].nomineeName}`;
-              const voteData = {
+              const voteData: {
+                nominee_id: string;
+                event_id: string;
+                count: number;
+                amount_payable: number;
+              } = {
                 nominee_id: userSessionData[sessionID].nomineeId,
                 event_id: userSessionData[sessionID].eventId,
                 count: userSessionData[sessionID].voteCount,
-                amount_payable: totalAmount,
+                amount_payable: Number(final_amount),
               };
               await juniPay(
                 totalAmount,

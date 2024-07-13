@@ -240,7 +240,7 @@ export async function juniPay(
       .select();
 
     if (!error) {
-      console.log("data from server endpoints", data);
+      return data;
     }
   } catch (error) {
     if (error instanceof AxiosError) {
