@@ -2,7 +2,7 @@ import { dbServer } from "./supabase";
 import { cookies } from "next/headers";
 import { db } from "./supabase";
 import { VotingDataResponse } from "@/types/types";
-import { Tables } from "@/types/supabase";
+import axios, { AxiosError } from "axios";
 
 export const getServerUser = async () => {
   const db = dbServer(cookies);
@@ -105,27 +105,34 @@ export const getNominee = async (code: string) => {
 
   const { data: nominee, error: nomineeError } = await db
     .from("nominees")
-    .select("*")
+    .select("full_name, code, category_id, event_id, id")
     .eq("code", code)
+    .single();
+
+  const { data: nomineeCategory } = await db
+    .from("categories")
+    .select("category_name")
+    .eq("id", nominee?.category_id!)
     .single();
 
   if (nomineeError) throw new Error(nomineeError.message);
 
-  return { nominee };
+  return { nominee, nomineeCategory };
 };
 
-export async function createOrUpdateVote(voteData: {
-  nominee_id: string;
-  event_id: string;
-  count: number;
-  amount_payable: number;
-}) {
+interface votesDataProps {
+  nominee_id: string | null | undefined;
+  event_id: string | null | undefined;
+  count: number | null | undefined;
+  amount_payable: number | null | undefined;
+}
+export async function createOrUpdateVote(voteData: votesDataProps) {
   const { nominee_id, count, amount_payable, event_id } = voteData;
 
   const { data, error } = await db
     .from("voting")
     .select("*")
-    .eq("nominee_id", nominee_id);
+    .eq("nominee_id", nominee_id as string);
 
   if (error) {
     console.error("Error fetching voting record:", error);
@@ -142,7 +149,7 @@ export async function createOrUpdateVote(voteData: {
     const { error: updateError } = await db
       .from("voting")
       .update({ count: updatedVotes, amount_payable: updatedAmount })
-      .eq("nominee_id", nominee_id);
+      .eq("nominee_id", nominee_id as string);
 
     if (updateError) {
       console.error("Error updating voting record:", updateError);
@@ -179,72 +186,84 @@ export async function getEventVotingPrice(eventId: string) {
   return { data };
 }
 
-// Import axios if not already imported
-import axios, { AxiosError } from "axios";
-
-// Function to initiate payment on Paystack
-// export async function initiatePayment(
-//   amount: number,
-//   email: string,
-//   callbackUrl: string,
-//   phone: number
-// ) {
-//   try {
-//     const response = await axios.post(
-//       "https://api.paystack.co/transaction/initialize",
-//       {
-//         amount: amount,
-//         email: email,
-//         callback_url: callbackUrl,
-//         reference: "xkljjsdkjfasdf", // Implement this function to generate unique references
-//         mobile_money: {
-//           phone,
-//           provider: "MTN",
-//         },
-//         currency: "GHS",
-//       },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY}`,
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-
-//     return response.data;
-//   } catch (error) {
-//     if (error instanceof Error)
-//       console.error("Failed to initialize payment:", error.name);
-//     throw error;
-//   }
-// }
-
-export async function generatePaystackPaymentLink(
-  email: string,
-  amount: number,
-  callbackUrl: string
-): Promise<string | null> {
-  const url = "https://api.paystack.co/transaction/initialize";
-  const headers = {
-    Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY}`, // Replace YOUR_SECRET_KEY with your actual secret key
-    "Content-Type": "application/json",
+interface JuniPayProps {
+  votingData: {
+    nominee_id: string;
+    event_id: string;
+    count: number;
+    amount_payable: number;
   };
-  const data = {
-    email: email,
-    amount: Number(amount) * 100, // Convert amount to kobo
-    callback_url: callbackUrl,
+}
+
+export async function juniPay(
+  amount: number,
+  total_amount: number,
+  provider: string,
+  phoneNumber: string,
+  description: string,
+  token: string,
+  votingData: JuniPayProps["votingData"]
+) {
+  console.log("Payload for juniPay:", {
+    amount,
+    total_amount,
+    provider,
+    phoneNumber,
+    description,
+    token,
+    votingData,
+  });
+
+  let callbackUrl = "https://jed-event.com/api/jed-callback";
+  let senderEmail = "info.jedvotes@gmail.com";
+  let channel = "mobile_money";
+  let foreignID = Date.now().toString();
+  let payload = {
+    amount: amount,
+    tot_amnt: total_amount,
+    provider: provider.toLocaleLowerCase(),
+    phoneNumber: phoneNumber,
+    description: description,
+    callbackUrl: callbackUrl,
+    senderEmail: senderEmail,
+    channel: channel,
+    foreignID: foreignID,
+  };
+
+  const config = {
+    method: "POST",
+    url: "https://api.junipayments.com/payment",
+    headers: {
+      "Content-Type": "application/json",
+      "cache-control": "no-cache",
+      Authorization: `Bearer ${token}`,
+      clientid: `Ih11176`,
+    },
+    data: payload,
   };
 
   try {
-    const response = await axios.post(url, data, { headers: headers });
-    return response.data.data.reference;
+    const response = await axios(config);
+    console.log("Payment API Response:", response);
+    const { data, error } = await db
+      .from("transactions")
+      .insert([{ ...votingData, trans_id: response.data.transID }])
+      .select();
+
+    if (!error) {
+      console.log("data from server endpoints", data);
+    }
+    console.log("log error", error);
   } catch (error) {
     if (error instanceof AxiosError) {
-      console.error(
-        "Error generating Paystack payment link:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error response data:", error.response?.data);
+      console.error("Error response status:", error.response?.status);
+      console.error("Error response headers:", error.response?.headers);
+    } else {
+      console.error("Error:", error);
     }
-    return null;
+    return {
+      status: "failed",
+    };
   }
 }

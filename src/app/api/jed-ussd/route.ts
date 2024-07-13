@@ -1,38 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
-import cache from "memory-cache";
-import axios from "axios";
+
 import {
   getNominee,
-  createOrUpdateVote,
   getEventVotingPrice,
-} from "@/lib/server_endpoints"; // Ensure these functions handle the DB operations
+  juniPay,
+} from "@/lib/server_endpoints";
+import { generateToken } from "@/lib/token";
 
-const ussdCode = "*928*121#";
 let userSessionData: { [key: string]: any } = {};
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
+  const token = generateToken();
 
   const { sessionID, userID, newSession, msisdn, userData, network } = body;
-  console.log("Details from JED", body);
 
   let message = "";
   let continueSession = true;
 
   try {
-    if (newSession && userData === ussdCode) {
+    if (newSession) {
       userSessionData[sessionID] = {
         step: 1,
         voteCount: undefined,
         code: undefined,
         nomineeId: undefined,
+        nomineeName: undefined,
+        categoryName: undefined,
         eventId: undefined,
         amount: undefined,
         service: undefined,
         reference: undefined,
       };
 
-      message = "Welcome to JED Platform, What are you doing today?\n";
+      message = "Welcome to JED Platform, select an option to continue:\n";
       message += "1. Vote for a nominee\n";
       message += "2. Buy a Ticket (coming soon)\n";
     } else if (!newSession && userSessionData[sessionID]?.step === 1) {
@@ -112,8 +113,11 @@ export async function POST(req: NextRequest) {
             console.log(
               "Voting, Response: " + JSON.stringify(voting_response, null, 2)
             );
-            const nomineeName = voting_response.nominee.full_name;
-            message = `You are purchasing ${userSessionData[sessionID].voteCount} votes for ${nomineeName}.\n`;
+            userSessionData[sessionID].nomineeName = voting_response.nominee
+              .full_name as string;
+            userSessionData[sessionID].categoryName = voting_response
+              .nomineeCategory?.category_name as string;
+            message = `You are purchasing ${userSessionData[sessionID].voteCount} votes for ${userSessionData[sessionID].nomineeName} in the category, ${userSessionData[sessionID].categoryName}\n`;
             message += `The cost will be ${totalAmount.toFixed(2)} GHS.\n`;
             message += "Please confirm by entering:\n";
             message += "1. Yes\n";
@@ -144,18 +148,31 @@ export async function POST(req: NextRequest) {
             const totalAmount =
               Number(userSessionData[sessionID].voteCount) * Number(votePrice);
 
-            const voteData = {
-              nominee_id: userSessionData[sessionID].nomineeId,
-              event_id: userSessionData[sessionID].eventId,
-              count: userSessionData[sessionID].voteCount,
-              amount_payable: totalAmount,
-            };
-
-            // Create or update the vote in the voting table
-            await createOrUpdateVote(voteData);
-
-            message =
-              "Prompt will be displayed soon to authorize payment for voting. Thank you!";
+            if (userSessionData[sessionID].service === "1") {
+              console.log(
+                totalAmount,
+                userSessionData[sessionID].reference,
+                userSessionData[sessionID].eventId
+              );
+              const reference = `voting for ${userSessionData[sessionID].nomineeName} in the category, ${userSessionData[sessionID].categoryName}`;
+              const voteData = {
+                nominee_id: userSessionData[sessionID].nomineeId,
+                event_id: userSessionData[sessionID].eventId,
+                count: userSessionData[sessionID].voteCount,
+                amount_payable: totalAmount,
+              };
+              await juniPay(
+                totalAmount,
+                totalAmount,
+                network,
+                msisdn,
+                reference,
+                token,
+                voteData
+              );
+              message =
+                "Prompt will be displayed soon to authorize payment for voting. Thank you!";
+            }
           }
           continueSession = false;
           delete userSessionData[sessionID];

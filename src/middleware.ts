@@ -15,9 +15,9 @@ export default async function middleware(req: NextRequest) {
     "/api/waitlist",
     "/api/request-withdrawal",
     "/api/jed-ussd",
-    "/api/jed-webhook",
+    "/api/jed-callback",
+    "/api/token",
     "/sitemap.xml",
-
   ];
 
   if (
