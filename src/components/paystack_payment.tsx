@@ -109,8 +109,6 @@ export default function PaystackPayment({ id }: { id: string }) {
   const FACTOR = 100;
   const amountPayable = Number(form.watch("votes")) * amountPerVote;
 
-  console.log("amountPayable", amountPayable);
-
   const config: PaystackProps = {
     reference: ref,
     email: form.watch("email") || "info.jedvotes@gmail.com",
