@@ -66,10 +66,6 @@ export async function POST(req: NextRequest) {
           );
 
           if (nomineeDetails) {
-            console.log(
-              "Nominee Details",
-              JSON.stringify(nomineeDetails, null, 2)
-            );
             userSessionData[sessionID].nomineeId = nomineeDetails.nominee.id;
             userSessionData[sessionID].eventId =
               nomineeDetails.nominee.event_id;
@@ -110,9 +106,6 @@ export async function POST(req: NextRequest) {
               userSessionData[sessionID].code
             );
 
-            console.log(
-              "Voting, Response: " + JSON.stringify(voting_response, null, 2)
-            );
             userSessionData[sessionID].nomineeName = voting_response.nominee
               .full_name as string;
             userSessionData[sessionID].categoryName = voting_response
@@ -149,11 +142,6 @@ export async function POST(req: NextRequest) {
               Number(userSessionData[sessionID].voteCount) * Number(votePrice);
 
             if (userSessionData[sessionID].service === "1") {
-              console.log(
-                totalAmount,
-                userSessionData[sessionID].reference,
-                userSessionData[sessionID].eventId
-              );
               const reference = `voting for ${userSessionData[sessionID].nomineeName} in the category, ${userSessionData[sessionID].categoryName}`;
               const voteData = {
                 nominee_id: userSessionData[sessionID].nomineeId,

@@ -214,7 +214,7 @@ export async function juniPay(
     votingData,
   });
 
-  let callbackUrl = "https://jed-event.com/api/jed-callback";
+  let callbackUrl = "https://www.jed-event.com/api/jed-callback";
   let senderEmail = "info.jedvotes@gmail.com";
   let channel = "mobile_money";
   let foreignID = Date.now().toString();
