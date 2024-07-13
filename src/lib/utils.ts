@@ -192,6 +192,17 @@ export function hasValidNominationPeriod(
     return false;
   }
 
+  const now = new Date();
+
+  if (
+    isWithinInterval(now, {
+      start: period.start_date,
+      end: period.end_date,
+    })
+  ) {
+    return true;
+  }
+
   return (
     isValid(parseISO(period.start_date)) && isValid(parseISO(period.end_date))
   );

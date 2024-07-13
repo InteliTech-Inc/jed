@@ -125,20 +125,22 @@ export default function NominationForm({ id }: { id: string }) {
     }
   }
 
-  if (!hasValidNominationPeriod(event.nomination_period)) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <p className="text-2xl text-gray-600">
-          There is no nomination for this event.
-        </p>
-      </div>
-    );
-  }
+  // if (!hasValidNominationPeriod(event.nomination_period)) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center h-screen">
+  //       <p className="text-2xl text-gray-600 text-center">
+  //         There is no nomination for this event.
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   if (isToday(event.nomination_period?.end_date || "")) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
-        <p className="text-2xl text-gray-600">Nomination period has ended.</p>
+        <p className="text-2xl text-gray-600 text-center">
+          Nomination period has ended.
+        </p>
       </div>
     );
   }
@@ -195,7 +197,7 @@ export default function NominationForm({ id }: { id: string }) {
               name="email"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">Email (optional)</Label>
                   <FormControl>
                     <Input
                       id="email"
@@ -280,7 +282,6 @@ export default function NominationForm({ id }: { id: string }) {
             disabled={
               inputValues.full_name.length === 0 ||
               inputValues.telephone.length === 0 ||
-              inputValues.email.length === 0 ||
               inputValues.category.length === 0 ||
               isPending
             }

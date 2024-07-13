@@ -6,7 +6,7 @@ const TERMS_CONTENT = [
     title: "Personal Information",
     text: `  We may collect personal information, such as your
 name, contact details (address, email address, phone number), and payment
-information such as amount when you use our JED services.`,
+information such as amount paid when you use our JED services.`,
   },
 
   {
