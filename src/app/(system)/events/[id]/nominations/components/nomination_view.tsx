@@ -1,12 +1,10 @@
 import NominationForm from "@/app/(system)/events/[id]/nominations/components/nomination_form";
 import { dbServer } from "@/lib/supabase";
 import { cookies } from "next/headers";
-import { toast } from "sonner";
 import { Event } from "@/app/(system)/events/[id]/nominations/components/nomination_form";
 import Image from "next/image";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-const db = dbServer(cookies);
 export default async function NominationView({ id }: { id: string }) {
+  const db = dbServer(cookies);
   const { data, error } = (await db
     .from("events")
     .select("*, categories(category_name, id, event_id)")
@@ -16,7 +14,8 @@ export default async function NominationView({ id }: { id: string }) {
     error: any;
   };
 
-  if (error)
+  if (error) {
+    console.error("Error fetching data:", error);
     return (
       <section className="flex min-h-[55dvh] p-4 flex-col items-center justify-center col-span-3">
         <Image
@@ -26,11 +25,11 @@ export default async function NominationView({ id }: { id: string }) {
           alt={"Empty notification inbox"}
         />
         <p className="text-xl text-gray-600 text-center">
-          There was a problem fetching the data, make sure the link is correct
-          and try again.
+          There was no data found, make sure the link is correct and try again.
         </p>
       </section>
     );
+  }
 
   return (
     <div className="mb-36">
