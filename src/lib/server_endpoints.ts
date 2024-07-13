@@ -204,16 +204,6 @@ export async function juniPay(
   token: string,
   votingData: JuniPayProps["votingData"]
 ) {
-  console.log("Payload for juniPay:", {
-    amount,
-    total_amount,
-    provider,
-    phoneNumber,
-    description,
-    token,
-    votingData,
-  });
-
   let callbackUrl = "https://www.jed-event.com/api/jed-callback";
   let senderEmail = "info.jedvotes@gmail.com";
   let channel = "mobile_money";
@@ -244,7 +234,6 @@ export async function juniPay(
 
   try {
     const response = await axios(config);
-    console.log("Payment API Response:", response);
     const { data, error } = await db
       .from("transactions")
       .insert([{ ...votingData, trans_id: response.data.transID }])
