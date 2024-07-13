@@ -142,7 +142,7 @@ export async function POST(req: NextRequest) {
               Number(userSessionData[sessionID].voteCount) * Number(votePrice);
 
             if (userSessionData[sessionID].service === "1") {
-              const reference = `voting for ${userSessionData[sessionID].nomineeName} in the category, ${userSessionData[sessionID].categoryName}`;
+              const reference = `voting for ${userSessionData[sessionID].nomineeName}`;
               const voteData = {
                 nominee_id: userSessionData[sessionID].nomineeId,
                 event_id: userSessionData[sessionID].eventId,
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
                 voteData
               );
               message =
-                "Prompt will be displayed soon to authorize payment for voting. Thank you!";
+                "Prompt will be displayed soon to authorize payment for voting. Kindly check your approvals to authorize payment if the popup does not appear. Thank you!";
             }
           }
           continueSession = false;
