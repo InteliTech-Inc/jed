@@ -1,4 +1,5 @@
 "use client";
+import { Event } from "@/app/(system)/events/[id]/nominations/components/nomination_form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { db } from "@/lib/supabase";
+import { hasVotingEnded } from "@/lib/utils";
 import { Vote } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -27,7 +29,7 @@ type Nominees =
     }[]
   | null;
 
-export default function VotingResults() {
+export default function VotingResults({ event }: { event: Event }) {
   const { id } = useParams();
   const [votes, setVotes] = useState<Votes[]>();
   const [nominees, setNominees] = useState<Nominees>();
@@ -102,11 +104,17 @@ export default function VotingResults() {
     };
   }, [db, router]);
 
+  const votingHasEnded = hasVotingEnded(event.voting_period?.end_date ?? "");
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className=" gap-2">
-          <span className="mr-1">View Voting Results</span>
+          <span className="mr-1">
+            {votingHasEnded
+              ? "View final voting results"
+              : "View live voting results"}
+          </span>
           <Vote size={16} />
         </Button>
       </DialogTrigger>

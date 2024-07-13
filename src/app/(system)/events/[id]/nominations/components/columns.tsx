@@ -68,18 +68,7 @@ export const columns: ColumnDef<NominationsResponse>[] = [
   },
   {
     accessorKey: "category",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className=" pl-2"
-        >
-          Category
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Category",
     cell: ({ row }) => {
       const data = row.original;
       return <div>{data.categories?.category_name}</div>;
