@@ -46,6 +46,7 @@ export default async function NominationsPage({
   if (!eventId) {
     redirect("/");
   }
+
   return (
     <div className="mb-36">
       <NominationView id={eventId} />;

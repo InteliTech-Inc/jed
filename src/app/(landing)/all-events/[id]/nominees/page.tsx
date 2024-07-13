@@ -37,10 +37,11 @@ export default async function CategoryNominees({ params: { id } }: Props) {
     );
   }
 
-  const { data: nomineeData, error } = await db
-    .from("nominees")
-    .select("*, categories(category_name)")
-    .eq("category_id", id);
+  const { data: categoryData, error } = await db
+    .from("categories")
+    .select("*, nominees(*)")
+    .eq("id", id)
+    .single();
 
   if (error) {
     return (
@@ -48,14 +49,10 @@ export default async function CategoryNominees({ params: { id } }: Props) {
     );
   }
 
-  const ids = nomineeData?.find(
-    (nominee) => nominee?.category_id === id
-  )?.event_id;
-
   const { data: eventData, error: eventerror } = (await db
     .from("events")
     .select("*")
-    .eq("id", ids!)
+    .eq("id", categoryData.event_id!)
     .single()) as {
     data: Event;
     error: any;
@@ -84,13 +81,16 @@ export default async function CategoryNominees({ params: { id } }: Props) {
           <p className="text-white text-2xl md:text-4xl font-bold text-center my-4">
             {eventData?.name}
           </p>
-          <p className=" text-slate-200 text-xl">
+          <p className=" text-slate-200  px-4">
             Nominees for {data.category_name}
           </p>
         </div>
       </div>
       <Suspense fallback={<Loader />}>
-        <CategoryNomineeCard nominees={nomineeData} event={eventData} />
+        <CategoryNomineeCard
+          nominees={categoryData.nominees}
+          event={eventData}
+        />
       </Suspense>
     </div>
   );

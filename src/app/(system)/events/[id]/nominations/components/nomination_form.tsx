@@ -112,6 +112,7 @@ export default function NominationForm({ event }: { event: Event }) {
   const date = new Date();
 
   if (
+    !event ||
     !event.nomination_period?.start_date ||
     !event.nomination_period.end_date
   ) {
