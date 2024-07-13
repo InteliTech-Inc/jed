@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { db } from "@/lib/supabase";
 import NominationView from "@/app/(system)/events/[id]/nominations/components/nomination_view";
-
+import { redirect } from "next/navigation";
 export async function generateStaticParams() {
   const { data: events } = await db.from("events").select("id");
 
@@ -36,10 +36,19 @@ export async function generateMetadata({
     },
   };
 }
-export default async function NominationsPage() {
+export default async function NominationsPage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | undefined };
+}) {
+  const eventId = searchParams?.id;
+
+  if (!eventId) {
+    redirect("/");
+  }
   return (
     <div className="mb-36">
-      <NominationView />;
+      <NominationView id={eventId} />;
     </div>
   );
 }
