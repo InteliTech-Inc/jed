@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
               .full_name as string;
             userSessionData[sessionID].categoryName = voting_response
               .nomineeCategory?.category_name as string;
-            message = `You are purchasing ${userSessionData[sessionID].voteCount} votes for ${userSessionData[sessionID].nomineeName} in the category, ${userSessionData[sessionID].categoryName}\n`;
+            message = `You are purchasing ${userSessionData[sessionID].voteCount} votes for ${userSessionData[sessionID].nomineeName}\n`;
             message += `The cost will be ${totalAmount.toFixed(2)} GHS.\n`;
             message += "Please confirm by entering:\n";
             message += "1. Yes\n";
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
                 voteData
               );
               message =
-                "Prompt will be displayed soon to authorize payment for voting. Kindly check your approvals to authorize payment if the popup does not appear. Thank you!";
+                "Prompt will be displayed soon to authorize payment for voting. Kindly check your approvals to authorize payment if the popup does not appear.";
             }
           }
           continueSession = false;
