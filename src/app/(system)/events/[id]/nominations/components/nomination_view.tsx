@@ -3,8 +3,8 @@ import { dbServer } from "@/lib/supabase";
 import { cookies } from "next/headers";
 import { Event } from "@/app/(system)/events/[id]/nominations/components/nomination_form";
 import Image from "next/image";
-const db = dbServer(cookies);
 export default async function NominationView({ id }: { id: string }) {
+  const db = dbServer(cookies);
   const { data, error } = (await db
     .from("events")
     .select("*, categories(category_name, id, event_id)")
