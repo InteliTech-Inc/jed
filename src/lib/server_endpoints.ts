@@ -242,12 +242,9 @@ export async function juniPay(
     if (!error) {
       console.log("data from server endpoints", data);
     }
-    console.log("log error", error);
   } catch (error) {
     if (error instanceof AxiosError) {
       console.error("Error response data:", error.response?.data);
-      console.error("Error response status:", error.response?.status);
-      console.error("Error response headers:", error.response?.headers);
     } else {
       console.error("Error:", error);
     }
