@@ -22,8 +22,6 @@ export default function AnalyticsGraph({ events }: { events: EventType[] }) {
 
   const event = events.find((event) => event.id === eventId);
 
-  console.log("Event", event);
-
   const nominees = event?.nominees.filter(
     (nominee) => nominee.category_id === category
   );

@@ -42,7 +42,7 @@ export default async function VoteNomineePage({ votingNominee }: Props) {
           </p>
           <p className="text-neutral-600">
             You may directly vote offline using the USSD CODE{" "}
-            <span className="text-black text-md font-bold">*170*200#</span> and
+            <span className="text-black text-md font-bold">*928*121#</span> and
             Nominee Code
           </p>
           <PaystackPayment id={votingNominee.id} />
