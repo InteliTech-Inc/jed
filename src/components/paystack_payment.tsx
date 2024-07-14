@@ -109,13 +109,13 @@ export default function PaystackPayment({ id }: { id: string }) {
   const FACTOR = 100;
   const amountPayable = Number(form.watch("votes")) * amountPerVote;
 
-  console.log("amountPayable", amountPayable);
+  const final_amount = Number(amountPayable).toFixed(2);
 
   const config: PaystackProps = {
     reference: ref,
     email: form.watch("email") || "info.jedvotes@gmail.com",
     firstname: form.watch("full_name"),
-    amount: amountPayable * FACTOR,
+    amount: Number(final_amount) * FACTOR,
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
     currency: "GHS",
   };
@@ -178,7 +178,9 @@ export default function PaystackPayment({ id }: { id: string }) {
 
   const componentProps = {
     ...config,
-    text: `${amountPayable ? `Pay GHS ${amountPayable}` : "Vote Now"}`,
+    text: `${
+      amountPayable ? `Pay GHS ${amountPayable.toFixed(2)}` : "Vote Now"
+    }`,
     onSuccess,
     onClose,
   };
