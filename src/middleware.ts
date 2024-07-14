@@ -18,6 +18,7 @@ export default async function middleware(req: NextRequest) {
     "/api/jed-callback",
     "/api/token",
     "/sitemap.xml",
+    "/robots.txt",
   ];
 
   if (
