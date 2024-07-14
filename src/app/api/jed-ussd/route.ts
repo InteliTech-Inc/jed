@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isWithinInterval, parseISO } from "date-fns"; // Import necessary functions from date-fns
 
 import {
   getNominee,
@@ -6,6 +7,7 @@ import {
   juniPay,
 } from "@/lib/server_endpoints";
 import { generateToken } from "@/lib/token";
+import { getVotingPeriodMessage } from "@/lib/utils";
 
 let userSessionData: { [key: string]: any } = {};
 
@@ -66,19 +68,32 @@ export async function POST(req: NextRequest) {
           );
 
           if (nomineeDetails) {
-            userSessionData[sessionID].nomineeId = nomineeDetails.nominee.id;
-            userSessionData[sessionID].eventId =
-              nomineeDetails.nominee.event_id;
+            const isWithinOpsDate = nomineeDetails.nomineeEvent
+              ?.voting_period as { start_date: string; end_date: string };
 
-            message = "Enter the number of votes you want to purchase:\n";
-            userSessionData[sessionID].step += 1;
+            const isVotingActive = getVotingPeriodMessage(isWithinOpsDate);
+
+            if (
+              isVotingActive?.includes("Voting has ended") ||
+              isVotingActive?.includes("Voting starts tomorrow.")
+            ) {
+              message = isVotingActive as string;
+              continueSession = false;
+            } else {
+              userSessionData[sessionID].nomineeId = nomineeDetails.nominee.id;
+              userSessionData[sessionID].eventId =
+                nomineeDetails.nominee.event_id;
+
+              message = "Enter the number of votes you want to purchase:\n";
+              userSessionData[sessionID].step += 1;
+            }
           } else {
             message = "Invalid nominee code. Please try again.";
             continueSession = false;
           }
         } catch (error) {
           message =
-            "Error retrieving nominee details.Kindly confirm the nominee code and try again.";
+            "Error retrieving nominee details. Kindly confirm the nominee code and try again.";
           continueSession = false;
         }
       }
@@ -101,15 +116,15 @@ export async function POST(req: NextRequest) {
             const totalAmount =
               Number(userSessionData[sessionID].voteCount) * Number(votePrice);
 
-            // returning the nominee name from the DB
             const voting_response = await getNominee(
               userSessionData[sessionID].code
             );
 
-            userSessionData[sessionID].nomineeName = voting_response.nominee
-              .full_name as string;
-            userSessionData[sessionID].categoryName = voting_response
-              .nomineeCategory?.category_name as string;
+            userSessionData[sessionID].nomineeName =
+              voting_response.nominee.full_name;
+            userSessionData[sessionID].categoryName =
+              voting_response.nomineeCategory?.category_name;
+
             message = `You are purchasing ${userSessionData[sessionID].voteCount} votes for ${userSessionData[sessionID].nomineeName}\n`;
             message += `The cost will be ${totalAmount.toFixed(2)} GHS.\n`;
             message += "Please confirm by entering:\n";
@@ -145,12 +160,7 @@ export async function POST(req: NextRequest) {
 
             if (userSessionData[sessionID].service === "1") {
               const reference = `voting for ${userSessionData[sessionID].nomineeName}`;
-              const voteData: {
-                nominee_id: string;
-                event_id: string;
-                count: number;
-                amount_payable: number;
-              } = {
+              const voteData = {
                 nominee_id: userSessionData[sessionID].nomineeId,
                 event_id: userSessionData[sessionID].eventId,
                 count: userSessionData[sessionID].voteCount,

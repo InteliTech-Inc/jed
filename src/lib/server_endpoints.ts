@@ -115,9 +115,15 @@ export const getNominee = async (code: string) => {
     .eq("id", nominee?.category_id!)
     .single();
 
+  const { data: nomineeEvent } = await db
+    .from("events")
+    .select("voting_period")
+    .eq("id", nominee?.event_id!)
+    .single();
+
   if (nomineeError) throw new Error(nomineeError.message);
 
-  return { nominee, nomineeCategory };
+  return { nominee, nomineeCategory, nomineeEvent };
 };
 
 interface votesDataProps {
