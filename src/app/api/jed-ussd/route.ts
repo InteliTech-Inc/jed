@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isWithinInterval, parseISO } from "date-fns"; // Import necessary functions from date-fns
 
 import {
   getNominee,
