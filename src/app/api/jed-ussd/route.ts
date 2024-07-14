@@ -7,6 +7,7 @@ import {
 } from "@/lib/server_endpoints";
 import { generateToken } from "@/lib/token";
 import { getVotingPeriodMessage } from "@/lib/utils";
+import { format } from "date-fns";
 
 let userSessionData: { [key: string]: any } = {};
 
@@ -74,7 +75,14 @@ export async function POST(req: NextRequest) {
 
             if (
               isVotingActive?.includes("Voting has ended") ||
-              isVotingActive?.includes("Voting starts tomorrow.")
+              isVotingActive?.includes("Voting starts tomorrow.") ||
+              isVotingActive?.includes("Voting has ended") ||
+              isVotingActive?.includes(
+                `Voting starts on ${format(
+                  isWithinOpsDate.start_date,
+                  "do MMMM"
+                )}.`
+              )
             ) {
               message = isVotingActive as string;
               continueSession = false;
