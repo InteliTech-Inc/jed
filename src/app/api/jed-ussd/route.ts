@@ -8,6 +8,7 @@ import {
 import { generateToken } from "@/lib/token";
 import { getVotingPeriodMessage } from "@/lib/utils";
 import { format } from "date-fns";
+import { getCachedData, setCachedData } from "@/lib/cache";
 
 let userSessionData: { [key: string]: any } = {};
 
@@ -33,6 +34,7 @@ export async function POST(req: NextRequest) {
         amount: undefined,
         service: undefined,
         reference: undefined,
+        votingData: undefined,
       };
 
       message = "Welcome to JED Platform, select an option to continue:\n";
@@ -63,9 +65,17 @@ export async function POST(req: NextRequest) {
         userSessionData[sessionID].code = userData.toUpperCase();
 
         try {
-          const nomineeDetails = await getNominee(
-            userSessionData[sessionID].code
+          // Check if the data is cached then we use it
+          let nomineeDetails = await getCachedData(
+            `nominee-${userSessionData[sessionID].code}`
           );
+          if (!nomineeDetails) {
+            nomineeDetails = await getNominee(userSessionData[sessionID].code);
+            await setCachedData(
+              `nominee-${userSessionData[sessionID].code}`,
+              nomineeDetails
+            );
+          }
 
           if (nomineeDetails) {
             const isWithinOpsDate = nomineeDetails.nomineeEvent
@@ -79,7 +89,7 @@ export async function POST(req: NextRequest) {
               isVotingActive?.includes("Voting has ended") ||
               isVotingActive?.includes(
                 `Voting starts on ${format(
-                  isWithinOpsDate.start_date,
+                  new Date(isWithinOpsDate.start_date),
                   "do MMMM"
                 )}.`
               )
@@ -105,16 +115,28 @@ export async function POST(req: NextRequest) {
         }
       }
     } else if (!newSession && userSessionData[sessionID]?.step === 3) {
-      if (!userData || isNaN(userData)) {
+      if (!userData || isNaN(Number(userData))) {
         message = "Invalid selection. Please enter a valid number of votes:";
         userSessionData[sessionID].step = 3;
       } else {
         userSessionData[sessionID].voteCount = userData.trim();
 
         try {
-          const eventDetails = await getEventVotingPrice(
-            userSessionData[sessionID].eventId
+          // Check if the data is cached then we use it
+          let eventDetails = await getCachedData(
+            `event-${userSessionData[sessionID].eventId}`
           );
+
+          if (!eventDetails) {
+            eventDetails = await getEventVotingPrice(
+              userSessionData[sessionID].eventId
+            );
+            await setCachedData(
+              `event-${userSessionData[sessionID].eventId}`,
+              eventDetails
+            );
+          }
+
           if (!eventDetails) {
             message = "Error fetching event details. Please try again.";
             continueSession = false;
@@ -123,9 +145,19 @@ export async function POST(req: NextRequest) {
             const totalAmount =
               Number(userSessionData[sessionID].voteCount) * Number(votePrice);
 
-            const voting_response = await getNominee(
-              userSessionData[sessionID].code
+            // Check if the data is cached then we use it
+            let voting_response = await getCachedData(
+              `nominee-${userSessionData[sessionID].code}`
             );
+            if (!voting_response) {
+              voting_response = await getNominee(
+                userSessionData[sessionID].code
+              );
+              await setCachedData(
+                `nominee-${userSessionData[sessionID].code}`,
+                voting_response
+              );
+            }
 
             userSessionData[sessionID].nomineeName =
               voting_response.nominee.full_name;
@@ -152,9 +184,21 @@ export async function POST(req: NextRequest) {
         userSessionData[sessionID].step = 4;
       } else if (userData === "1") {
         try {
-          const eventDetails = await getEventVotingPrice(
-            userSessionData[sessionID].eventId
+          // Check if the data is cached then we use it
+          let eventDetails = await getCachedData(
+            `event-${userSessionData[sessionID].eventId}`
           );
+
+          if (!eventDetails) {
+            eventDetails = await getEventVotingPrice(
+              userSessionData[sessionID].eventId
+            );
+            await setCachedData(
+              `event-${userSessionData[sessionID].eventId}`,
+              eventDetails
+            );
+          }
+
           if (!eventDetails) {
             message = "Error fetching event details. Please try again.";
             continueSession = false;
@@ -167,12 +211,14 @@ export async function POST(req: NextRequest) {
 
             if (userSessionData[sessionID].service === "1") {
               const reference = `voting for ${userSessionData[sessionID].nomineeName}`;
+
               const voteData = {
                 nominee_id: userSessionData[sessionID].nomineeId,
                 event_id: userSessionData[sessionID].eventId,
                 count: userSessionData[sessionID].voteCount,
                 amount_payable: Number(final_amount),
               };
+
               await juniPay(
                 totalAmount,
                 totalAmount,
