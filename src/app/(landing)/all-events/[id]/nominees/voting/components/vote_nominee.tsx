@@ -1,7 +1,7 @@
 import Image from "next/image";
 import PaystackPayment from "@/components/paystack_payment";
 import BackButton from "@/components/back";
-
+import ShareLink from "./share_link";
 type Nominee = {
   id: string;
   category_id: string | null;
@@ -18,7 +18,11 @@ type Props = {
 export default async function VoteNomineePage({ votingNominee }: Props) {
   return (
     <section className="container mx-auto mb-8 p-6">
-      <BackButton />
+      <div className=" flex justify-between">
+        <BackButton />
+        <ShareLink />
+      </div>
+
       <div className="flex flex-col md:flex-row items-start justify-center w-full gap-4">
         <div className="border rounded-lg p-3 w-full md:w-[25rem] md:h-[30rem]">
           <div className="h-full w-full mb-4">
