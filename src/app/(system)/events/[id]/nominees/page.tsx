@@ -28,7 +28,8 @@ export default async function AdminNominee({
     categories:category_id(*)
     `
     )
-    .eq("user_id", user?.id!);
+    .eq("user_id", user?.id!)
+    .eq("event_id", id);
 
   // Get Votes and its nominees
   const { data: votes } = await db.from("voting").select(`*, nominees(*)`);
@@ -40,7 +41,7 @@ export default async function AdminNominee({
   }));
 
   return (
-    <section className="py-8 px-3 md:px-6 ">
+    <section className="py-8 px-3 md:px-6 h-fit">
       <div className="flex md:items-center flex-col md:flex-row gap-4 justify-between">
         <div className="">
           <p className="text-4xl text-neutral-700 mb-2 font-semibold">

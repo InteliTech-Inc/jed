@@ -66,10 +66,6 @@ export async function POST(req: NextRequest) {
           );
 
           if (nomineeDetails) {
-            console.log(
-              "Nominee Details",
-              JSON.stringify(nomineeDetails, null, 2)
-            );
             userSessionData[sessionID].nomineeId = nomineeDetails.nominee.id;
             userSessionData[sessionID].eventId =
               nomineeDetails.nominee.event_id;
@@ -110,14 +106,11 @@ export async function POST(req: NextRequest) {
               userSessionData[sessionID].code
             );
 
-            console.log(
-              "Voting, Response: " + JSON.stringify(voting_response, null, 2)
-            );
             userSessionData[sessionID].nomineeName = voting_response.nominee
               .full_name as string;
             userSessionData[sessionID].categoryName = voting_response
               .nomineeCategory?.category_name as string;
-            message = `You are purchasing ${userSessionData[sessionID].voteCount} votes for ${userSessionData[sessionID].nomineeName} in the category, ${userSessionData[sessionID].categoryName}\n`;
+            message = `You are purchasing ${userSessionData[sessionID].voteCount} votes for ${userSessionData[sessionID].nomineeName}\n`;
             message += `The cost will be ${totalAmount.toFixed(2)} GHS.\n`;
             message += "Please confirm by entering:\n";
             message += "1. Yes\n";
@@ -148,18 +141,20 @@ export async function POST(req: NextRequest) {
             const totalAmount =
               Number(userSessionData[sessionID].voteCount) * Number(votePrice);
 
+            const final_amount = Number(totalAmount).toFixed(2);
+
             if (userSessionData[sessionID].service === "1") {
-              console.log(
-                totalAmount,
-                userSessionData[sessionID].reference,
-                userSessionData[sessionID].eventId
-              );
-              const reference = `voting for ${userSessionData[sessionID].nomineeName} in the category, ${userSessionData[sessionID].categoryName}`;
-              const voteData = {
+              const reference = `voting for ${userSessionData[sessionID].nomineeName}`;
+              const voteData: {
+                nominee_id: string;
+                event_id: string;
+                count: number;
+                amount_payable: number;
+              } = {
                 nominee_id: userSessionData[sessionID].nomineeId,
                 event_id: userSessionData[sessionID].eventId,
                 count: userSessionData[sessionID].voteCount,
-                amount_payable: totalAmount,
+                amount_payable: Number(final_amount),
               };
               await juniPay(
                 totalAmount,
@@ -171,7 +166,7 @@ export async function POST(req: NextRequest) {
                 voteData
               );
               message =
-                "Prompt will be displayed soon to authorize payment for voting. Thank you!";
+                "Prompt will be displayed soon to authorize payment for voting. Kindly check your approvals to authorize payment if the popup does not appear.";
             }
           }
           continueSession = false;

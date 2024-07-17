@@ -204,17 +204,7 @@ export async function juniPay(
   token: string,
   votingData: JuniPayProps["votingData"]
 ) {
-  console.log("Payload for juniPay:", {
-    amount,
-    total_amount,
-    provider,
-    phoneNumber,
-    description,
-    token,
-    votingData,
-  });
-
-  let callbackUrl = "https://jed-event.com/api/jed-callback";
+  let callbackUrl = "https://www.jed-event.com/api/jed-callback";
   let senderEmail = "info.jedvotes@gmail.com";
   let channel = "mobile_money";
   let foreignID = Date.now().toString();
@@ -244,21 +234,17 @@ export async function juniPay(
 
   try {
     const response = await axios(config);
-    console.log("Payment API Response:", response);
     const { data, error } = await db
       .from("transactions")
       .insert([{ ...votingData, trans_id: response.data.transID }])
       .select();
 
     if (!error) {
-      console.log("data from server endpoints", data);
+      return data;
     }
-    console.log("log error", error);
   } catch (error) {
     if (error instanceof AxiosError) {
       console.error("Error response data:", error.response?.data);
-      console.error("Error response status:", error.response?.status);
-      console.error("Error response headers:", error.response?.headers);
     } else {
       console.error("Error:", error);
     }

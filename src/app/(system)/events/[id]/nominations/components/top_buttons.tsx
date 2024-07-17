@@ -88,10 +88,10 @@ export default function TopButtons({
     toast.success("Nominations results exported successfully");
   };
   return (
-    <div className="flex items-center justify-end gap-x-2 md:gap-x-4">
+    <div className="flex items-center  w-full lg:w-fit justify-end gap-x-2 md:gap-x-4">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="secondary" className=" gap-2">
+          <Button variant="secondary" className="w-full gap-2">
             {" "}
             <LinkIcon size={14} />
             Generate forms link

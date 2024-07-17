@@ -18,7 +18,6 @@ export async function POST(req: NextRequest) {
         .select("*")
         .eq("trans_id", incoming.trans_id)
         .single();
-      console.log("getData from callaback", getData);
 
       const voting_payloads = {
         nominee_id: getData?.nominee_id,

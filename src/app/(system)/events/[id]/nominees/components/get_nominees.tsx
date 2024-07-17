@@ -112,16 +112,20 @@ export default function GetNominees({ nominees, votes }: any) {
   });
 
   return (
-    <>
-      <div className="flex md:justify-end w-full">
-        <div className="relative my-2">
+    <div className="">
+      <div className="flex flex-col-reverse gap-3 mt-3 items-center md:justify-between md:flex-row  md:items-center w-full">
+        <p className="text-center">
+          Total nominees {searchQuery ? `that matches "${searchQuery}"` : ""}:{" "}
+          {filteredNominees.length}
+        </p>
+        <div className="relative w-full my-2 md:w-fit">
           <SearchIcon
             size={18}
             className="absolute left-4 top-[0.6rem] text-gray-500"
           />
           <Input
             placeholder="Search nominee by category"
-            className="md:w-[18rem] px-10"
+            className="w-full md:w-[18rem] px-10"
             onChange={(e) => setSearchQuery(e.target.value)}
             value={searchQuery}
           />
@@ -132,10 +136,10 @@ export default function GetNominees({ nominees, votes }: any) {
           filteredNominees.length === 0
             ? "justify-center items-center"
             : "justify-start items-start"
-        } flex w-full h-screen gap-4 mt-6 flex-wrap`}
+        } flex w-full gap-4 mt-6 flex-wrap`}
       >
         {filteredNominees.length === 0 ? (
-          <section className="flex flex-col items-center justify-center">
+          <section className="flex h-full flex-col items-center justify-center">
             <Image
               src={"/images/no-docs.svg"}
               width={200}
@@ -148,14 +152,12 @@ export default function GetNominees({ nominees, votes }: any) {
           </section>
         ) : (
           filteredNominees.length > 0 &&
-          filteredNominees
-            .filter((nominee: Nominee) => nominee?.event_id === id)
-            .map((nominee: Nominee) => (
-              <NomineeCard key={nominee.id} nominee={nominee} votes={votes} />
-            ))
+          filteredNominees.map((nominee: Nominee) => (
+            <NomineeCard key={nominee.id} nominee={nominee} votes={votes} />
+          ))
         )}
       </div>
-    </>
+    </div>
   );
 }
 
