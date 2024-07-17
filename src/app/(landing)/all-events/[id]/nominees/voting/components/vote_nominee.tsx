@@ -18,7 +18,7 @@ type Props = {
 export default async function VoteNomineePage({ votingNominee }: Props) {
   return (
     <section className="container mx-auto mb-8 p-6">
-      <div className=" flex justify-between">
+      <div className=" flex justify-between pb-4 items-center">
         <BackButton />
         <ShareLink />
       </div>
