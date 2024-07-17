@@ -6,8 +6,16 @@ import axios from "axios";
 import { useState } from "react";
 export default function ShareLink() {
   const handleCopyLink = async (url: string) => {
-    await navigator.clipboard.writeText(url);
-    toast.success("Voting link copied to clipboard");
+    if (navigator.share) {
+      await navigator.share({
+        url: url,
+        title: "JED | Voting",
+        text: "Vote for a nominee",
+      });
+    } else {
+      await navigator.clipboard.writeText(url);
+      toast.success("Nominations forms link copied to clipboard");
+    }
   };
 
   const handleShortenURL = async (urlToShorten: string) => {
