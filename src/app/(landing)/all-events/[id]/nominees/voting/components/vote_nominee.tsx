@@ -1,8 +1,12 @@
 import Image from "next/image";
 import PaystackPayment from "@/components/paystack_payment";
 import BackButton from "@/components/back";
+
 import { getNominee } from "@/lib/server_endpoints";
 import { getVotingPeriodMessage } from "@/lib/utils";
+
+
+import ShareLink from "./share_link";
 
 type Nominee = {
   id: string;
@@ -37,7 +41,11 @@ export default async function VoteNomineePage({ votingNominee }: Props) {
 
   return (
     <section className="container mx-auto mb-8 p-6">
-      <BackButton />
+      <div className=" flex justify-between pb-4 items-center">
+        <BackButton />
+        <ShareLink />
+      </div>
+
       <div className="flex flex-col md:flex-row items-start justify-center w-full gap-4">
         <div className="border rounded-lg p-3 w-full md:w-[25rem] md:h-[30rem]">
           <div className="h-full w-full mb-4">
