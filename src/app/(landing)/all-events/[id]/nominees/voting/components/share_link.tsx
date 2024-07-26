@@ -14,7 +14,6 @@ export default function ShareLink() {
       });
     } else {
       await navigator.clipboard.writeText(url);
-      toast.success("Nominations forms link copied to clipboard");
     }
   };
 
@@ -37,7 +36,6 @@ export default function ShareLink() {
 
       const url = res.data.short_url;
       await handleCopyLink(url);
-      toast.success("Shortened url copied to clipboard", { id: toastId });
     } catch (error) {
       console.log(error);
       toast.error("An error occurred while shortening URL", { id: toastId });
