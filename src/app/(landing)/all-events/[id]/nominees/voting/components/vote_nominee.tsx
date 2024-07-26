@@ -1,6 +1,8 @@
 import Image from "next/image";
 import PaystackPayment from "@/components/paystack_payment";
 import BackButton from "@/components/back";
+import { getNominee } from "@/lib/server_endpoints";
+import { getVotingPeriodMessage } from "@/lib/utils";
 
 type Nominee = {
   id: string;
@@ -16,6 +18,23 @@ type Props = {
 };
 
 export default async function VoteNomineePage({ votingNominee }: Props) {
+  const info = await getNominee(votingNominee.code || "");
+
+  const endingDate = info.nomineeEvent?.voting_period as {
+    start_date: string;
+    end_date: string;
+  };
+
+  const checks = getVotingPeriodMessage(endingDate);
+
+  if (checks?.includes("Voting has ended")) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <p className="text-2xl text-gray-600 text-center">Voting has ended.</p>
+      </div>
+    );
+  }
+
   return (
     <section className="container mx-auto mb-8 p-6">
       <BackButton />
