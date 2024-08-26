@@ -1,21 +1,39 @@
-"use client";
-import { useSearchParams } from "next/navigation";
 import NominationForm from "@/app/(system)/events/[id]/nominations/components/nomination_form";
-import { useRouter } from "next/navigation";
+import { dbServer } from "@/lib/supabase";
+import { cookies } from "next/headers";
+import { Event } from "@/app/(system)/events/[id]/nominations/components/nomination_form";
+import Image from "next/image";
+export default async function NominationView({ id }: { id: string }) {
+  const db = dbServer(cookies);
+  const { data, error } = (await db
+    .from("events")
+    .select("*, categories(category_name, id, event_id)")
+    .eq("id", id)
+    .single()) as {
+    data: Event;
+    error: any;
+  };
 
-export default function NominationView() {
-  const search = useSearchParams();
-  const router = useRouter();
-
-  const eventId = search.get("id");
-
-  if (!eventId) {
-    router.push("/");
-    return;
+  if (error) {
+    console.error("Error fetching data:", error);
+    return (
+      <section className="flex min-h-[55dvh] p-4 flex-col items-center justify-center col-span-3">
+        <Image
+          src={"/images/no-docs.svg"}
+          width={200}
+          height={200}
+          alt={"Empty notification inbox"}
+        />
+        <p className="text-xl text-gray-600 text-center">
+          There was no data found, make sure the link is correct and try again.
+        </p>
+      </section>
+    );
   }
+
   return (
     <div className="mb-36">
-      <NominationForm id={eventId} />;
+      <NominationForm event={data} />;
     </div>
   );
 }
