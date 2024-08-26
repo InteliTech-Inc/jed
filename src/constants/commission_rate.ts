@@ -13,4 +13,13 @@ const calculateCommission = async (revenue: number): Promise<number> => {
   return revenue * conversion;
 };
 
-export { calculateCommission };
+async function totalWithdrawal(
+  revenue: number,
+  afterdeduction: number
+): Promise<number> {
+  const total = revenue - afterdeduction;
+
+  return total;
+}
+
+export { calculateCommission, totalWithdrawal };
