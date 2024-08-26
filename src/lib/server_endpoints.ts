@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { db } from "./supabase";
 import { VotingDataResponse } from "@/types/types";
 import axios, { AxiosError } from "axios";
+import { setCachedData } from "./cache";
 
 export const getServerUser = async () => {
   const db = dbServer(cookies);
@@ -115,9 +116,15 @@ export const getNominee = async (code: string) => {
     .eq("id", nominee?.category_id!)
     .single();
 
+  const { data: nomineeEvent } = await db
+    .from("events")
+    .select("voting_period")
+    .eq("id", nominee?.event_id!)
+    .single();
+
   if (nomineeError) throw new Error(nomineeError.message);
 
-  return { nominee, nomineeCategory };
+  return { nominee, nomineeCategory, nomineeEvent };
 };
 
 interface votesDataProps {
@@ -234,14 +241,35 @@ export async function juniPay(
 
   try {
     const response = await axios(config);
-    const { data, error } = await db
-      .from("transactions")
-      .insert([{ ...votingData, trans_id: response.data.transID }])
-      .select();
+    console.log("junipay", response.data);
+    // const { data, error } = await db
+    //   .from("transactions")
+    //   .insert([{ ...votingData, trans_id: response.data.transID }])
+    //   .select();
 
-    if (!error) {
-      return data;
-    }
+    // if (!error) {
+    //   return data;
+    // }
+
+    // Cache the transaction data before processing payment
+
+    const transactionData = {
+      nominee_id: votingData.nominee_id,
+      event_id: votingData.event_id,
+      count: votingData.count,
+      amount_payable: votingData.amount_payable,
+    };
+
+    await setCachedData(
+      `transactionData-${response.data.transID}`,
+      transactionData
+    );
+    // console.log(
+    //   "SET CACHED IN JUNIPAY FUNC:",
+    //   `transactionData-${response.data.transID}`,
+    //   transactionData
+    // );
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       console.error("Error response data:", error.response?.data);
