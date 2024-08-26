@@ -7,7 +7,7 @@ const nextConfig = {
         hostname: "cdn.sanity.io",
       },
       {
-        hostname: process.env.NEXT_PUBLIC_SUPABASE_HOST_NAME,
+        hostname: "acgavvlmfamcfpoktfqe.supabase.co",
       },
     ],
   },
