@@ -71,7 +71,6 @@ export default function EventCards({ events }: Props) {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
               {filteredEvents?.map((event) => {
                 const notice = getVotingPeriodMessage(event.voting_period);
-                console.log(notice);
                 return (
                   <Link href={`/all-events/${event.id}`} key={event.id}>
                     <div className="transition-all  duration-150 hover:shadow-lg rounded-xl cursor-pointer border h-[350px]">

@@ -10,10 +10,12 @@ type Props = {
 export default function Template({ children }: Props) {
   const pathname = usePathname();
 
-  const isSystem =
-    pathname.match(/events\/?(.*)/) || pathname.match(/dashboard\/?(.*)/);
+  const shouldbeEscaped =
+    pathname.match(/events\/?(.*)/) ||
+    pathname.match(/dashboard\/?(.*)/) ||
+    pathname.match(/admin\/?(.*)/);
 
-  if (isSystem) return children;
+  if (shouldbeEscaped) return children;
 
   return (
     <motion.div
