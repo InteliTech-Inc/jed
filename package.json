@@ -64,6 +64,7 @@
     "zod": "^3.23.4"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.8",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/lodash.debounce": "^4.0.9",
     "@types/lodash.throttle": "^4.1.9",

@@ -242,7 +242,7 @@ export function getVotingPeriodMessage(votingPeriod: Event["voting_period"]) {
 export const hasVotingEnded = (endDate: string) => {
   if (!endDate) return true;
   const date = new Date();
-  return isAfter(date, endDate);
+  return isAfter(date, addDays(endDate, 1));
 };
 
 export const canVote = (startDate: string, endDate: string) => {
@@ -250,6 +250,6 @@ export const canVote = (startDate: string, endDate: string) => {
   const now = new Date();
   return isWithinInterval(now, {
     start: startDate,
-    end: endDate,
+    end: addDays(endDate, 1),
   });
 };
