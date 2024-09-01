@@ -11,13 +11,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <Link className="hidden lg:block" href={"/"}>
           <Logo />
         </Link>
-        <Topbar />
+        {/* <Topbar /> */}
         <MobileTopbar />
         <div className="w-fit ml-auto">
           <UserDropdown />
         </div>
       </header>
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] bg-white flex-1 flex-col gap-4 bg-muted/40 md:gap-8 ">
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] bg-white flex-1 flex-col gap-4 bg-muted/40 md:gap-8">
         {children}
       </main>
     </div>

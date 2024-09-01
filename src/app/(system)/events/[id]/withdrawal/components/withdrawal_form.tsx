@@ -81,12 +81,13 @@ export default function WithdrawalForm({}: Props) {
     }
 
     const payloads = {
-      channel,
+      payment_method: channel,
       amount,
       provider,
       account_number,
       account_name,
       event_id: eventId as string,
+      is_payout_request: true,
     };
 
     const withdrawaldetails = {
@@ -98,40 +99,60 @@ export default function WithdrawalForm({}: Props) {
     };
 
     setIsPending(true);
+
     try {
       const { data: userData } = await db.auth.getUser();
-      const { error } = await db.from("withdrawals").insert(payloads).select();
 
       const currentUser = {
         fullName: `${userData.user?.user_metadata.firstName} ${userData.user?.user_metadata.lastName}`,
         email: userData.user?.email,
       };
 
-      if (error) {
-        console.log(error.message);
-        setIsPending(false);
-        return;
-      }
-
       const res = await axios.post("/api/request-withdrawal", {
         user: { ...currentUser },
         withdrawaldetails,
       });
 
-      // So if the withdrawal is successfull I would like to deduct the amount taken from the payout table's withdrawal column and update the db
-
-      const remaining = Number(withdrawable) - Number(amount);
-
       if (res.data) {
-        await db
+        // Check if a payout with the same event_id already exists for the user
+        const { data: existingPayout } = await db
           .from("payouts")
-          .update({
-            paid_out_amount: Number(amount),
-            withdrawable: remaining,
-            is_paid: true,
-          })
-          .eq("user_id", userData.user?.id as string);
+          .select("*")
+          .eq("user_id", userData.user?.id as string)
+          .single();
+
+        console.log("existing", existingPayout);
+
+        if (existingPayout?.event_id === null) {
+          // If a payout exists, update the existing record with new payloads
+          const { data: updatedRecords } = await db
+            .from("payouts")
+            .update(payloads)
+            .eq("user_id", userData.user?.id as string)
+            .eq("id", existingPayout.id)
+            .select()
+            .single();
+
+          console.log("UPDATED RECORD", updatedRecords);
+
+          // Optionally, log or handle the updatedRecords if needed
+        } else {
+          // If no payout exists with the event_id, insert a new payout request
+          const { data: newPayouts } = await db
+            .from("payouts")
+            .insert(payloads)
+            .select()
+            .single();
+
+          if (newPayouts) {
+            console.log("NEW PAYOUT", newPayouts);
+          }
+
+          // Optionally, log or handle the newly inserted record if needed
+        }
+
         setIsPending(false);
+
         router.refresh();
         form.reset();
         toast.success(res.data.message);
