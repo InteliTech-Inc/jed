@@ -120,47 +120,50 @@ export default function PaystackPayment({ id }: { id: string }) {
     currency: "GHS",
   };
 
+  // Hit to database
   const onSuccess = (response: referenceObj) => {
-    if (response.status === "success" && response.message === "Approved") {
-      // Check if the nominee has been voted for
-      const toDatabase = async () => {
-        const { votes: voting } = form.getValues();
-        const { data: votes, error } = await db
+    console.log("onSuccess", response);
+    async function toDatabase() {
+      const { votes: voting } = form.getValues();
+      const { data: votes, error } = await db
+        .from("voting")
+        .select("*")
+        .eq("nominee_id", id);
+
+      if (error) {
+        console.error("Error fetching votes:", error);
+        return;
+      }
+
+      if (votes && votes.length > 0) {
+        // If the nominee has been voted for, increment the vote count
+        const { error: updateError } = await db
           .from("voting")
-          .select("*")
+          .update({
+            count: votes[0].count! + Number(voting),
+            amount_payable: votes[0]?.amount_payable! + Number(amountPayable),
+          })
           .eq("nominee_id", id);
 
-        if (error) {
-          console.error("Error fetching votes:", error);
-          return;
+        if (updateError) {
+          console.error("Error updating vote count:", updateError);
         }
+      } else {
+        const { error: insertError } = await db.from("voting").insert({
+          nominee_id: id,
+          count: Number(voting),
+          event_id: eventId,
+          amount_payable: amountPayable,
+        });
 
-        if (votes && votes.length > 0) {
-          // If the nominee has been voted for, increment the vote count
-          const { error: updateError } = await db
-            .from("voting")
-            .update({
-              count: votes[0].count! + Number(voting),
-              amount_payable: votes[0]?.amount_payable! + Number(amountPayable),
-            })
-            .eq("nominee_id", id);
-
-          if (updateError) {
-            console.error("Error updating vote count:", updateError);
-          }
-        } else {
-          const { error: insertError } = await db.from("voting").insert({
-            nominee_id: id,
-            count: Number(voting),
-            event_id: eventId,
-            amount_payable: amountPayable,
-          });
-
-          if (insertError) {
-            console.error("Error inserting new vote:", insertError);
-          }
+        if (insertError) {
+          console.error("Error inserting new vote:", insertError);
         }
-      };
+      }
+    }
+
+    if (response.status === "success" && response.message === "Approved") {
+      // Check if the nominee has been voted for
       toDatabase();
       router.back();
       form.reset();

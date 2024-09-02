@@ -35,6 +35,7 @@ export default function WithdrawalForm({}: Props) {
   const { id: eventId } = useParams();
 
   const [isPending, setIsPending] = useState<boolean>(false);
+  const [withdrawable, setWithdrawable] = useState<number | null | undefined>();
 
   const form = useForm<z.infer<typeof payoutShape>>({
     resolver: zodResolver(payoutShape),
@@ -47,8 +48,37 @@ export default function WithdrawalForm({}: Props) {
     },
   });
 
+  useEffect(() => {
+    async function getAllEventRevenue() {
+      const {
+        data: { user },
+      } = await db.auth.getUser();
+      //  Fetch withdrawable from the payouts table
+      const { data } = await db
+        .from("payouts")
+        .select("withdrawable")
+        .eq("user_id", user?.id!)
+        .single();
+
+      const withdrawable = parseInt(data?.withdrawable?.toString() || "0");
+
+      if (data) {
+        form.setValue("amount", String(withdrawable));
+        setWithdrawable(data?.withdrawable);
+      }
+    }
+    getAllEventRevenue();
+  }, [setWithdrawable]);
+
   async function handlePayout(data: z.infer<typeof payoutShape>) {
     const { channel, amount, provider, account_number, account_name } = data;
+
+    if (Number(amount) > Number(withdrawable)) {
+      toast.error(
+        "You cannot withdraw more than your total withdrawable earnings"
+      );
+      return;
+    }
 
     const payloads = {
       channel,
@@ -88,10 +118,24 @@ export default function WithdrawalForm({}: Props) {
         withdrawaldetails,
       });
 
-      setIsPending(false);
-      router.refresh();
-      form.reset();
-      toast.success(res.data.message);
+      // So if the withdrawal is successfull I would like to deduct the amount taken from the payout table's withdrawal column and update the db
+
+      const remaining = Number(withdrawable) - Number(amount);
+
+      if (res.data) {
+        await db
+          .from("payouts")
+          .update({
+            paid_out_amount: Number(amount),
+            withdrawable: remaining,
+            is_paid: true,
+          })
+          .eq("user_id", userData.user?.id as string);
+        setIsPending(false);
+        router.refresh();
+        form.reset();
+        toast.success(res.data.message);
+      }
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -139,6 +183,7 @@ export default function WithdrawalForm({}: Props) {
                         type="text"
                         placeholder="Enter the Amount for payout"
                         {...field}
+                        readOnly
                       />
                     </FormControl>
                   </FormItem>
