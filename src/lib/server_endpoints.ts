@@ -211,7 +211,7 @@ export async function juniPay(
   token: string,
   votingData: JuniPayProps["votingData"]
 ) {
-  let callbackUrl = "https://www.jed-event.com/api/jed-callback";
+  let callbackUrl = "https://d6fcjvwk-3000.uks1.devtunnels.ms/api/jed-callback";
   let senderEmail = "info.jedvotes@gmail.com";
   let channel = "mobile_money";
   let foreignID = Date.now().toString();
