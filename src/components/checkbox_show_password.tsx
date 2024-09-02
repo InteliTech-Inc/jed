@@ -2,6 +2,7 @@ import React from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Check } from "lucide-react";
+import Link from "next/link";
 
 interface CheckBoxProps {
   showPassword: boolean;
@@ -21,13 +22,22 @@ export default function Checkbox_Show_Password({
         onChange={() => setShowPassword(!showPassword)}
       />
       <span
-        className={`mr-2 w-5 h-5 flex items-center border border-gray-300 rounded ${
+        className={`mr-2 w-4 h-4 flex items-center border border-gray-300 rounded ${
           showPassword ? "bg-secondary" : "bg-white"
         }`}
       >
         {showPassword && <Check className="font-bold text-white" />}
       </span>
-      <span>Show password</span>
+      <span className=" my-2 text-sm text-gray-600 font-normal">
+        I agree to JED's{" "}
+        <Link href={"/resources/terms"} className=" underline">
+          Terms & Conditions
+        </Link>{" "}
+        and{" "}
+        <Link href={"/resources/privacy-policy"} className=" underline">
+          Privacy Policy
+        </Link>{" "}
+      </span>
     </Label>
   );
 }

@@ -139,10 +139,6 @@ export default function LoginForm() {
                   </FormItem>
                 )}
               />
-              <Checkbox_Show_Password
-                showPassword={showPassword}
-                setShowPassword={setShowPassword}
-              />
               <Button
                 type="submit"
                 className="w-full bg-secondary hover:bg-secondary hover:bg-opacity-80 focus:outline-none transition-colors duration-200 gap-2 ease-in-out disabled:bg-secondary"
