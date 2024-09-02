@@ -42,7 +42,7 @@ const events: EventsResponse[] = [
     },
   },
   {
-    amount_per_vote: null,
+    amount_per_vote: "1",
     created_at: "2024-08-10T11:45:00Z",
     description: "Nomination for the Leadership Excellence Award",
     id: "nom_003",
@@ -99,7 +99,7 @@ const events: EventsResponse[] = [
     },
   },
   {
-    amount_per_vote: null,
+    amount_per_vote: "1",
     created_at: "2024-08-17T12:00:00Z",
     description: "Nomination for the Best Mentor Award",
     id: "nom_006",
@@ -173,7 +173,7 @@ const events: EventsResponse[] = [
     },
   },
   {
-    amount_per_vote: null,
+    amount_per_vote: "0.5",
     created_at: "2024-08-28T13:45:00Z",
     description: "Nomination for the Lifetime Achievement Award",
     id: "nom_010",

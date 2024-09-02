@@ -29,12 +29,15 @@ import { useState } from "react";
 import Rotating_Lines from "@/components/spinner";
 import Checkbox_Show_Password from "@/components/checkbox_show_password";
 import Logo from "@/components/logo";
+import { Eye, EyeIcon, EyeOffIcon } from "lucide-react";
 import { checkConnection } from "@/lib/utils";
 
 export default function SignupForm() {
   const router = useRouter();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [confirmPassword, setConfirmPassword] = useState<boolean>(false);
+  const [hasAgreedTC, setHasAgreedTC] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof signupShape>>({
     resolver: zodResolver(signupShape),
@@ -162,44 +165,46 @@ export default function SignupForm() {
                   )}
                 />
               </div>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label htmlFor="email">Email</Label>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="Enter a valid email address"
-                        className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage {...field} />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label htmlFor="phone">Phone</Label>
-                    <FormControl>
-                      <Input
-                        id="phone"
-                        type="text"
-                        placeholder="Enter your phone number"
-                        className="border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage {...field} />
-                  </FormItem>
-                )}
-              />
+              <div className=" flex flex-col md:flex-row items-center justify-center gap-x-6">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <Label htmlFor="email">Email</Label>
+                      <FormControl>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="Enter a valid email address"
+                          className="border border-accent w-full focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage {...field} />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem className=" w-full">
+                      <Label htmlFor="phone">Phone</Label>
+                      <FormControl>
+                        <Input
+                          id="phone"
+                          type="text"
+                          placeholder="Enter your phone number"
+                          className="border w-full border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage {...field} />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <div className="flex flex-col md:flex-row items-center justify-center gap-x-6">
                 <FormField
                   control={form.control}
@@ -208,13 +213,28 @@ export default function SignupForm() {
                     <FormItem className="w-full">
                       <Label htmlFor="password">Password</Label>
                       <FormControl>
-                        <Input
-                          id="password"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Enter your password"
-                          className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
-                          {...field}
-                        />
+                        <div className=" relative">
+                          <Input
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Enter your password"
+                            className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setShowPassword((isShown) => !isShown)
+                            }
+                            className="absolute right-2 top-[30%] text-gray-600"
+                          >
+                            {showPassword ? (
+                              <EyeOffIcon size={16} className="" />
+                            ) : (
+                              <Eye size={16} />
+                            )}
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage {...field} />
                     </FormItem>
@@ -228,13 +248,28 @@ export default function SignupForm() {
                       <Label htmlFor="confirm_password">Confirm Password</Label>
 
                       <FormControl>
-                        <Input
-                          id="confirm_password"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Confirm your password"
-                          className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
-                          {...field}
-                        />
+                        <div className=" relative">
+                          <Input
+                            id="confirm_password"
+                            type={confirmPassword ? "text" : "password"}
+                            placeholder="Confirm your password"
+                            className=" border border-accent focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-opacity-50 focus-visible:border-transparent"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setConfirmPassword((isShown) => !isShown)
+                            }
+                            className="absolute right-2 top-[30%] text-gray-600"
+                          >
+                            {confirmPassword ? (
+                              <EyeOffIcon size={16} className="" />
+                            ) : (
+                              <Eye size={16} />
+                            )}
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage {...field} />
                     </FormItem>
@@ -242,8 +277,8 @@ export default function SignupForm() {
                 />
               </div>
               <Checkbox_Show_Password
-                showPassword={showPassword}
-                setShowPassword={setShowPassword}
+                showPassword={hasAgreedTC}
+                setShowPassword={setHasAgreedTC}
               />
               <Button
                 type="submit"
@@ -253,7 +288,8 @@ export default function SignupForm() {
                     inputValues.confirm_password.length === 0 &&
                     inputValues.email.length === 0 &&
                     inputValues.firstName.length === 0) ||
-                  isPending
+                  isPending ||
+                  !hasAgreedTC
                 }
               >
                 {isPending && <Rotating_Lines color="#fff" />}
