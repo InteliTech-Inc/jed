@@ -167,7 +167,7 @@ Press\n1 Confirm payment\n2 Cancel.\n \nPowered by InteliTech Inc.`;
     } else if (!newSession && userSessionData[sessionID]?.step === 3) {
       if (userData === "1") {
         message =
-          "Kindly wait for the authorization prompt to complete payment. if it doesn't please dial *170# on MTN to complete payment.";
+          "Kindly wait for the authorization prompt to complete payment. If it doesn't appear please prceed to approvals to complete payment.";
 
         // Retrieve votePrice from session data
         const votePrice = userSessionData[sessionID].votePrice;
