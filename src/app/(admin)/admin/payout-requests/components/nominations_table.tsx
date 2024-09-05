@@ -32,8 +32,6 @@ export default async function NominationsTable() {
     };
   });
 
-  console.log("Payouts", transformedPayouts);
-
   return (
     <div>
       <DataTable

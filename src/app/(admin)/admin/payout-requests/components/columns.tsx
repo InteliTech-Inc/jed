@@ -1,16 +1,19 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { NominationsResponse } from "@/types/types";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreVertical } from "lucide-react";
 import { FilterFn } from "@tanstack/react-table";
-import { Switch } from "@/components/ui/switch";
 import { PayoutResponse } from "./data_table";
 import { db } from "@/lib/supabase";
 import { toast } from "sonner";
 import { useState } from "react";
 import Spinner from "@/components/spinner";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const multiColumnFilterFn: FilterFn<PayoutResponse> = (
   row,
@@ -37,7 +40,9 @@ export const columns: ColumnDef<PayoutResponse>[] = [
     cell: ({ row }) => {
       const { amount } = row.original;
       return (
-        <div> {new Intl.NumberFormat("en-US", {}).format(Number(amount))}</div>
+        <div className="text-green-500">
+          {new Intl.NumberFormat("en-US", {}).format(Number(amount))}
+        </div>
       );
     },
   },
@@ -82,16 +87,32 @@ export const columns: ColumnDef<PayoutResponse>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className=" pl-2"
         >
-          Transaction Status
+          Status
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
+      const { transaction_status } = row.original;
+
+      return (
+        <p
+          className={`${
+            transaction_status === true ? "text-green-500" : "text-red-500"
+          }`}
+        >
+          {transaction_status === true ? "Settled" : "Unsettled"}
+        </p>
+      );
+    },
+  },
+  {
+    header: "",
+    id: "actions",
+    cell: ({ row }) => {
       const { amount, transaction_status } = row.original;
 
-      const [publishNomination, setPublishNomination] =
-        useState<boolean>(false);
+      const [paid, setPaid] = useState<boolean>(false);
 
       const handleToggle = () => {
         toast.warning(`Are you sure you want to pay this event?`, {
@@ -110,7 +131,7 @@ export const columns: ColumnDef<PayoutResponse>[] = [
                     .select("withdrawable, is_paid")
                     .single();
 
-                  setPublishNomination(transaction_status as boolean);
+                  setPaid(transaction_status as boolean);
 
                   // So if the withdrawal is successfull I would like to deduct the amount taken from the payout table's withdrawal column and update the db
                   const remaining = Number(data?.withdrawable) - Number(amount);
@@ -121,7 +142,7 @@ export const columns: ColumnDef<PayoutResponse>[] = [
                       .update({
                         paid_out_amount: Number(amount),
                         withdrawable: remaining,
-                        is_paid: !publishNomination,
+                        is_paid: !paid,
                       })
                       .eq("user_id", user?.id as string);
 
@@ -141,52 +162,25 @@ export const columns: ColumnDef<PayoutResponse>[] = [
       };
 
       return (
-        <div className="flex items-center justify-start gap-x-3">
-          <p>{!publishNomination === true ? "Paid" : "Unpaid"}</p>
-          <Switch
-            aria-readonly
-            onCheckedChange={handleToggle}
-            checked={transaction_status}
-            disabled={transaction_status}
-          />
+        <div className="">
+          <Popover>
+            <PopoverTrigger
+              disabled={transaction_status === true}
+              className="disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <MoreVertical size={16} className="ml-2" />
+            </PopoverTrigger>
+            <PopoverContent className="w-36 mr-10 py-2">
+              <button
+                className="text-left text-sm w-full"
+                onClick={handleToggle}
+              >
+                Pay Now
+              </button>
+            </PopoverContent>
+          </Popover>
         </div>
       );
     },
   },
-  // {
-  //   header: "",
-  //   id: "actions",
-  //   cell: ({ row }) => {
-  //     const reference = row.original;
-  //     return (
-  //       <div>
-  //         {/* <Dialog>
-  //           <DropdownMenu>
-  //             <DropdownMenuTrigger asChild>
-  //               <Button variant="outline" className="h-8 w-8 p-0">
-  //                 <span className="sr-only">Open menu</span>
-  //                 <MoreHorizontal className="h-4 w-4" />
-  //               </Button>
-  //             </DropdownMenuTrigger>
-  //             <DropdownMenuContent align="end">
-  //               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-  //               <DropdownMenuSeparator />
-  //               <DropdownMenuItem>
-  //                 <Dialog>
-  //                   <DialogTrigger>View Reasons</DialogTrigger>
-  //                   <DialogContent>
-  //                     <DialogHeader>
-  //                       <DialogTitle>View Reasons</DialogTitle>
-  //                     </DialogHeader>
-  //                     <p>{reference.reasons}</p>
-  //                   </DialogContent>
-  //                 </Dialog>
-  //               </DropdownMenuItem>
-  //             </DropdownMenuContent>
-  //           </DropdownMenu>
-  //         </Dialog> */}
-  //       </div>
-  //     );
-  //   },
-  // },
 ];
