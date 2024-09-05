@@ -15,7 +15,7 @@ export default async function PayoutTable() {
   // Fetch events from which payouts are available
   const { data: events } = await db.from("events").select("*");
 
-  // Create a DataTable with the transformed payouts
+  // Create a DataTable with the transformed payout
   const transformedPayouts = payouts?.map((payout) => {
     const event = events?.find((event) => event.id === payout?.event_id!);
     return {
