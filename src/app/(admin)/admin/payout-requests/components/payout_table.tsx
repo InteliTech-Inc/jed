@@ -1,11 +1,8 @@
 import { DataTable, PayoutResponse } from "./data_table";
 import { columns } from "./columns";
-import { dbServer } from "@/lib/supabase";
-import { cookies } from "next/headers";
+import { db } from "@/lib/supabase";
 
 export default async function PayoutTable() {
-  const db = dbServer(cookies);
-
   // Fetch all requested payouts
   const { data: payouts } = await db
     .from("payouts")

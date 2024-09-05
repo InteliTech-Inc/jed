@@ -1,4 +1,4 @@
-import NominationsTable from "./components/payout_table";
+import PayoutTable from "./components/payout_table";
 import { Suspense } from "react";
 import Spinner from "@/components/spinner";
 import { dbServer } from "@/lib/supabase";
@@ -28,7 +28,7 @@ export default async function AdminPayoutsPage({
           </div>
         }
       >
-        <NominationsTable />
+        <PayoutTable />
       </Suspense>
     </section>
   );
