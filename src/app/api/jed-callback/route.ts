@@ -15,11 +15,6 @@ export async function POST(req: NextRequest) {
       const getData = await getCachedData(
         `transactionData-${incoming.trans_id}`
       );
-      // console.log(
-      //   "Attempting to retrieve data for trans_id:",
-      //   incoming.trans_id
-      // );
-      // console.log("CALLBACK CACHED:", getData);
 
       if (getData) {
         const voting_payloads = {

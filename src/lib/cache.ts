@@ -1,6 +1,6 @@
 import redisClient from "./redisClient";
 
-const CACHE_DURATION = 600; // Cache duration in seconds
+const CACHE_DURATION = 1200; // Cache duration in seconds
 
 export const getCachedData = async (key: string) => {
   const data = await redisClient.get(key);

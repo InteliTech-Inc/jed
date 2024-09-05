@@ -32,32 +32,15 @@ export async function POST(req: NextRequest) {
         categoryName: undefined,
         eventId: undefined,
         amount: undefined,
+        votePrice: undefined, // Store vote price here
         service: undefined,
         reference: undefined,
         votingData: undefined,
       };
 
-      message = "Welcome to JED Platform, select an option to continue:\n";
-      message += "1. Vote for a nominee\n";
-      message += "2. Buy a Ticket (coming soon)\n";
+      message =
+        "Welcome to JED Event Management Platform\n \nPlease enter nominee code to vote:";
     } else if (!newSession && userSessionData[sessionID]?.step === 1) {
-      if (!userData || (userData !== "1" && userData !== "2")) {
-        message = "Invalid selection. Please choose an option:\n";
-        message += "1. Vote for a nominee\n";
-        message += "2. Buy a Ticket (coming soon)\n";
-        userSessionData[sessionID].step = 1; // Ensure step remains 1
-      } else {
-        userSessionData[sessionID].service = userData.trim();
-
-        if (userSessionData[sessionID].service === "1") {
-          message = "Please enter the nominee's code to vote for them:";
-          userSessionData[sessionID].step += 1;
-        } else if (userSessionData[sessionID].service === "2") {
-          message = "This feature is not available yet.";
-          continueSession = false;
-        }
-      }
-    } else if (!newSession && userSessionData[sessionID]?.step === 2) {
       if (!userData) {
         message = "Invalid selection. Please enter the nominee's code:";
         userSessionData[sessionID].step = 2; // Ensure step remains 2
@@ -69,6 +52,7 @@ export async function POST(req: NextRequest) {
           let nomineeDetails = await getCachedData(
             `nominee-${userSessionData[sessionID].code}`
           );
+
           if (!nomineeDetails) {
             nomineeDetails = await getNominee(userSessionData[sessionID].code);
             await setCachedData(
@@ -114,10 +98,9 @@ export async function POST(req: NextRequest) {
           continueSession = false;
         }
       }
-    } else if (!newSession && userSessionData[sessionID]?.step === 3) {
+    } else if (!newSession && userSessionData[sessionID]?.step === 2) {
       if (!userData || isNaN(Number(userData))) {
         message = "Invalid selection. Please enter a valid number of votes:";
-        userSessionData[sessionID].step = 3;
       } else {
         userSessionData[sessionID].voteCount = userData.trim();
 
@@ -145,6 +128,9 @@ export async function POST(req: NextRequest) {
             const totalAmount =
               Number(userSessionData[sessionID].voteCount) * Number(votePrice);
 
+            // Store votePrice in session data
+            userSessionData[sessionID].votePrice = votePrice;
+
             // Check if the data is cached then we use it
             let voting_response = await getCachedData(
               `nominee-${userSessionData[sessionID].code}`
@@ -164,87 +150,70 @@ export async function POST(req: NextRequest) {
             userSessionData[sessionID].categoryName =
               voting_response.nomineeCategory?.category_name;
 
-            message = `You are purchasing ${userSessionData[sessionID].voteCount} votes for ${userSessionData[sessionID].nomineeName}\n`;
-            message += `The cost will be ${totalAmount.toFixed(2)} GHS.\n`;
-            message += "Please confirm by entering:\n";
-            message += "1. Yes\n";
-            message += "2. No\n";
-            userSessionData[sessionID].step += 1;
-          }
-        } catch (error) {
-          message = "Error retrieving event details. Please try again later.";
-          continueSession = false;
-        }
-      }
-    } else if (!newSession && userSessionData[sessionID]?.step === 4) {
-      if (!userData || (userData !== "1" && userData !== "2")) {
-        message = "Invalid selection. Please confirm by entering:\n";
-        message += "1. Yes\n";
-        message += "2. No\n";
-        userSessionData[sessionID].step = 4;
-      } else if (userData === "1") {
-        try {
-          // Check if the data is cached then we use it
-          let eventDetails = await getCachedData(
-            `event-${userSessionData[sessionID].eventId}`
-          );
-
-          if (!eventDetails) {
-            eventDetails = await getEventVotingPrice(
-              userSessionData[sessionID].eventId
-            );
-            await setCachedData(
-              `event-${userSessionData[sessionID].eventId}`,
-              eventDetails
-            );
-          }
-
-          if (!eventDetails) {
-            message = "Error fetching event details. Please try again.";
-            continueSession = false;
-          } else {
-            const votePrice = eventDetails.data.amount_per_vote;
-            const totalAmount =
-              Number(userSessionData[sessionID].voteCount) * Number(votePrice);
-
             const final_amount = Number(totalAmount).toFixed(2);
 
-            if (userSessionData[sessionID].service === "1") {
-              const reference = `voting for ${userSessionData[sessionID].nomineeName}`;
+            // Show the summary and ask for confirmation
+            message = `SUMMARY\n
+${userSessionData[sessionID].nomineeName}\n${userSessionData[sessionID].categoryName} - ${userSessionData[sessionID].code}\nNo. of votes: ${userSessionData[sessionID].voteCount}\nTotal Amount: GHS${final_amount}\n
+Press\n1 Confirm payment\n2 Cancel.\n \nPowered by InteliTech Inc.`;
 
-              const voteData = {
-                nominee_id: userSessionData[sessionID].nomineeId,
-                event_id: userSessionData[sessionID].eventId,
-                count: userSessionData[sessionID].voteCount,
-                amount_payable: Number(final_amount),
-              };
-
-              await juniPay(
-                totalAmount,
-                totalAmount,
-                network,
-                msisdn,
-                reference,
-                token,
-                voteData
-              );
-              message =
-                "Prompt will be displayed soon to authorize payment for voting. Kindly check your approvals to authorize payment if the popup does not appear.";
-            }
+            userSessionData[sessionID].step = 3; // Move to the confirmation step
           }
-          continueSession = false;
-          delete userSessionData[sessionID];
         } catch (error) {
-          message = "Error processing your vote. Please try again later.";
+          message = "An error occurred. Please try again later.";
           continueSession = false;
         }
-      } else if (userData === "2") {
-        message = "Enter the nominee's code to vote for them";
-        userSessionData[sessionID].step = 2;
       }
-    } else {
-      message = "Invalid entry, please try again later.";
-      continueSession = false;
+    } else if (!newSession && userSessionData[sessionID]?.step === 3) {
+      if (userData === "1") {
+        message =
+          "Kindly wait for the authorization prompt to complete payment. If it doesn't appear please prceed to approvals to complete payment.";
+
+        // Retrieve votePrice from session data
+        const votePrice = userSessionData[sessionID].votePrice;
+
+        const totalAmount =
+          Number(userSessionData[sessionID].voteCount) * Number(votePrice);
+
+        const voteData = {
+          nominee_id: userSessionData[sessionID].nomineeId,
+          event_id: userSessionData[sessionID].eventId,
+          count: userSessionData[sessionID].voteCount,
+          amount_payable: Number(totalAmount),
+        };
+
+        const reference = `voting for ${userSessionData[sessionID].nomineeName} - ${userSessionData[sessionID].code}`;
+
+        setTimeout(async () => {
+          await juniPay(
+            voteData.amount_payable,
+            voteData.amount_payable,
+            network,
+            msisdn,
+            reference,
+            token,
+            voteData
+          );
+        }, 1000);
+
+        continueSession = false;
+        delete userSessionData[sessionID];
+        return NextResponse.json({
+          sessionID,
+          msisdn,
+          userID,
+          message,
+          network,
+          continueSession: false,
+        });
+      } else if (userData === "2") {
+        message = "Payment canceled.\nThank you for choosing JED.";
+        continueSession = false;
+        delete userSessionData[sessionID];
+      } else {
+        message =
+          "Invalid selection. Please press 1 to confirm or 2 to cancel.";
+      }
     }
   } catch (error) {
     message = "An error occurred. Please try again later.";
@@ -259,6 +228,5 @@ export async function POST(req: NextRequest) {
     continueSession,
     network,
   };
-
   return NextResponse.json(response);
 }
