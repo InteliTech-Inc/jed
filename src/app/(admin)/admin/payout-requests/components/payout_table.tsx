@@ -3,7 +3,7 @@ import { columns } from "./columns";
 import { dbServer } from "@/lib/supabase";
 import { cookies } from "next/headers";
 
-export default async function NominationsTable() {
+export default async function PayoutTable() {
   const db = dbServer(cookies);
 
   // Fetch all requested payouts

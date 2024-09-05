@@ -18,13 +18,11 @@ export default async function NominationsTable({ id }: NominationsTableProps) {
 
   if (!data_nominations) return [];
 
-
   const linkURL =
     process.env.NODE_ENV === "production"
       ? process.env.NEXT_PUBLIC_LIVE_URL
       : process.env.NEXT_PUBLIC_DEV_URL;
   const url = `${linkURL}/nom?id=${id}`;
-
 
   return (
     <div>
@@ -32,7 +30,7 @@ export default async function NominationsTable({ id }: NominationsTableProps) {
         data={data_nominations}
         columns={columns}
         url={url}
-        event_name={data?.name}
+        event_name={data?.name as string}
       />
     </div>
   );

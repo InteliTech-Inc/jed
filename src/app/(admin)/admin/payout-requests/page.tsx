@@ -1,4 +1,4 @@
-import NominationsTable from "./components/nominations_table";
+import NominationsTable from "./components/payout_table";
 import { Suspense } from "react";
 import Spinner from "@/components/spinner";
 import { dbServer } from "@/lib/supabase";
