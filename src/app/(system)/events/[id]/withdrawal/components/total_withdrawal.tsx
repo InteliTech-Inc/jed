@@ -12,12 +12,13 @@ export default function TotalWithdrawal() {
   useEffect(() => {
     async function GetTotal() {
       const { data } = await supabase
-        .from("withdrawals")
-        .select("amount")
-        .eq("event_id", id);
+        .from("payouts")
+        .select("paid_out_amount")
+        .eq("event_id", id)
+        .eq("is_paid", true);
 
       const totals = data
-        ?.map((total) => total.amount)
+        ?.map((total) => total.paid_out_amount)
         .reduce((prev, curr) => parseInt(prev) + parseInt(curr), 0);
       setBalance(totals);
     }

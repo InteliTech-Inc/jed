@@ -56,7 +56,7 @@ function useCreateRequest({
   const { mutateAsync, status, isError, isSuccess, isPending } = useMutation({
     mutationFn: async (payload: Payload) => {
       if (method === "patch") {
-        const { data, error } = await db.from(dbName).update(payload);
+        const { data, error } = await db.from(dbName as any).update(payload);
 
         if (error) throw error;
 
@@ -64,7 +64,7 @@ function useCreateRequest({
       }
 
       const { data, error } = await db
-        .from(dbName)
+        .from(dbName as any)
         .insert(payload || {})
         .select();
 

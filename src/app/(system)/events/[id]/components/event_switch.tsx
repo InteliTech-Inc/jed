@@ -30,7 +30,7 @@ export default function EventSwitch({ id, className }: Props) {
         }
 
         if (data) {
-          setPublishNomination(data.is_completed);
+          setPublishNomination(data.is_completed as unknown as boolean);
         }
       } catch (error) {
         toast.error(`Failed to fetch event status`);

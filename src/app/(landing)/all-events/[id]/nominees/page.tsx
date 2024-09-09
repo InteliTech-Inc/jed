@@ -88,7 +88,7 @@ export default async function CategoryNominees({ params: { id } }: Props) {
       </div>
       <Suspense fallback={<Loader />}>
         <CategoryNomineeCard
-          nominees={categoryData.nominees}
+          nominees={categoryData.nominees as any}
           event={eventData}
         />
       </Suspense>
