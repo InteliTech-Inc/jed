@@ -25,19 +25,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import TopButtons from "./top_buttons";
-
-export interface PayoutResponse {
-  id: string;
-  payment_method: string;
-  account_number: string;
-  account_name: string;
-  provider: string;
-  amount: number;
-  event_name: string;
-  transaction_status: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import { PayoutResponse } from "@/types/types";
 
 interface DataTableProps<TValue> {
   columns: ColumnDef<PayoutResponse, TValue>[];

@@ -2,8 +2,9 @@ import { Suspense } from "react";
 import Spinner from "@/components/spinner";
 import { dbServer } from "@/lib/supabase";
 import { cookies } from "next/headers";
-import { DataTable, PayoutResponse } from "./components/data_table";
+import { DataTable } from "./components/data_table";
 import { columns } from "./components/columns";
+import { PayoutResponse } from "@/types/types";
 export default async function AdminPayoutsPage() {
   const db = dbServer(cookies);
 
@@ -17,21 +18,25 @@ export default async function AdminPayoutsPage() {
   const { data: events } = await db.from("events").select("*");
 
   // Create a DataTable with the transformed payout
-  const transformedPayouts = payouts?.map((payout) => {
-    const event = events?.find((event) => event.id === payout?.event_id!);
-    return {
-      id: String(payout.id),
-      amount: String(payout.amount),
-      payment_method: payout.payment_method,
-      account_number: payout.account_number,
-      account_name: payout.account_name,
-      provider: payout.provider,
-      created_at: new Date(payout.created_at).toLocaleString(),
-      updated_at: new Date(payout.created_at).toLocaleString(),
-      transaction_status: payout.is_paid,
-      event_name: event?.name,
-    };
-  });
+  const transformedPayouts =
+    (payouts &&
+      payouts.map((payout) => {
+        const event =
+          events && events.find((event) => event.id === payout?.event_id!);
+        return {
+          id: String(payout.id),
+          amount: String(payout.amount),
+          payment_method: payout.payment_method,
+          account_number: payout.account_number,
+          account_name: payout.account_name,
+          provider: payout.provider,
+          created_at: new Date(payout.created_at).toLocaleString(),
+          updated_at: new Date(payout.created_at).toLocaleString(),
+          transaction_status: payout.is_paid,
+          event_name: event ? event.name : "N/A",
+        };
+      })) ||
+    [];
 
   return (
     <section className="p-4">
@@ -52,7 +57,7 @@ export default async function AdminPayoutsPage() {
         }
       >
         <DataTable
-          data={transformedPayouts as unknown as PayoutResponse[]}
+          data={transformedPayouts as PayoutResponse[] | []}
           columns={columns}
         />
       </Suspense>

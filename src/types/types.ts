@@ -132,6 +132,19 @@ type EditNominee = {
   };
 };
 
+interface PayoutResponse {
+  id: string;
+  payment_method: string;
+  account_number: string;
+  account_name: string;
+  provider: string;
+  amount: number;
+  event_name: string;
+  transaction_status: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 type NominationsResponse = {
   id: string | null;
   full_name: string | null;
@@ -174,4 +187,5 @@ export type {
   NominationsResponse,
   onSuccessReference,
   VotingDataResponse,
+  PayoutResponse,
 };

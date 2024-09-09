@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreVertical } from "lucide-react";
 import { FilterFn } from "@tanstack/react-table";
-import { PayoutResponse } from "./data_table";
+import { PayoutResponse } from "@/types/types";
 import { db } from "@/lib/supabase";
 import { toast } from "sonner";
 import { useState } from "react";

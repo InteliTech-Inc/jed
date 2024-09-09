@@ -6,7 +6,7 @@ import { format, formatDate } from "date-fns";
 import { exportToCSV } from "@/lib/utils";
 
 import { useState } from "react";
-import { PayoutResponse } from "./data_table";
+import { PayoutResponse } from "@/types/types";
 
 export default function TopButtons({ results }: { results: PayoutResponse[] }) {
   const handleDownloadData = () => {
