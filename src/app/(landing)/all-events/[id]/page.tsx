@@ -3,7 +3,12 @@ import React, { Suspense } from "react";
 import SingleEvent from "./components/single_event";
 import Loader from "../../components/loader";
 import { Event, EventResponse } from "@/interfaces/event-interface";
-import { fetchAllEvent, fetchEvent } from "@/composables/events";
+import { fetchAllEvent, fetchEvent } from "@/actions/events";
+import {
+  QueryClient,
+  HydrationBoundary,
+  dehydrate,
+} from "@tanstack/react-query";
 
 type Props = {
   params: { id: string };
@@ -40,9 +45,16 @@ export async function generateMetadata({
 }
 
 export default async function SingleEventPage({ params: { id } }: Props) {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["event"],
+    queryFn: async () => await fetchEvent(id),
+  });
   return (
     <Suspense fallback={<Loader />}>
-      <SingleEvent id={id!} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <SingleEvent id={id} />
+      </HydrationBoundary>
     </Suspense>
   );
 }

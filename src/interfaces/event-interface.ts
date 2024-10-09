@@ -14,14 +14,8 @@ interface Event {
   img_public_id: string;
   is_completed: boolean;
   amount_per_vote: string;
-  nomination_period: {
-    start_date: string;
-    end_date: string;
-  };
-  voting_period: {
-    start_date: string;
-    end_date: string;
-  };
+  nomination_period: Period;
+  voting_period: Period;
   created_at: string;
   user_id: string;
   Categories: Category[];

@@ -18,13 +18,7 @@ type Nominees = {
   user_id: string;
 } | null;
 
-export default async function CategoryNomineeCard({
-  nominees,
-  event,
-}: {
-  nominees?: Nominees[] | null;
-  event: Event;
-}) {
+export default function CategoryNomineeCard() {
   const router = useRouter();
   // if (nominees?.length === 0) {
   //   return (
@@ -50,10 +44,10 @@ export default async function CategoryNomineeCard({
       <section className="container mx-auto px-6">
         <section className=" flex justify-between">
           <BackButton />
-          <VotingResults event={event} />
+          {/* <VotingResults event={event} /> */}
         </section>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-10">
-          {nominees?.length! > 0 &&
+          {/* {nominees?.length! > 0 &&
             nominees?.map((nominee) => (
               <div
                 className="transition-all duration-150 hover:shadow-lg rounded-xl cursor-pointer border"
@@ -92,7 +86,7 @@ export default async function CategoryNomineeCard({
                   </Button>
                 </div>
               </div>
-            ))}
+            ))} */}
         </div>
       </section>
     </>

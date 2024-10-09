@@ -4,17 +4,23 @@ import { ArrowRight, Search } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { fetchEvent } from "@/actions/events";
+import Loader from "@/app/(landing)/components/loader";
 
-type Props = {
-  categories: Category[];
-};
-
-export default function CategoriesCard({ categories }: Props) {
+export default function CategoriesCard({ id }: { id: string }) {
   const [search, setSearch] = useState("");
 
-  const filteredCategories = categories?.filter((category) =>
+  const { data, isLoading } = useQuery({
+    queryKey: ["event_category"],
+    queryFn: async () => await fetchEvent(id),
+  });
+
+  const filteredCategories = data?.Categories?.filter((category) =>
     category?.name?.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (isLoading) return <Loader />;
 
   return (
     <div className=" mt-6 mb-10 w-[25rem] md:w-full px-6">
@@ -32,7 +38,7 @@ export default function CategoriesCard({ categories }: Props) {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full  my-10">
-        {filteredCategories!.length > 0 ? (
+        {filteredCategories && filteredCategories?.length > 0 ? (
           filteredCategories?.map((category) => (
             <Link
               href={`/all-events/${category.id}/nominees`}

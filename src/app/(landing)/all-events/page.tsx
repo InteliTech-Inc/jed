@@ -1,9 +1,15 @@
 import React, { Suspense } from "react";
 import AllEvents from "./components/all_events";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
-import { dbServer } from "@/lib/supabase";
 import Loader from "../components/loader";
+import { EventResponse } from "@/interfaces/event-interface";
+import { fetchAllEvent } from "@/actions/events";
+import {
+  QueryClient,
+  HydrationBoundary,
+  dehydrate,
+} from "@tanstack/react-query";
+import EventCards from "./components/event_cards";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -13,10 +19,12 @@ export const metadata: Metadata = {
 export const revalidate = 10;
 
 export default async function AllEventsPage() {
-  const db = dbServer(cookies);
-  const { data: events } = await db.from("events").select("*");
+  const queryClient = new QueryClient();
 
-  const liveEvents = events?.filter((event) => event.is_completed);
+  await queryClient.prefetchQuery({
+    queryKey: ["events"],
+    queryFn: fetchAllEvent,
+  });
 
   return (
     <section>
@@ -28,15 +36,11 @@ export default async function AllEventsPage() {
           Find all ongoing events and vote for preferred nominee
         </p>
       </div>
-      {liveEvents?.length === 0 ? (
-        <div className="text-center my-10 font-bold text-neutral-600">
-          There are no Live Events
-        </div>
-      ) : (
+      <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense fallback={<Loader />}>
-          <AllEvents />
+          <EventCards />
         </Suspense>
-      )}
+      </HydrationBoundary>
     </section>
   );
 }
