@@ -22,28 +22,28 @@ export default async function CategoryNomineeCard({
   nominees,
   event,
 }: {
-  nominees: Nominees[] | null;
+  nominees?: Nominees[] | null;
   event: Event;
 }) {
   const router = useRouter();
-  if (nominees?.length === 0) {
-    return (
-      <div className="p-10">
-        <BackButton />
-        <div className="grid place-items-center">
-          <Image
-            src={"/images/no-docs.svg"}
-            alt="No-docs"
-            width={200}
-            height={200}
-          />
-          <p className="text-center">
-            Sorry, there are no nominees for this category.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // if (nominees?.length === 0) {
+  //   return (
+  //     <div className="p-10">
+  //       <BackButton />
+  //       <div className="grid place-items-center">
+  //         <Image
+  //           src={"/images/no-docs.svg"}
+  //           alt="No-docs"
+  //           width={200}
+  //           height={200}
+  //         />
+  //         <p className="text-center">
+  //           Sorry, there are no nominees for this category.
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>

@@ -5,24 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-type Event = {
-  created_at: string;
-  name: string;
-  description: string;
-  img_url: string | null;
-  is_completed: boolean;
-  user_id: string;
-  id: string;
-  voting_period?: {
-    start_date?: string;
-    end_date?: string;
-  };
-  nomination_period?: {
-    start_date?: string;
-    end_date?: string;
-  };
-};
+import { Event } from "@/interfaces/event-interface";
 
 type Props = {
   events: Event[];
@@ -77,7 +60,7 @@ export default function EventCards({ events }: Props) {
                       <div className="h-[15rem]">
                         <Image
                           className="h-full w-full rounded-lg rounded-b-none object-cover object-center"
-                          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
+                          src={event.img_url}
                           width={2000}
                           height={2000}
                           alt={event!.name}
