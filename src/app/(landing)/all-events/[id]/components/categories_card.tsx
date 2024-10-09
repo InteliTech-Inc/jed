@@ -4,21 +4,16 @@ import { ArrowRight, Search } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import Image from "next/image";
-interface ICategory {
-  category_name: string | null;
-  event_id: string | null;
-  id: string;
-}
 
 type Props = {
-  categories: ICategory[] | undefined;
+  categories: Category[];
 };
 
 export default function CategoriesCard({ categories }: Props) {
   const [search, setSearch] = useState("");
 
   const filteredCategories = categories?.filter((category) =>
-    category?.category_name?.toLowerCase().includes(search.toLowerCase())
+    category?.name?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -45,7 +40,7 @@ export default function CategoriesCard({ categories }: Props) {
               className=" p-4 bg-accent/60 hover:bg-accent transition-all duration-150 ease-in-out hover:border-accent border border-secondary rounded-3xl text-neutral-600 w-full"
             >
               <div className="flex justify-between items-center">
-                <span>{category.category_name}</span>
+                <span>{category.name}</span>
                 <ArrowRight size={14} />
               </div>
             </Link>
