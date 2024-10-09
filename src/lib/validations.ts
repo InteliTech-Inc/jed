@@ -40,14 +40,14 @@ export const resetPasswordShape = shape;
 
 export const signupShape = z
   .object({
-    firstName: z.string().min(2, {
+    first_name: z.string().min(2, {
       message: "First name is required!",
     }),
-    lastName: z.string().min(2, {
+    last_name: z.string().min(2, {
       message: "Last name is required!",
     }),
     email: emailShape,
-    phone: z
+    phone_number: z
       .string()
       .min(10, {
         message: "Phone number is required!",
