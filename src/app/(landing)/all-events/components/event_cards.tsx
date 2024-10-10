@@ -40,15 +40,13 @@ export default function EventCards() {
   if (error) {
     return (
       <div className="flex items-center justify-center flex-col my-6">
-        <div>
-          <Image
-            src={"/images/no-docs.svg"}
-            alt="Error"
-            width={200}
-            height={200}
-          />
-          <p className="text-center">An error occurred while fetching events</p>
-        </div>
+        <Image
+          src={"/images/no-docs.svg"}
+          alt="Error"
+          width={200}
+          height={200}
+        />
+        <p className="text-center">An error occurred while fetching events</p>
       </div>
     );
   }
