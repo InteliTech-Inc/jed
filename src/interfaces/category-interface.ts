@@ -8,4 +8,5 @@ interface Category {
   name: string;
   event_id: string;
   created_at: string;
+  Nominees: Nominee[];
 }
