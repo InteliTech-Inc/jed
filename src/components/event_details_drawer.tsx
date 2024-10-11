@@ -12,11 +12,7 @@ import Loader from "@/app/(landing)/components/loader";
 export function DrawerDialogDemo({ id }: { id: string }) {
   const [open, setOpen] = React.useState(false);
 
-  const {
-    data: event,
-    error,
-    isLoading,
-  } = useQuery({
+  const { data: event } = useQuery({
     queryKey: ["event"],
     queryFn: async () => await fetchEvent(id),
     refetchInterval: 60 * 1000,
@@ -25,15 +21,12 @@ export function DrawerDialogDemo({ id }: { id: string }) {
   // Type Guarding to ensure that
   // event.nomination_period and
   // event.voting_period are strings before parsing them.
-
   const nom_per =
     event && typeof event.nomination_period === "string"
       ? (JSON.parse(event.nomination_period) as Period)
       : null;
-  const vot_per =
-    event && typeof event.voting_period === "string"
-      ? (JSON.parse(event.voting_period) as Period)
-      : null;
+
+  const vot_per = event?.voting_period;
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
