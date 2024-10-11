@@ -6,15 +6,31 @@ import Image from "next/image";
 import React from "react";
 
 export default function Header({ id }: { id: string }) {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["event", id],
     queryFn: async () => {
       const category = await fetchCategory(id);
       const event = await fetchEvent(category.event_id);
       return event;
     },
+    refetchOnMount: "always",
+    refetchInterval: 60000,
   });
 
+  if (isLoading) {
+    return (
+      <div className="h-96 md:h-[20rem] relative mb-14 w-full">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="animate-pulse flex flex-col space-y-4 w-full px-4">
+            <div className="h-24 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="h-96 md:h-[20rem] relative mb-14">
       {data && (
