@@ -1,4 +1,6 @@
 "use client";
+import { fetchAllNominees } from "@/actions/nominees";
+import { getVotingRecord } from "@/actions/voting";
 import { Event } from "@/app/(system)/events/[id]/nominations/components/nomination_form";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,107 +11,60 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { db } from "@/lib/supabase";
 import { hasVotingEnded } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { Vote } from "lucide-react";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 type Votes = {
   count: number | null;
   nominee_id: string | null;
 };
 
-type Nominees =
-  | {
-      full_name: string | null;
-      id: string;
-      img_url: string | null;
-    }[]
-  | null;
+type Nominees = {
+  result: Nominee[];
+};
+export default function VotingResults() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-export default function VotingResults({ event }: { event: Event }) {
-  const { id } = useParams();
-  const [votes, setVotes] = useState<Votes[]>();
-  const [nominees, setNominees] = useState<Nominees>();
+  const { data: results, refetch: refetchResults } = useQuery<Votes[]>({
+    queryKey: ["voting_results"],
+    queryFn: async () => await getVotingRecord(),
+    refetchOnMount: "always",
+  });
 
-  const router = useRouter();
-  useEffect(() => {
-    async function fetchVotes() {
-      const { data: nominees } = await db
-        .from("nominees")
-        .select(
-          `*, 
-    categories:category_id(*)
-    `
-        )
-        .eq("category_id", id);
-      setNominees(nominees);
+  // Get nominees data
+  const { data: nominees, refetch: refetchNominees } = useQuery<Nominees>({
+    queryKey: ["nominee"],
+    queryFn: async () => await fetchAllNominees(),
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5,
+  });
 
-      const { data: votes } = await db.from("voting").select(`*, nominees(*)`);
+  // Get Event ending date
+  const { data: event } = useQuery<Event>({
+    queryKey: ["event"],
+    refetchOnMount: "always",
+  });
 
-      const votesCount = votes?.map((vote) => ({
-        count: vote.count,
-        nominee_id: vote.nominee_id,
-      }));
-      setVotes(votesCount);
+  const votingHasEnded = hasVotingEnded(event?.voting_period?.end_date ?? "");
+
+  // Sort results by count in descending order
+  const sortedResults = results?.sort((a, b) => b.count! - a.count!);
+
+  const handleDialogOpenChange = (isOpen: boolean) => {
+    setIsDialogOpen(isOpen);
+    if (isOpen) {
+      refetchResults();
+      refetchNominees();
     }
-
-    fetchVotes();
-  }, []);
-
-  // Realtime for nominees fetch
-  useEffect(() => {
-    const nominee_channel = db
-      .channel("realtime")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "nominees",
-        },
-        () => {
-          router.refresh();
-          console.log("Nominee channel updated");
-        }
-      )
-      .subscribe();
-
-    return () => {
-      db.removeChannel(nominee_channel);
-    };
-  }, [db, router]);
-
-  useEffect(() => {
-    const voting_channel = db
-      .channel("realtime")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "voting",
-        },
-        () => {
-          router.refresh();
-          console.log("Voting channel updated");
-        }
-      )
-      .subscribe();
-
-    return () => {
-      db.removeChannel(voting_channel);
-    };
-  }, [db, router]);
-
-  const votingHasEnded = hasVotingEnded(event.voting_period?.end_date ?? "");
+  };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
-        <Button className=" gap-2">
+        <Button className="gap-2">
           <span className="mr-1">
             {votingHasEnded
               ? "View final voting results"
@@ -127,25 +82,33 @@ export default function VotingResults({ event }: { event: Event }) {
         </DialogHeader>
 
         <div className="flex flex-col gap-2 items-center justify-between ">
-          {nominees?.map((nominee) => (
-            <div
-              className="flex w-full items-center justify-between px-2 bg-accent/10 border py-2 text-neutral-600 rounded-full"
-              key={nominee.id}
-            >
-              <Image
-                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${nominee?.img_url}`}
-                alt={nominee?.full_name!}
-                width={30}
-                height={30}
-                className="rounded-full object-cover object-bottom aspect-square"
-              />
-              <p className=" text-sm ">{nominee?.full_name}</p>
-              <p className="font-medium text-sm mr-2">
-                {votes?.find((vote: any) => vote.nominee_id === nominee.id)
-                  ?.count || 0}
-              </p>
-            </div>
-          ))}
+          {sortedResults?.map((vote, index) => {
+            const nominee = nominees?.result?.find(
+              (n) => n.id === vote.nominee_id
+            );
+            return (
+              <div
+                className="flex w-full items-center justify-between px-2 bg-accent/10 border py-2 text-neutral-600 rounded-full"
+                key={vote.nominee_id}
+              >
+                <Image
+                  src={nominee?.img_url || ""}
+                  alt={nominee?.full_name!}
+                  width={30}
+                  height={30}
+                  className="rounded-full object-cover object-top aspect-square"
+                />
+                <p className=" text-sm ">{nominee?.full_name}</p>
+                <p className="font-medium text-sm space-x-2 mr-2">
+                  <span>
+                    {results?.find((vote) => vote.nominee_id === nominee?.id)
+                      ?.count || 0}
+                  </span>
+                  {index === 0 && <span>🏆</span>}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </DialogContent>
     </Dialog>
