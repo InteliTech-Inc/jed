@@ -45,8 +45,11 @@ export default function EventCards() {
           alt="Error"
           width={200}
           height={200}
+          priority
         />
-        <p className="text-center">An error occurred while fetching events</p>
+        <p className="text-center text-neutral-600">
+          An error occurred while fetching events
+        </p>
       </div>
     );
   }
@@ -60,15 +63,16 @@ export default function EventCards() {
         <>
           {filteredEvents && filteredEvents.length === 0 && !query ? (
             <div className="flex items-center justify-center flex-col my-6">
-              <div>
-                <Image
-                  src={"/images/no-docs.svg"}
-                  alt="No-docs"
-                  width={200}
-                  height={200}
-                />
-                <p className="text-center">There are no published events</p>
-              </div>
+              <Image
+                src={"/images/no-docs.svg"}
+                alt="No-docs"
+                width={200}
+                height={200}
+                priority
+              />
+              <p className="text-center text-neutral-600">
+                There are no published events
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
@@ -83,7 +87,7 @@ export default function EventCards() {
                           src={event.img_url}
                           width={2000}
                           height={2000}
-                          alt={event!.name}
+                          alt={event.name}
                           priority
                         />
                       </div>
@@ -115,9 +119,6 @@ export default function EventCards() {
             <p className="text-center">No Search resuluts for "{query}"</p>
           </div>
         )}
-        {/* {filteredEvents.length === 0 && (
-         
-        )} */}
       </div>
     </section>
   );
