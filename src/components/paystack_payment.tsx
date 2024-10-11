@@ -14,10 +14,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { db } from "@/lib/supabase";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Spinner from "./spinner";
+import { useQuery } from "@tanstack/react-query";
+import { fetchEvent } from "@/actions/events";
+import {
+  createVotingRecord,
+  getVotingRecord,
+  updateVotingRecord,
+  votesData,
+} from "@/actions/voting";
+import axios from "axios";
 
 type referenceObj = {
   message: string;
@@ -28,11 +36,11 @@ type referenceObj = {
   trxref: string;
 };
 
-type FORM_DATA = {
+interface FORM_DATA {
   full_name: string;
   email?: string;
   votes: string;
-};
+}
 
 const formSchema = z.object({
   full_name: z
@@ -42,14 +50,10 @@ const formSchema = z.object({
   votes: z.string().min(1, { message: "Number of votes must be at least 1" }),
 });
 
-export default function PaystackPayment({ id }: { id: string }) {
+export default function PaystackPayment() {
   const router = useRouter();
   const [ref, setRef] = useState("");
   const [_, setFormData] = useState<FORM_DATA>();
-  const [amountPerVote, setAmountPerVote] = useState(1);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
-  const [eventId, setEventId] = useState<string | null>(null);
-
   const [success, setSuccess] = useState(false);
 
   const form = useForm({
@@ -61,45 +65,16 @@ export default function PaystackPayment({ id }: { id: string }) {
     },
   });
 
-  useEffect(() => {
-    (async function getEventAmount() {
-      setIsFetching(true);
-      try {
-        const { data, error } = await db
-          .from(`nominees`)
-          .select(`*, event_id`)
-          .eq("id", id)
-          .single();
+  const { data: nomineeData } = useQuery<Nominee>({
+    queryKey: ["votingNominee"],
+    refetchOnMount: "always",
+  });
 
-        if (data) {
-          setEventId(data.event_id);
-        }
-
-        if (error) {
-          console.error("Error fetching event amount:", error);
-          return;
-        }
-
-        const { data: eventData, error: eventError } = await db
-          .from("events")
-          .select("amount_per_vote")
-          .eq("id", data?.event_id!)
-          .single();
-
-        if (eventError) {
-          console.error("Error fetching event amount:", eventError);
-          return;
-        }
-
-        setAmountPerVote(Number(eventData?.amount_per_vote!) || 1); // let's set the default amount per vote as 1 cedi
-      } catch (error) {
-        console.error("Error fetching event amount:", error);
-        return;
-      } finally {
-        setIsFetching(false);
-      }
-    })();
-  }, []);
+  const { data: eventData, isLoading } = useQuery({
+    queryKey: ["event"],
+    queryFn: async () => await fetchEvent(nomineeData?.event_id!),
+    refetchOnMount: "always",
+  });
 
   useEffect(() => {
     setSuccess(false);
@@ -107,7 +82,8 @@ export default function PaystackPayment({ id }: { id: string }) {
   }, [success]);
 
   const FACTOR = 100;
-  const amountPayable = Number(form.watch("votes")) * amountPerVote;
+  const amountPayable =
+    Number(form.watch("votes")) * Number(eventData?.amount_per_vote);
 
   const final_amount = Number(amountPayable).toFixed(2);
 
@@ -122,55 +98,73 @@ export default function PaystackPayment({ id }: { id: string }) {
 
   // Hit to database
   const onSuccess = (response: referenceObj) => {
-    console.log("onSuccess", response);
-    async function toDatabase() {
-      const { votes: voting } = form.getValues();
-      const { data: votes, error } = await db
-        .from("voting")
-        .select("*")
-        .eq("nominee_id", id);
+    // Get the votes from the input
+    const { votes: voting } = form.getValues();
+    const { full_name } = form.getValues();
 
-      if (error) {
-        console.error("Error fetching votes:", error);
-        return;
-      }
+    async function submitVotes() {
+      const votingRecord = await getVotingRecord();
+      console.log("READING VOTES RECORD", votingRecord);
+      if (
+        votingRecord &&
+        votingRecord.length > 0 &&
+        votingRecord[0].nominee_id === nomineeData?.id
+      ) {
+        // Nominee already has counts, update their count with the new one
+        const updatedVotes = Number(votingRecord[0].count) + Number(voting);
+        const updatedAmount =
+          Number(votingRecord[0].amount_payable) + Number(final_amount);
 
-      if (votes && votes.length > 0) {
-        // If the nominee has been voted for, increment the vote count
-        const { error: updateError } = await db
-          .from("voting")
-          .update({
-            count: votes[0].count! + Number(voting),
-            amount_payable: votes[0]?.amount_payable! + Number(amountPayable),
-          })
-          .eq("nominee_id", id);
+        const updatedVotingRecord = {
+          id: votingRecord[0].id,
+          count: Number(updatedVotes),
+          amount_payable: String(updatedAmount),
+        };
 
-        if (updateError) {
-          console.error("Error updating vote count:", updateError);
-        }
+        const updated = await updateVotingRecord(updatedVotingRecord);
+        console.log("UPDATED VOTE RECORD", updated);
       } else {
-        const { error: insertError } = await db.from("voting").insert({
-          nominee_id: id,
+        const payload = {
+          nominee_id: nomineeData?.id,
           count: Number(voting),
-          event_id: eventId,
-          amount_payable: amountPayable,
-        });
-
-        if (insertError) {
-          console.error("Error inserting new vote:", insertError);
-        }
+          event_id: eventData?.id,
+          amount_payable: String(final_amount),
+        };
+        const posted = await createVotingRecord(payload);
+        console.log("CREATED VOTE RECORD", posted);
       }
     }
-
+    console.log("onSuccess", response);
     if (response.status === "success" && response.message === "Approved") {
-      // Check if the nominee has been voted for
-      toDatabase();
-      router.back();
-      form.reset();
+      submitVotes();
+      // Let's store the transaction information
+      const body = {
+        nominee_id: nomineeData?.id,
+        event_id: eventData?.id,
+        count: Number(voting),
+        amount_payable: String(final_amount),
+        trans_id: `${full_name.split(" ").join("_")}_${response.reference}`,
+      };
+      (async () => {
+        try {
+          const transaction = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/transactions`,
+            body
+          );
+
+          if (transaction.data) {
+            router.back();
+            form.reset();
+            toast.success("Voting Successful!");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      })();
     }
   };
 
-  const handleVoting = async (data: z.infer<typeof formSchema>) => {
+  const handleVoting = (data: z.infer<typeof formSchema>) => {
     setFormData(data);
   };
 
@@ -189,6 +183,7 @@ export default function PaystackPayment({ id }: { id: string }) {
   };
 
   const inputValues = form.watch();
+
   return (
     <Form {...form}>
       <form
@@ -238,13 +233,13 @@ export default function PaystackPayment({ id }: { id: string }) {
             <FormItem>
               <FormLabel htmlFor="votes" className="flex gap-1">
                 Number of Votes{" "}
-                {isFetching ? (
+                {isLoading ? (
                   <span className="ml-2">
                     <Spinner />
                   </span>
                 ) : (
                   <span className="font-bold">
-                    (GHS {amountPerVote} per Vote)
+                    (GHS {eventData?.amount_per_vote} per Vote)
                   </span>
                 )}
               </FormLabel>

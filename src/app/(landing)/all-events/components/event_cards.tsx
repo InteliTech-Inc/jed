@@ -5,67 +5,74 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Event } from "@/interfaces/event-interface";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllEvent } from "@/actions/events";
+import Loader from "../../components/loader";
 
-type Event = {
-  created_at: string;
-  name: string;
-  description: string;
-  img_url: string | null;
-  is_completed: boolean;
-  user_id: string;
-  id: string;
-  voting_period?: {
-    start_date?: string;
-    end_date?: string;
-  };
-  nomination_period?: {
-    start_date?: string;
-    end_date?: string;
-  };
-};
-
-type Props = {
-  events: Event[];
-};
-
-export default function EventCards({ events }: Props) {
+export default function EventCards() {
   const [query, setQuery] = useState("");
-  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Event[] | undefined>([]);
   const searchParams = useSearchParams();
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["events"],
+    queryFn: fetchAllEvent,
+  });
 
   const eventQuery = searchParams.get("event");
 
   useEffect(() => {
     Search(eventQuery as string);
-  }, [eventQuery, events]);
+  }, [eventQuery, data?.result]);
 
   const Search = (query: string) => {
     if (query) {
-      const filteredEvents = events.filter((event) =>
+      const filteredEvents = data?.result.filter((event) =>
         event?.name.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredEvents(filteredEvents);
     } else {
-      setFilteredEvents(events);
+      setFilteredEvents(data?.result);
     }
   };
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center flex-col my-6">
+        <Image
+          src={"/images/no-docs.svg"}
+          alt="Error"
+          width={200}
+          height={200}
+          priority
+        />
+        <p className="text-center text-neutral-600">
+          An error occurred while fetching events
+        </p>
+      </div>
+    );
+  }
+
+  if (isLoading) return <Loader />;
 
   return (
     <section>
       <div className="container mx-auto px-6 py-8">
         <SearchBar queryKey="event" placeholder="Search for events" />
         <>
-          {filteredEvents.length === 0 && !query ? (
+          {filteredEvents && filteredEvents.length === 0 && !query ? (
             <div className="flex items-center justify-center flex-col my-6">
-              <div>
-                <Image
-                  src={"/images/no-docs.svg"}
-                  alt="No-docs"
-                  width={200}
-                  height={200}
-                />
-                <p className="text-center">There are no published events</p>
-              </div>
+              <Image
+                src={"/images/no-docs.svg"}
+                alt="No-docs"
+                width={200}
+                height={200}
+                priority
+              />
+              <p className="text-center text-neutral-600">
+                There are no published events
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-10 w-full">
@@ -77,10 +84,10 @@ export default function EventCards({ events }: Props) {
                       <div className="h-[15rem]">
                         <Image
                           className="h-full w-full rounded-lg rounded-b-none object-cover object-center"
-                          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event.img_url}`}
+                          src={event.img_url}
                           width={2000}
                           height={2000}
-                          alt={event!.name}
+                          alt={event.name}
                           priority
                         />
                       </div>
@@ -99,7 +106,7 @@ export default function EventCards({ events }: Props) {
             </div>
           )}
         </>
-        {filteredEvents.length === 0 && query && (
+        {filteredEvents && filteredEvents.length === 0 && query && (
           <div className="flex items-center justify-center flex-col my-6">
             <div>
               <Image
@@ -112,9 +119,6 @@ export default function EventCards({ events }: Props) {
             <p className="text-center">No Search resuluts for "{query}"</p>
           </div>
         )}
-        {/* {filteredEvents.length === 0 && (
-         
-        )} */}
       </div>
     </section>
   );

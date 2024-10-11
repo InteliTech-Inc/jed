@@ -1,9 +1,13 @@
 import React, { Suspense } from "react";
 import VoteNomineePage from "./components/vote_nominee";
 import { Metadata } from "next";
-import { dbServer } from "@/lib/supabase";
-import { cookies } from "next/headers";
 import Loader from "@/app/(landing)/components/loader";
+import {
+  HydrationBoundary,
+  dehydrate,
+  QueryClient,
+} from "@tanstack/react-query";
+import { fetchNominee } from "@/actions/nominees";
 
 type Props = {
   params: {
@@ -17,19 +21,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Voting({ params: { id } }: Props) {
-  const db = dbServer(cookies);
+  const queryClient = new QueryClient();
 
-  const { data, error } = await db
-    .from("nominees")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) throw error;
+  await queryClient.prefetchQuery({
+    queryKey: ["votingNominee"],
+    queryFn: async () => await fetchNominee(id),
+  });
 
   return (
     <Suspense fallback={<Loader />}>
-      <VoteNomineePage votingNominee={data} />;
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <VoteNomineePage />
+      </HydrationBoundary>
     </Suspense>
   );
 }

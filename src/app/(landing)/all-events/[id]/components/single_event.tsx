@@ -1,33 +1,16 @@
+"use client";
 import CategoriesCard from "./categories_card";
-import { db } from "@/lib/supabase";
 import BackButton from "@/components/back";
 
 import { DrawerDialogDemo } from "@/components/event_details_drawer";
-type Data = {
-  data: {
-    id: string;
-    name: string;
-    description: string;
-    img_url: string;
-    nomination_period: {
-      start_date: string;
-      end_date: string;
-    };
-    voting_period: {
-      start_date: string;
-      end_date: string;
-    };
-    categories: any[];
-  };
-  error: any;
-};
+import { fetchEvent } from "@/actions/events";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function SingleEvent({ id }: { id: string }) {
-  const { data: event } = (await db
-    .from("events")
-    .select(`*, categories(*)`)
-    .eq("id", id)
-    .single()) as Data;
+export default function SingleEvent({ id }: { id: string }) {
+  const { data: event } = useQuery({
+    queryKey: ["event"],
+    queryFn: async () => await fetchEvent(id),
+  });
 
   return (
     <section className="container mx-auto py-10 overflow-x-hidden ">
@@ -41,15 +24,8 @@ export default async function SingleEvent({ id }: { id: string }) {
         </p>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <DrawerDialogDemo
-          data={{
-            name: event.name,
-            description: event.description,
-            voting_period: event.voting_period,
-            nomination_period: event.nomination_period,
-          }}
-        />
-        <CategoriesCard categories={event?.categories} />
+        <DrawerDialogDemo id={id} />
+        <CategoriesCard id={id} />
       </div>
     </section>
   );

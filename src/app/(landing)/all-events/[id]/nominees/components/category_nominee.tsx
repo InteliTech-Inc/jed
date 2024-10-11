@@ -7,26 +7,24 @@ import VotingResults from "./voting_results";
 import BackButton from "@/components/back";
 import { canVote, hasVotingEnded } from "@/lib/utils";
 import { Event } from "@/app/(system)/events/[id]/nominations/components/nomination_form";
-type Nominees = {
-  category_id: string | null;
-  code: string | null;
-  created_at: string;
-  event_id: string | null;
-  full_name: string | null;
-  id: string;
-  img_url: string | null;
-  user_id: string;
-} | null;
+import { useQuery } from "@tanstack/react-query";
+import { fetchEvent } from "@/actions/events";
 
-export default async function CategoryNomineeCard({
-  nominees,
-  event,
-}: {
-  nominees: Nominees[] | null;
-  event: Event;
-}) {
+export default function CategoryNomineeCard() {
   const router = useRouter();
-  if (nominees?.length === 0) {
+
+  const { data } = useQuery<Category>({
+    queryKey: ["category"],
+  });
+
+  const { data: event } = useQuery({
+    queryKey: ["event", data?.event_id],
+    queryFn: async () => await fetchEvent(data?.event_id!),
+  });
+
+  const vot_per = event && event?.voting_period;
+
+  if (data?.Nominees?.length === 0) {
     return (
       <div className="p-10">
         <BackButton />
@@ -50,19 +48,20 @@ export default async function CategoryNomineeCard({
       <section className="container mx-auto px-6">
         <section className=" flex justify-between">
           <BackButton />
-          <VotingResults event={event} />
+          <VotingResults />
         </section>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-10">
-          {nominees?.length! > 0 &&
-            nominees?.map((nominee) => (
+          {data &&
+            data?.Nominees?.length > 0 &&
+            data.Nominees?.map((nominee: Nominee) => (
               <div
                 className="transition-all duration-150 hover:shadow-lg rounded-xl cursor-pointer border"
                 key={nominee?.id}
               >
                 <div className="h-[20rem]">
                   <Image
-                    className="h-full w-full rounded-lg rounded-b-none object-cover object-center"
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${nominee?.img_url}`}
+                    className="h-full w-full rounded-lg rounded-b-none object-cover object-top"
+                    src={`${nominee?.img_url}`}
                     width={2000}
                     height={2000}
                     alt={nominee?.full_name!}
@@ -83,8 +82,8 @@ export default async function CategoryNomineeCard({
                     className="w-full"
                     disabled={
                       !canVote(
-                        event.voting_period?.start_date || "",
-                        event.voting_period?.end_date || ""
+                        vot_per?.start_date || "",
+                        vot_per?.end_date || ""
                       )
                     }
                   >

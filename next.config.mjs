@@ -9,6 +9,9 @@ const nextConfig = {
       {
         hostname: process.env.NEXT_PUBLIC_SUPABASE_HOST_NAME,
       },
+      {
+        hostname: "res.cloudinary.com",
+      },
     ],
   },
 };

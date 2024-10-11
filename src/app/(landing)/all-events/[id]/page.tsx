@@ -1,20 +1,26 @@
 import { Metadata } from "next";
 import React, { Suspense } from "react";
-import { db } from "@/lib/supabase";
 import SingleEvent from "./components/single_event";
 import Loader from "../../components/loader";
+import { Event, EventResponse } from "@/interfaces/event-interface";
+import { fetchAllEvent, fetchEvent } from "@/actions/events";
+import {
+  QueryClient,
+  HydrationBoundary,
+  dehydrate,
+} from "@tanstack/react-query";
 
 type Props = {
   params: { id: string };
 };
 
-export async function generateStaticParams({ params: { id } }: Props) {
-  const { data: events } = await db.from("events").select("id").eq("id", id);
+export async function generateStaticParams() {
+  const events: EventResponse = await fetchAllEvent();
 
-  const idRoutes = events ? events.map((event) => event.id) : [];
+  const idRoutes = events.result ? events.result.map((event) => event.id) : [];
 
-  return idRoutes?.map((id) => ({
-    id,
+  return idRoutes?.map((event_id) => ({
+    event_id,
   }));
 }
 
@@ -23,18 +29,14 @@ export const revalidate = 10;
 export async function generateMetadata({
   params: { id },
 }: Props): Promise<Metadata> {
-  const { data: event } = await db
-    .from("events")
-    .select(`*, categories(category_name, event_id, id)`)
-    .eq("id", id!)
-    .single();
+  const event: Event = await fetchEvent(id);
   return {
     title: event?.name,
     description: event?.description,
     openGraph: {
       images: [
         {
-          url: `/${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${event?.img_url}`,
+          url: `${event?.img_url}`,
           alt: `${event?.name}'s image`,
         },
       ],
@@ -43,9 +45,16 @@ export async function generateMetadata({
 }
 
 export default async function SingleEventPage({ params: { id } }: Props) {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["event"],
+    queryFn: async () => await fetchEvent(id),
+  });
   return (
     <Suspense fallback={<Loader />}>
-      <SingleEvent id={id!} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <SingleEvent id={id} />
+      </HydrationBoundary>
     </Suspense>
   );
 }
